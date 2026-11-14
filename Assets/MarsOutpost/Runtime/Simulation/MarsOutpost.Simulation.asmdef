@@ -1,0 +1,5 @@
+{
+    "name": "MarsOutpost.Simulation",
+    "rootNamespace": "MarsOutpost",
+    "noEngineReferences": true
+}

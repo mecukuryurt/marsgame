@@ -1,0 +1,14 @@
+{
+    "name": "MarsOutpost.Tests.EditMode",
+    "rootNamespace": "MarsOutpost.Tests",
+    "references": [
+        "MarsOutpost.Simulation",
+        "MarsOutpost.Presentation"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ]
+}

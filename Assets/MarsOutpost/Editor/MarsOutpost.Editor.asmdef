@@ -1,0 +1,22 @@
+{
+    "name": "MarsOutpost.Editor",
+    "rootNamespace": "MarsOutpost.Editor",
+    "references": [
+        "MarsOutpost.Simulation",
+        "MarsOutpost.Presentation",
+        "Unity.InputSystem",
+        "UnityEngine.UI",
+        "Unity.RenderPipelines.Universal.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
