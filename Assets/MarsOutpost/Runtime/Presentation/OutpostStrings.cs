@@ -58,24 +58,30 @@ namespace MarsOutpost.Presentation
             paused ? TrEn("Devam Et", ResumeButton) : TrEn("Duraklat", PauseButton);
 
         public static string GetSleepButton(bool isSleeping) =>
-            isSleeping ? TrEn("☀️ Uykuyu Bitir", WakeButton) : TrEn("🌙 Gece Uykusu (8x)", SleepButton);
+            isSleeping ? TrEn("Uykuyu Bitir", WakeButton) : TrEn("Gece Uykusu", SleepButton);
 
         public static string GetEarthAdviceButton(bool urgent) =>
-            urgent ? TrEn("🚨 Dünya'ya Hemen Sor!", "Ask Earth NOW (Hazard <30s)") : TrEn("📡 Dünya'ya Danış (45sn)", EarthAdviceButton);
+            urgent ? TrEn("[!] Dünya'ya Hemen Sor!", "Ask Earth NOW (Hazard <30s)") : TrEn(">> Dünya'ya Danış (45sn)", EarthAdviceButton);
 
-        public static string GetRestButton() => TrEn("🛏️ Dinlen", RestButton);
-        public static string GetReturnButton() => TrEn("🏃 Sığınağa Çek! (10sn)", ReturnButton);
-        public static string GetCancelTaskButton() => TrEn("✋ Durdur", CancelTaskButton);
+        public static string GetRestButton() => TrEn("Dinlen", "Rest");
+        public static string GetReturnButton() => TrEn("Sığınağa Dön", "Return");
+        public static string GetCancelTaskButton() => TrEn("Durdur", "Stop");
 
         public static string GetResearchToggle(bool enabled) =>
-            enabled ? TrEn("⚡ Lab Gücü: AÇIK", ResearchToggleOn) : TrEn("⚡ Lab Gücü: KAPALI", ResearchToggleOff);
+            enabled ? TrEn("Lab: AÇIK", "Lab: ON") : TrEn("Lab: KAPALI", "Lab: OFF");
 
-        public static string GetRestartButton() => TrEn("🔄 Yeniden Başlat", RestartButton);
+        public static string GetRestartButton() => TrEn("Yeniden Başlat", "Restart");
         public static string GetContinueButton() => TrEn("Devam Et", ContinueButton);
         public static string GetAcknowledgeButton() => TrEn("Anladım", AcknowledgeButton);
         public static string GetSkipTutorialButton() => TrEn("Rehberi Gizle", SkipTutorialButton);
-        public static string GetSourcesButton() => TrEn("📚 Bilim Kaynakları", "NASA Sources");
-        public static string GetLangButton() => TrEn("🌐 TR / EN", "🌐 EN / TR");
+        public static string GetSourcesButton() => TrEn("[NASA] Bilim Kaynakları", "NASA Sources");
+        public static string GetLangButton() => TrEn("[TR / EN]", "[EN / TR]");
+        public static string GetCameraResetButton() => TrEn("[3D] Kamera", "[3D] Reset Cam");
+        public static string GetDomeRoofButton(bool isRoofVisible) =>
+            isRoofVisible ? TrEn("[3D] Kubbe: Açık", "[3D] Dome: Closed") : TrEn("[3D] Kubbe: Kesit", "[3D] Dome: Cutaway");
+        public static string GetCameraNavigationHint() =>
+            TrEn("Tekerlek: Yakınlaştır | Sürükle / WASD: Gez | R: Sıfırla",
+                 "Wheel: Zoom | Drag / WASD: Pan | R: Reset");
 
         public static string GetTutorialStep(int step)
         {
@@ -115,8 +121,8 @@ namespace MarsOutpost.Presentation
 
         public static string FormatLocation(CrewLocation location) =>
             location == CrewLocation.Inside
-                ? TrEn("🛡️ Sığınakta Güvende", "🛡️ Safe Inside Shelter")
-                : TrEn("⚠️ Mars Yüzeyinde (Dışarıda)", "⚠️ Outside on Mars Surface");
+                ? TrEn("[GÜVENDE] Sığınakta", "[SAFE] Inside Shelter")
+                : TrEn("[!] Mars Yüzeyinde (Dışarıda)", "[!] Outside on Mars Surface");
 
         public static string BuildTwoDecisionExplanation(MissionState state, double researchGoal)
         {

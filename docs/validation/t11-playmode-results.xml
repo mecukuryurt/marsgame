@@ -1,39 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<test-run id="2" testcasecount="3" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-11-14 15:30:46Z" end-time="2026-11-14 15:30:49Z" duration="3.6238282">
-  <test-suite type="TestSuite" id="1012" name="marsoutpostgame" fullname="marsoutpostgame" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-11-14 15:30:46Z" end-time="2026-11-14 15:30:49Z" duration="3.623828" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+<test-run id="2" testcasecount="4" result="Passed" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-11-14 16:26:29Z" end-time="2026-11-14 16:26:32Z" duration="3.2481133">
+  <test-suite type="TestSuite" id="1013" name="marsoutpostgame" fullname="marsoutpostgame" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-11-14 16:26:29Z" end-time="2026-11-14 16:26:32Z" duration="3.248113" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
     <properties>
       <property name="platform" value="PlayMode" />
     </properties>
-    <test-suite type="Assembly" id="1005" name="MarsOutpost.Tests.PlayMode.dll" fullname="/run/media/senesatka/storage/projects/marsgame/Library/ScriptAssemblies/MarsOutpost.Tests.PlayMode.dll" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-11-14 15:30:46Z" end-time="2026-11-14 15:30:49Z" duration="3.615531" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <test-suite type="Assembly" id="1006" name="MarsOutpost.Tests.PlayMode.dll" fullname="/run/media/senesatka/storage/projects/marsgame/Library/ScriptAssemblies/MarsOutpost.Tests.PlayMode.dll" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-11-14 16:26:29Z" end-time="2026-11-14 16:26:32Z" duration="3.240026" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
       <properties>
-        <property name="_PID" value="133792" />
+        <property name="_PID" value="143943" />
         <property name="_APPDOMAIN" value="Unity Child Domain" />
         <property name="platform" value="PlayMode" />
         <property name="EditorOnly" value="False" />
       </properties>
-      <test-suite type="TestSuite" id="1006" name="MarsOutpost" fullname="MarsOutpost" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-11-14 15:30:46Z" end-time="2026-11-14 15:30:49Z" duration="3.614818" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <test-suite type="TestSuite" id="1007" name="MarsOutpost" fullname="MarsOutpost" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-11-14 16:26:29Z" end-time="2026-11-14 16:26:32Z" duration="3.239342" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
         <properties />
-        <test-suite type="TestSuite" id="1007" name="Tests" fullname="MarsOutpost.Tests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-11-14 15:30:46Z" end-time="2026-11-14 15:30:49Z" duration="3.614457" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <test-suite type="TestSuite" id="1008" name="Tests" fullname="MarsOutpost.Tests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-11-14 16:26:29Z" end-time="2026-11-14 16:26:32Z" duration="3.239006" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
           <properties />
-          <test-suite type="TestSuite" id="1008" name="PlayMode" fullname="MarsOutpost.Tests.PlayMode" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-11-14 15:30:46Z" end-time="2026-11-14 15:30:49Z" duration="3.614116" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <test-suite type="TestSuite" id="1009" name="PlayMode" fullname="MarsOutpost.Tests.PlayMode" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-11-14 16:26:29Z" end-time="2026-11-14 16:26:32Z" duration="3.238666" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
             <properties />
-            <test-suite type="TestFixture" id="1001" name="MarsOutpostScenePlayTests" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-11-14 15:30:46Z" end-time="2026-11-14 15:30:49Z" duration="3.612809" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <test-suite type="TestFixture" id="1001" name="MarsOutpostScenePlayTests" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-11-14 16:26:29Z" end-time="2026-11-14 16:26:32Z" duration="3.237247" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
               <properties />
-              <test-case id="1003" name="AudioSourcesFoodCommsAndNinetySecondDemoCompleteEndToEnd" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.AudioSourcesFoodCommsAndNinetySecondDemoCompleteEndToEnd" methodname="AudioSourcesFoodCommsAndNinetySecondDemoCompleteEndToEnd" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="1144066304" result="Passed" start-time="2026-11-14 15:30:46Z" end-time="2026-11-14 15:30:48Z" duration="2.114904" asserts="0">
+              <test-case id="1003" name="AudioSourcesFoodCommsAndNinetySecondDemoCompleteEndToEnd" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.AudioSourcesFoodCommsAndNinetySecondDemoCompleteEndToEnd" methodname="AudioSourcesFoodCommsAndNinetySecondDemoCompleteEndToEnd" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="1308569843" result="Passed" start-time="2026-11-14 16:26:29Z" end-time="2026-11-14 16:26:31Z" duration="1.342467" asserts="0">
                 <properties>
                   <property name="_JOINTYPE" value="UnityCombinatorial" />
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
-              <test-case id="1004" name="BilingualLanguageToggleAndHazardAlertBannerFunctionCleanly" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.BilingualLanguageToggleAndHazardAlertBannerFunctionCleanly" methodname="BilingualLanguageToggleAndHazardAlertBannerFunctionCleanly" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="1974187850" result="Passed" start-time="2026-11-14 15:30:48Z" end-time="2026-11-14 15:30:48Z" duration="0.307097" asserts="0">
+              <test-case id="1004" name="BilingualLanguageToggleAndHazardAlertBannerFunctionCleanly" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.BilingualLanguageToggleAndHazardAlertBannerFunctionCleanly" methodname="BilingualLanguageToggleAndHazardAlertBannerFunctionCleanly" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="1729417955" result="Passed" start-time="2026-11-14 16:26:31Z" end-time="2026-11-14 16:26:31Z" duration="0.322824" asserts="0">
                 <properties>
                   <property name="_JOINTYPE" value="UnityCombinatorial" />
                   <property name="retryIteration" value="0" />
                   <property name="repeatIteration" value="0" />
                 </properties>
               </test-case>
-              <test-case id="1002" name="PlayableSceneLoadsBindsHudAndHandlesCommandsAndRestart" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.PlayableSceneLoadsBindsHudAndHandlesCommandsAndRestart" methodname="PlayableSceneLoadsBindsHudAndHandlesCommandsAndRestart" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="71473987" result="Passed" start-time="2026-11-14 15:30:48Z" end-time="2026-11-14 15:30:49Z" duration="1.176489" asserts="0">
+              <test-case id="1002" name="PlayableSceneLoadsBindsHudAndHandlesCommandsAndRestart" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.PlayableSceneLoadsBindsHudAndHandlesCommandsAndRestart" methodname="PlayableSceneLoadsBindsHudAndHandlesCommandsAndRestart" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="907876657" result="Passed" start-time="2026-11-14 16:26:31Z" end-time="2026-11-14 16:26:32Z" duration="1.214707" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1005" name="SeamlessTaskSwitchingAndPauseOverlayFunctionCleanly" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.SeamlessTaskSwitchingAndPauseOverlayFunctionCleanly" methodname="SeamlessTaskSwitchingAndPauseOverlayFunctionCleanly" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="1328378147" result="Passed" start-time="2026-11-14 16:26:32Z" end-time="2026-11-14 16:26:32Z" duration="0.341486" asserts="0">
                 <properties>
                   <property name="_JOINTYPE" value="UnityCombinatorial" />
                   <property name="retryIteration" value="0" />

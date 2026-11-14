@@ -36,17 +36,51 @@ namespace MarsOutpost.Editor
 
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
-            // Main Camera configured for URP 2D
+            // Main Camera configured for 2.5D perspective with camera controller
             var camGo = new GameObject("Main Camera");
             camGo.tag = "MainCamera";
-            camGo.transform.position = new Vector3(0.4f, -0.1f, -10f);
+            camGo.transform.position = new Vector3(0.4f, 10.566f, -11.416f);
+            camGo.transform.rotation = Quaternion.Euler(43.0f, 0.0f, 0.0f);
             var cam = camGo.AddComponent<Camera>();
-            cam.orthographic = true;
-            cam.orthographicSize = 4.8f;
-            cam.backgroundColor = new Color(0.12f, 0.08f, 0.08f, 1f);
+            cam.orthographic = false;
+            cam.fieldOfView = 34f;
+            cam.nearClipPlane = 0.5f;
+            cam.farClipPlane = 160f;
+            cam.backgroundColor = new Color(0.28f, 0.14f, 0.10f, 1f);
             cam.clearFlags = CameraClearFlags.SolidColor;
             camGo.AddComponent<AudioListener>();
             camGo.AddComponent<UniversalAdditionalCameraData>();
+            camGo.AddComponent<MarsOutpostCameraController>();
+
+            // 3D Directional Sunlight (MarsSunLight) casting soft 3D shadows
+            var sunGo = new GameObject("MarsSunLight");
+            var sun = sunGo.AddComponent<Light>();
+            sun.type = LightType.Directional;
+            sun.color = new Color(1.0f, 0.84f, 0.68f, 1f);
+            sun.intensity = 1.55f;
+            sun.shadows = LightShadows.Soft;
+            sunGo.transform.rotation = Quaternion.Euler(46f, -32f, 0f);
+
+            // Subtle cool-slate fill light for balanced 3-point 360° PBR lighting
+            var fillGo = new GameObject("MarsFillLight");
+            var fill = fillGo.AddComponent<Light>();
+            fill.type = LightType.Directional;
+            fill.color = new Color(0.48f, 0.58f, 0.72f, 1f);
+            fill.intensity = 0.32f;
+            fill.shadows = LightShadows.None;
+            fillGo.transform.rotation = Quaternion.Euler(35f, 148f, 0f);
+
+            RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Trilight;
+            RenderSettings.ambientSkyColor = new Color(0.36f, 0.30f, 0.34f, 1f);
+            RenderSettings.ambientEquatorColor = new Color(0.58f, 0.38f, 0.28f, 1f);
+            RenderSettings.ambientGroundColor = new Color(0.24f, 0.14f, 0.10f, 1f);
+
+            // Subtle atmospheric Mars horizon fog
+            RenderSettings.fog = true;
+            RenderSettings.fogMode = FogMode.Linear;
+            RenderSettings.fogColor = new Color(0.32f, 0.16f, 0.11f, 1f);
+            RenderSettings.fogStartDistance = 36f;
+            RenderSettings.fogEndDistance = 78f;
 
             // Input System EventSystem
             var eventSystemGo = new GameObject("EventSystem");
@@ -103,15 +137,42 @@ namespace MarsOutpost.Editor
         {
             AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
             var importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
-            if (importer != null && (importer.textureType != TextureImporterType.Sprite || importer.spriteImportMode != SpriteImportMode.Single))
+            if (importer != null)
             {
-                importer.textureType = TextureImporterType.Sprite;
-                importer.spriteImportMode = SpriteImportMode.Single;
-                importer.spritePixelsPerUnit = 100f;
-                importer.filterMode = FilterMode.Bilinear;
-                importer.mipmapEnabled = false;
-                importer.alphaIsTransparency = true;
-                importer.SaveAndReimport();
+                bool changed = false;
+                if (importer.textureType != TextureImporterType.Sprite || importer.spriteImportMode != SpriteImportMode.Single)
+                {
+                    importer.textureType = TextureImporterType.Sprite;
+                    importer.spriteImportMode = SpriteImportMode.Single;
+                    importer.spritePixelsPerUnit = 100f;
+                    importer.filterMode = FilterMode.Bilinear;
+                    importer.alphaIsTransparency = true;
+                    changed = true;
+                }
+
+                if (assetPath.EndsWith("mars_terrain.png", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    if (importer.wrapMode != TextureWrapMode.Repeat || !importer.isReadable || !importer.mipmapEnabled)
+                    {
+                        importer.wrapMode = TextureWrapMode.Repeat;
+                        importer.isReadable = true;
+                        importer.mipmapEnabled = true;
+                        changed = true;
+                    }
+                }
+                else
+                {
+                    if (importer.mipmapEnabled)
+                    {
+                        importer.mipmapEnabled = false;
+                        changed = true;
+                    }
+                }
+
+                if (changed)
+                {
+                    importer.SaveAndReimport();
+                }
             }
             return AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
         }
