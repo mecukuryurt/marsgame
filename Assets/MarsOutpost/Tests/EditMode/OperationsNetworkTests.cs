@@ -132,6 +132,28 @@ namespace MarsOutpost.Tests
         }
 
         [Test]
+        public void StarterSolarWorkApronConnectsNewLineAndAdjacentPanel()
+        {
+            var sim = CreateCleanOpsSim();
+            var apron = ParcelMap.SolarWorkCoord;
+            var panelCoord = new GridCoord(10, 5);
+            var map = sim.State.Map;
+            Assert.That(map.GetCell(apron).IsClaimed, Is.True);
+            Assert.That(map.GetCell(apron).IsPassable, Is.True);
+            Assert.That(map.GetCell(ParcelMap.StarterSolarCoord).HasUtilityLine, Is.True);
+            Assert.That(sim.ClaimParcel(panelCoord).Success, Is.True);
+
+            var lineId = BuildAndCommission(sim, FacilityKind.UtilityLine, apron);
+            Assert.That(FindFacility(sim.State, lineId).IsConnectedToCore, Is.True);
+            var panelId = BuildAndCommission(sim, FacilityKind.SolarPanel, panelCoord);
+            Assert.That(FindFacility(sim.State, panelId).IsConnectedToCore, Is.True);
+            Assert.That(sim.State.Resources.Panels.Count, Is.EqualTo(4));
+            Assert.That(SolarProduction.GetPanelHealthFactor(sim.State.Resources, sim.State.Facilities), Is.GreaterThan(1));
+            Assert.That(MissionSimulation.TryLoadFromJson(sim.SaveToJson(), out var loaded, out var error), Is.True, error);
+            Assert.That(FindFacility(loaded.State, panelId).IsConnectedToCore, Is.True);
+        }
+
+        [Test]
         public void StarterFacilitiesStayConnectedToCoreAndPreserveBaselineResources()
         {
             var sim = CreateCleanOpsSim();

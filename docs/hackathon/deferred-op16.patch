@@ -1,0 +1,227 @@
+diff --git a/Assets/MarsOutpost/Runtime/Simulation/MissionSimulation.cs b/Assets/MarsOutpost/Runtime/Simulation/MissionSimulation.cs
+index bb06273..f8505fb 100644
+--- a/Assets/MarsOutpost/Runtime/Simulation/MissionSimulation.cs
++++ b/Assets/MarsOutpost/Runtime/Simulation/MissionSimulation.cs
+@@ -1081,6 +1081,9 @@ public CommandResult SpendScience(double amount, string reason = null)
+ 
+         public const int ClaimParcelCost = 2;
+ 
++        public CommandResult AssignExploration(string crewId, GridCoord targetCoord)
++            => AssignSurfaceWork(crewId, targetCoord, 0, SurfaceJobKind.Explore, allowTargetCell: true);
++
+         public CommandResult ClaimParcel(int x, int z) => ClaimParcel(new GridCoord(x, z));
+ 
+         public CommandResult ClaimParcel(GridCoord coord)
+@@ -1141,6 +1144,17 @@ public CommandResult AssignSurfaceWork(
+                 return CommandResult.Rejected("Crew member is exhausted and must rest before working.");
+             if (!sim.Map.Config.IsInBounds(targetCoord))
+                 return CommandResult.Rejected($"Parcel {targetCoord} is outside the map bounds.");
++            if (kind == SurfaceJobKind.Explore)
++            {
++                var target = sim.Map.GetCell(targetCoord);
++                if (target.IsExplored || !target.IsPassable)
++                    return CommandResult.Rejected("Exploration requires an unexplored, passable parcel.");
++                bool bordersExplored = false;
++                foreach (var neighbor in sim.Map.Config.GetCardinalNeighbors(targetCoord))
++                    if (sim.Map.GetCell(neighbor).IsExplored) { bordersExplored = true; break; }
++                if (!bordersExplored)
++                    return CommandResult.Rejected("Exploration target must border an explored parcel.");
++            }
+ 
+             GridCoord startCell;
+             WorldPos2D startPos;
+@@ -1160,7 +1174,15 @@ public CommandResult AssignSurfaceWork(
+                 startPos = GridNav.AirlockOuterWorldPos;
+             }
+ 
+-            if (!GridNav.TryFindBestWorkCell(sim.Map, startCell, targetCoord, allowTargetCell, out var workCell, out var cellPath))
++            GridCoord workCell;
++            List<GridCoord> cellPath;
++            if (kind == SurfaceJobKind.Explore)
++            {
++                workCell = targetCoord;
++                if (!GridNav.TryFindPath(sim.Map, startCell, targetCoord, out cellPath, exploredOnly: true))
++                    return CommandResult.Rejected($"No reachable surface path to parcel {targetCoord}.");
++            }
++            else if (!GridNav.TryFindBestWorkCell(sim.Map, startCell, targetCoord, allowTargetCell, out workCell, out cellPath))
+                 return CommandResult.Rejected($"No reachable surface path to parcel {targetCoord}.");
+ 
+             if (replace)
+@@ -1194,6 +1216,12 @@ public CommandResult AssignSurfaceWork(
+ 
+             if (phase == SurfaceJobPhase.Completed)
+             {
++                if (kind == SurfaceJobKind.Explore)
++                {
++                    sim.Map.GetCell(targetCoord).IsExplored = true;
++                    foreach (var neighbor in sim.Map.Config.GetCardinalNeighbors(targetCoord))
++                        sim.Map.GetCell(neighbor).IsExplored = true;
++                }
+                 job.AssignedCrewId = null;
+                 member.Location = CrewLocation.Outside;
+                 member.SurfacePosX = waypoints[waypoints.Count - 1].X;
+diff --git a/Assets/MarsOutpost/Runtime/Simulation/Resources.cs b/Assets/MarsOutpost/Runtime/Simulation/Resources.cs
+index 65bcbc1..676b05a 100644
+--- a/Assets/MarsOutpost/Runtime/Simulation/Resources.cs
++++ b/Assets/MarsOutpost/Runtime/Simulation/Resources.cs
+@@ -1153,6 +1153,14 @@ internal static double AdvanceAll(
+                             member.SurfacePosX = pos.X;
+                             member.SurfacePosZ = pos.Z;
+                             member.HasSurfacePosition = true;
++                            if (activeSJob.Kind == SurfaceJobKind.Explore && simState.Map != null &&
++                                simState.Map.Config.TryWorldToCell(pos.X, pos.Z, out var reached) &&
++                                reached == activeSJob.TargetCoord)
++                            {
++                                simState.Map.GetCell(reached).IsExplored = true;
++                                foreach (var neighbor in simState.Map.Config.GetCardinalNeighbors(reached))
++                                    simState.Map.GetCell(neighbor).IsExplored = true;
++                            }
+                         }
+                         else if (activeSJob.Phase == SurfaceJobPhase.Work && member.Status == CrewStatus.Working)
+                         {
+diff --git a/Assets/MarsOutpost/Runtime/Simulation/SaveLoad.cs b/Assets/MarsOutpost/Runtime/Simulation/SaveLoad.cs
+index 6fdcb2c..4c9eb63 100644
+--- a/Assets/MarsOutpost/Runtime/Simulation/SaveLoad.cs
++++ b/Assets/MarsOutpost/Runtime/Simulation/SaveLoad.cs
+@@ -9,7 +9,7 @@ namespace MarsOutpost
+     internal static class OperationsSaveCodec
+     {
+         public const int CurrentSchemaVersion = 3;
+-        public const int CurrentExpansionRevision = 4;
++        public const int CurrentExpansionRevision = 5;
+ 
+         public static string Serialize(MissionConfig config, double elapsedSeconds, double timeCompensation, SimulationMutableState sim)
+         {
+diff --git a/Assets/MarsOutpost/Runtime/Simulation/SurfaceJob.cs b/Assets/MarsOutpost/Runtime/Simulation/SurfaceJob.cs
+index 03fcb4a..86352d7 100644
+--- a/Assets/MarsOutpost/Runtime/Simulation/SurfaceJob.cs
++++ b/Assets/MarsOutpost/Runtime/Simulation/SurfaceJob.cs
+@@ -69,7 +69,7 @@ public static class GridNav
+         /// Deterministic 4-neighbor shortest-path BFS using fixed N/E/S/W order.
+         /// Allows stepping out of <paramref name="start"/>, while all entered cells must be passable.
+         /// </summary>
+-        public static bool TryFindPath(ParcelMap map, GridCoord start, GridCoord goal, out List<GridCoord> path)
++        public static bool TryFindPath(ParcelMap map, GridCoord start, GridCoord goal, out List<GridCoord> path, bool exploredOnly = false)
+         {
+             path = null;
+             if (map == null || !map.Config.IsInBounds(start) || !map.Config.IsInBounds(goal))
+@@ -113,6 +113,7 @@ public static bool TryFindPath(ParcelMap map, GridCoord start, GridCoord goal, o
+                     int nextIdx = next.Z * width + next.X;
+                     if (visited[nextIdx]) continue;
+                     if (!map.TryGetCell(next, out var nextCell) || !nextCell.IsPassable) continue;
++                    if (exploredOnly && !nextCell.IsExplored && next != goal) continue;
+ 
+                     visited[nextIdx] = true;
+                     parent[nextIdx] = curIdx;
+diff --git a/Assets/MarsOutpost/Tests/EditMode/OperationsWaterExtractorTests.cs b/Assets/MarsOutpost/Tests/EditMode/OperationsWaterExtractorTests.cs
+index ec15275..9ebc02f 100644
+--- a/Assets/MarsOutpost/Tests/EditMode/OperationsWaterExtractorTests.cs
++++ b/Assets/MarsOutpost/Tests/EditMode/OperationsWaterExtractorTests.cs
+@@ -400,7 +400,7 @@ public void DepletionBoundaryMatchesBetweenLargeAndSmallTicksAndPersistsInRevisi
+             // Save/Load round-trip check for Revision 4 + per-site toggle + telemetry + depleted RemainingWater == 0.
+             Assert.That(simLarge.SetFacilityEnabled(facId, false).Success, Is.True);
+             string postJson = simLarge.SaveToJson();
+-            Assert.That(postJson, Does.Contain("\"expansionRevision\":4"));
++            Assert.That(postJson, Does.Contain($"\"expansionRevision\":{OperationsSaveCodec.CurrentExpansionRevision}"));
+             Assert.That(MissionSimulation.TryLoadFromJson(postJson, out var reloaded, out string err3), Is.True, err3);
+             var reFac = FindFacility(reloaded.State, facId);
+             Assert.That(reFac.IsEnabled, Is.False);
+diff --git a/docs/expansion-v3/INTEGRATION.md b/docs/expansion-v3/INTEGRATION.md
+index 5d48f16..99f227e 100644
+--- a/docs/expansion-v3/INTEGRATION.md
++++ b/docs/expansion-v3/INTEGRATION.md
+@@ -55,6 +55,8 @@ revision ve eklenen alanlar her kalıcı model checkpoint'inde bu bölüme eklen
+ - **Revision 2 (OP04):** `crew` (`activeSurfaceJobId`, `surfacePosX`, `surfacePosZ`, `hasSurfacePosition`) ve `surfaceJobs` (`jobId`, `kind`, `targetId`, `targetX/Z`, `workX/Z`, `assignedCrewId`, `phase`, `travelSpeed`, `workRequiredSeconds`, `workProgressSeconds`, `workStaminaRate`, `workEnergyTotal`, `energyConsumed`, `waypoints`, `legTotalDistance`, `legDistanceTraveled`, `airlockRemainingSeconds`). Rev 1 ve legacy kayıtlardan göçte boş `surfaceJobs` listesi başlatılır; hayali aktif iş üretilmez.
+ - **Revision 3 (OP06):** `map.cells[].ubid` (`UtilityBlueprintId`) ve `facilities` (`facilityId`, `kind`, `originX/Z`, `rotation`, `lifecycleStatus`, `workProgressSeconds`, `workRequiredSeconds`, `energySpentTotal`, `energyRequiredTotal`, `paidMaterials`, `isProtectedStarter`, `isConnectedToCore`, `isProductionApplied`, `footprint`, `linkedPanelIds`). Rev 1/2 ve legacy kayıtlardan göçte starter tesisler (`core-habitat`, `starter-solar`, `legacy-extractor`) başlatılır; bitmemiş `Blueprint` tesisleri 0 üretim kuralıyla yüklenir.
+ 
++- **Revision 5 (OP16):** `Explore` yüzey işi ve mevcut `map.cells[].explored` durumu kullanılır; revizyon 1–4 kayıtlarının haritası ve etkin işleri değişmeden okunur, keşif geçmişi sıfırlanmaz.
++
+ 1. Legacy kayıt önce mevcut V2 decoder semantiğiyle okunur. Elapsed/config,
+    timeCompensation, kaynaklar, arıza hedefi/RNG, görevler, Sol raporu, bilim,
+    günlük öğün ve Dünya emirleri korunur. Göçte `Tick` çalıştırılmaz.
+diff --git a/Assets/MarsOutpost/Tests/EditMode/OperationsExplorationTests.cs b/Assets/MarsOutpost/Tests/EditMode/OperationsExplorationTests.cs
+new file mode 100644
+index 0000000..e3f3aa5
+--- /dev/null
++++ b/Assets/MarsOutpost/Tests/EditMode/OperationsExplorationTests.cs
+@@ -0,0 +1,71 @@
++using System;
++using System.Linq;
++using NUnit.Framework;
++
++namespace MarsOutpost.Tests
++{
++    public class OperationsExplorationTests
++    {
++        private static MissionSimulation Create() => new MissionSimulation(
++            MissionConfig.CreateOperationsDefault(operationsSeed: 424242, enableOperationsRandomEvents: false),
++            new MissionScenario(events: Array.Empty<EventState>()));
++
++        private static GridCoord Frontier(MissionSimulation sim)
++        {
++            var map = sim.State.Map;
++            return map.Cells.First(c => !c.IsExplored && c.IsPassable &&
++                map.Config.GetCardinalNeighbors(c.Coord).Any(n => map.GetCell(n).IsExplored) &&
++                GridNav.TryFindPath(map, ParcelMap.AirlockCorridorCoord, c.Coord, out _, true)).Coord;
++        }
++
++        [Test]
++        public void ExplorationRequiresReachableFrontierAndRevealsOnlyAfterArrival()
++        {
++            var sim = Create();
++            var target = Frontier(sim);
++            var oldSnapshot = sim.State;
++            Assert.That(sim.AssignExploration("crew-1", new GridCoord(0, 0)).Success, Is.False);
++            Assert.That(sim.AssignExploration("crew-1", target).Success, Is.True);
++            Assert.That(sim.State.Map.GetCell(target).IsExplored, Is.False);
++            var job = sim.State.SurfaceJobs.Last();
++            sim.Tick(job.LegTotalDistance / job.TravelSpeed + 0.01);
++            Assert.That(sim.State.Map.GetCell(target).IsExplored, Is.True);
++            Assert.That(oldSnapshot.Map.GetCell(target).IsExplored, Is.False);
++            Assert.That(sim.AssignExploration("crew-2", target).Success, Is.False);
++        }
++
++        [Test]
++        public void ExplorationSaveAndLargeTickMatchSmallTicksAndRestart()
++        {
++            var big = Create();
++            var small = Create();
++            var target = Frontier(big);
++            Assert.That(big.AssignExploration("crew-1", target).Success, Is.True);
++            Assert.That(small.AssignExploration("crew-1", target).Success, Is.True);
++            big.Tick(0.5);
++            small.Tick(0.5);
++            Assert.That(MissionSimulation.TryLoadFromJson(big.SaveToJson(), out var loaded, out var error), Is.True, error);
++            big.Tick(100);
++            loaded.Tick(100);
++            for (int i = 0; i < 1000; i++) small.Tick(0.1);
++            for (int i = 0; i < big.State.Map.Cells.Count; i++)
++            {
++                Assert.That(loaded.State.Map.Cells[i].IsExplored, Is.EqualTo(big.State.Map.Cells[i].IsExplored));
++                Assert.That(small.State.Map.Cells[i].IsExplored, Is.EqualTo(big.State.Map.Cells[i].IsExplored));
++            }
++            big.Restart();
++            Assert.That(big.State.Map.GetCell(target).IsExplored, Is.False);
++        }
++
++        [Test]
++        public void CancellationBeforeArrivalDoesNotRevealTarget()
++        {
++            var sim = Create();
++            var target = Frontier(sim);
++            Assert.That(sim.AssignExploration("crew-1", target).Success, Is.True);
++            Assert.That(sim.CancelTask("crew-1").Success, Is.True);
++            sim.Tick(100);
++            Assert.That(sim.State.Map.GetCell(target).IsExplored, Is.False);
++        }
++    }
++}
+diff --git a/Assets/MarsOutpost/Tests/EditMode/OperationsExplorationTests.cs.meta b/Assets/MarsOutpost/Tests/EditMode/OperationsExplorationTests.cs.meta
+new file mode 100644
+index 0000000..0d152c5
+--- /dev/null
++++ b/Assets/MarsOutpost/Tests/EditMode/OperationsExplorationTests.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: 17c9c98feee2106ff9ce2ddf081b69f2
+\ No newline at end of file
