@@ -15,7 +15,7 @@ namespace MarsOutpost.Presentation
         private MarsOutpostAudio audioController;
         private GameObject overlay;
         private Dropdown qualityDropdown, resolutionDropdown;
-        private Slider volumeSlider;
+        private Slider volumeSlider, ambienceSlider, musicSlider, sfxSlider;
         private Toggle muteToggle, fullscreenToggle;
         private Text titleText, audioHeader, graphicsHeader, displayHeader, statusText;
         private UniversalRenderPipelineAsset originalPipeline, runtimePipeline;
@@ -27,7 +27,7 @@ namespace MarsOutpost.Presentation
         private bool audioBeforeOpenMute;
         private float audioBeforeOpenVolume;
         private RenderPipelineAsset originalQualityPipeline;
-        private float draftVolume;
+        private float draftVolume, draftAmbience, draftMusic, draftSfx;
         private int draftQuality, draftResolution;
         private readonly List<Resolution> resolutions = new List<Resolution>();
         private Button entryButton;
@@ -60,6 +60,8 @@ namespace MarsOutpost.Presentation
                 {
                     var wv = FindFirstObjectByType<MarsOutpostWorldView>();
                     if (wv != null && wv.HandleEscapeCancel()) return;
+                    var hud = FindFirstObjectByType<MarsOutpostHud>();
+                    if (hud != null && hud.CloseContextDrawer()) return;
                     Open();
                 }
             }
@@ -139,11 +141,14 @@ namespace MarsOutpost.Presentation
             var contentGo = new GameObject("SettingsContent", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
             contentGo.transform.SetParent(scrollGo.transform, false);
             var contentRt = contentGo.GetComponent<RectTransform>(); contentRt.anchorMin = new Vector2(0, 1); contentRt.anchorMax = new Vector2(1, 1); contentRt.pivot = new Vector2(0.5f, 1); contentRt.sizeDelta = new Vector2(0, 540);
-            var layout = contentGo.GetComponent<VerticalLayoutGroup>(); layout.padding = new RectOffset(12, 12, 8, 12); layout.spacing = 5; layout.childControlWidth = true; layout.childControlHeight = false; layout.childForceExpandWidth = true;
+            var layout = contentGo.GetComponent<VerticalLayoutGroup>(); layout.padding = new RectOffset(12, 12, 8, 12); layout.spacing = 5; layout.childControlWidth = true; layout.childControlHeight = true; layout.childForceExpandWidth = true;
             contentGo.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             var scroll = scrollGo.GetComponent<ScrollRect>(); scroll.content = contentRt; scroll.horizontal = false; scroll.vertical = true; scroll.viewport = scrollRt;
 
             audioHeader = Section(contentGo.transform, 38); muteToggle = AddToggle(contentGo.transform, 42); volumeSlider = AddSlider(contentGo.transform, 52);
+            ambienceSlider = AddSlider(contentGo.transform, 52); ambienceSlider.gameObject.name = "AmbienceSlider";
+            musicSlider = AddSlider(contentGo.transform, 52); musicSlider.gameObject.name = "MusicSlider";
+            sfxSlider = AddSlider(contentGo.transform, 52); sfxSlider.gameObject.name = "SfxSlider";
             graphicsHeader = Section(contentGo.transform, 38); qualityDropdown = AddDropdown(contentGo.transform, 44);
             displayHeader = Section(contentGo.transform, 38); fullscreenToggle = AddToggle(contentGo.transform, 42); resolutionDropdown = AddDropdown(contentGo.transform, 44);
             statusText = Label("SettingsStatus", panel, new Vector2(24, 42), new Vector2(340, 24), 14, FontStyle.Italic, TextAnchor.MiddleLeft, new Color(0.65f, 0.85f, 1));
@@ -157,6 +162,9 @@ namespace MarsOutpost.Presentation
             var reset = Button(OutpostStrings.TrEn("Varsayılan", "Defaults"), panel, new Vector2(-320, 18), new Vector2(120, 40)); reset.onClick.AddListener(ResetDraft);
             muteToggle.onValueChanged.AddListener(v => draftMute = v);
             volumeSlider.onValueChanged.AddListener(v => draftVolume = v);
+            ambienceSlider.onValueChanged.AddListener(v => draftAmbience = v);
+            musicSlider.onValueChanged.AddListener(v => draftMusic = v);
+            sfxSlider.onValueChanged.AddListener(v => draftSfx = v);
             fullscreenToggle.onValueChanged.AddListener(v => draftFullscreen = v);
             qualityDropdown.onValueChanged.AddListener(v => draftQuality = v);
             resolutionDropdown.onValueChanged.AddListener(v => draftResolution = v);
@@ -167,6 +175,10 @@ namespace MarsOutpost.Presentation
         {
             draftMute = audioController != null ? audioController.IsMuted : PlayerPrefs.GetInt(Prefix + "Muted", 0) != 0;
             draftVolume = audioController != null ? audioController.Volume : PlayerPrefs.GetFloat(Prefix + "Volume", 0.6f);
+            draftAmbience = audioController != null ? audioController.AmbienceVolume : 0.45f;
+            draftMusic = audioController != null ? audioController.MusicVolume : 0.35f;
+            draftSfx = audioController != null ? audioController.SfxVolume : 0.8f;
+            ambienceSlider.SetValueWithoutNotify(draftAmbience); musicSlider.SetValueWithoutNotify(draftMusic); sfxSlider.SetValueWithoutNotify(draftSfx);
             draftQuality = Mathf.Clamp(PlayerPrefs.GetInt(Prefix + "Quality", 2), 0, 2);
             draftFullscreen = PlayerPrefs.GetInt(Prefix + "Fullscreen", Screen.fullScreen ? 1 : 0) != 0;
             PopulateResolutions();
@@ -196,6 +208,9 @@ namespace MarsOutpost.Presentation
             {
                 audioController.SetMuted(PlayerPrefs.GetInt(Prefix + "Muted", audioController.IsMuted ? 1 : 0) != 0);
                 audioController.SetVolume(PlayerPrefs.GetFloat(Prefix + "Volume", audioController.Volume));
+                audioController.SetAmbienceVolume(PlayerPrefs.GetFloat(Prefix + "Ambience", 0.45f));
+                audioController.SetMusicVolume(PlayerPrefs.GetFloat(Prefix + "Music", 0.35f));
+                audioController.SetSfxVolume(PlayerPrefs.GetFloat(Prefix + "Sfx", 0.8f));
             }
             int quality = Mathf.Clamp(PlayerPrefs.GetInt(Prefix + "Quality", 2), 0, 2);
             ApplyGraphics(quality);
@@ -267,6 +282,8 @@ namespace MarsOutpost.Presentation
 
         private void ResetDraft()
         {
+            draftAmbience = 0.45f; draftMusic = 0.35f; draftSfx = 0.8f;
+            ambienceSlider.SetValueWithoutNotify(draftAmbience); musicSlider.SetValueWithoutNotify(draftMusic); sfxSlider.SetValueWithoutNotify(draftSfx);
             draftMute = false; draftVolume = 0.6f; draftQuality = 2; draftFullscreen = true;
             PopulateResolutions();
             int nativeWidth = Screen.currentResolution.width > 0 ? Screen.currentResolution.width : Screen.width;
@@ -280,10 +297,11 @@ namespace MarsOutpost.Presentation
         private void Apply()
         {
             PlayerPrefs.SetInt(Prefix + "Muted", draftMute ? 1 : 0); PlayerPrefs.SetFloat(Prefix + "Volume", draftVolume);
+            PlayerPrefs.SetFloat(Prefix + "Ambience", draftAmbience); PlayerPrefs.SetFloat(Prefix + "Music", draftMusic); PlayerPrefs.SetFloat(Prefix + "Sfx", draftSfx);
             PlayerPrefs.SetInt(Prefix + "Quality", draftQuality); PlayerPrefs.SetInt(Prefix + "Fullscreen", draftFullscreen ? 1 : 0);
             var chosen = resolutions[Mathf.Clamp(draftResolution, 0, resolutions.Count - 1)];
             PlayerPrefs.SetInt(Prefix + "Width", chosen.width); PlayerPrefs.SetInt(Prefix + "Height", chosen.height); PlayerPrefs.Save();
-            if (audioController != null) { audioController.SetMuted(draftMute); audioController.SetVolume(draftVolume); }
+            if (audioController != null) { audioController.SetMuted(draftMute); audioController.SetVolume(draftVolume); audioController.SetAmbienceVolume(draftAmbience); audioController.SetMusicVolume(draftMusic); audioController.SetSfxVolume(draftSfx); }
             ApplyGraphics(draftQuality);
             if (!Application.isBatchMode && chosen.width > 0 && chosen.height > 0)
                 Screen.SetResolution(chosen.width, chosen.height, draftFullscreen);
@@ -338,7 +356,10 @@ namespace MarsOutpost.Presentation
             titleText.text = OutpostStrings.TrEn("AYARLAR", "SETTINGS");
             entryButton.GetComponentInChildren<Text>().text = OutpostStrings.TrEn("Ayarlar", "Settings");
             audioHeader.text = OutpostStrings.TrEn("SES", "AUDIO"); graphicsHeader.text = OutpostStrings.TrEn("GRAFİK", "GRAPHICS"); displayHeader.text = OutpostStrings.TrEn("EKRAN", "DISPLAY");
-            SetToggleLabel(muteToggle, OutpostStrings.TrEn("Sesi kapat", "Mute sound")); SetSliderLabel(volumeSlider, OutpostStrings.TrEn("Ses seviyesi", "Volume"));
+            SetToggleLabel(muteToggle, OutpostStrings.TrEn("Sesi kapat", "Mute sound")); SetSliderLabel(volumeSlider, OutpostStrings.TrEn("Ana ses", "Master"));
+            SetSliderLabel(ambienceSlider, OutpostStrings.TrEn("Ambiyans", "Ambience"));
+            SetSliderLabel(musicSlider, OutpostStrings.TrEn("Müzik", "Music"));
+            SetSliderLabel(sfxSlider, OutpostStrings.TrEn("Efektler", "SFX"));
             SetDropdownLabel(qualityDropdown, OutpostStrings.TrEn("Grafik kalitesi", "Graphics quality")); SetToggleLabel(fullscreenToggle, OutpostStrings.TrEn("Tam ekran", "Fullscreen")); SetDropdownLabel(resolutionDropdown, OutpostStrings.TrEn("Çözünürlük", "Resolution"));
         }
 

@@ -146,6 +146,9 @@ namespace MarsOutpost.Tests.PlayMode
             runner.InitializeOperationsMission();
             yield return null;
 
+            GameObject.Find("BtnBuildMode").GetComponent<Button>().onClick.Invoke();
+            yield return null;
+
             var btnBuildExField = typeof(MarsOutpostHud).GetField("btnBuildExtractor", BindingFlags.Instance | BindingFlags.NonPublic);
             var btnToggleExField = typeof(MarsOutpostHud).GetField("btnToggleSiteExtractor", BindingFlags.Instance | BindingFlags.NonPublic);
             var parcelDetailsField = typeof(MarsOutpostHud).GetField("parcelDetailsText", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -183,6 +186,7 @@ namespace MarsOutpost.Tests.PlayMode
             double remAfter = runner.State.Map.GetCell(ice.Coord).RemainingWater;
             Assert.That(remAfter, Is.LessThan(remBefore));
 
+            GameObject.Find("BtnBuildMode").GetComponent<Button>().onClick.Invoke();
             world.SelectParcel(ice.Coord);
             yield return null;
             Assert.That(btnToggleEx.gameObject.activeInHierarchy, Is.True);

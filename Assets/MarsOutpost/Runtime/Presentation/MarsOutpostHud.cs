@@ -269,6 +269,10 @@ namespace MarsOutpost.Presentation
 
         // Operations Build Catalog & Ghost Status Panel (OP06+)
         private GameObject operationsBuildPanel;
+        private bool buildDrawerOpen;
+        private bool systemsDrawerOpen;
+        private bool toolsOpen;
+        private GameObject buildEntry, systemsEntry;
         private Text buildCatalogTitleText;
         private Text buildGhostInfoText;
         private Text buildNoticeText;
@@ -400,9 +404,11 @@ namespace MarsOutpost.Presentation
             bool captureOp05Surface = Array.IndexOf(Environment.GetCommandLineArgs(), "--capture-op05-surface") >= 0;
             bool captureOp06Ghost = Array.IndexOf(Environment.GetCommandLineArgs(), "--capture-op06-ghost") >= 0;
             bool captureOp14Extractor = Array.IndexOf(Environment.GetCommandLineArgs(), "--capture-op14-extractor") >= 0;
+            bool captureSystems = Array.IndexOf(Environment.GetCommandLineArgs(), "--capture-systems") >= 0;
+            bool captureOrders = Array.IndexOf(Environment.GetCommandLineArgs(), "--capture-orders") >= 0;
             if (runner != null)
             {
-                if (captureOp03Grid || captureOp05Surface || captureOp06Ghost || captureOp14Extractor)
+                if (captureOp03Grid || captureOp05Surface || captureOp06Ghost || captureOp14Extractor || captureSystems || captureOrders)
                     runner.InitializeOperationsMission();
 
                 if (captureOp14Extractor)
@@ -607,6 +613,22 @@ namespace MarsOutpost.Presentation
                 yield return null;
             yield return new WaitForEndOfFrame();
 
+            if (captureOp06Ghost)
+            {
+                buildDrawerOpen = true;
+                RefreshOperationsBuildUi(runner != null ? runner.State : null);
+            }
+            if (captureSystems)
+            {
+                systemsDrawerOpen = true;
+                RefreshEquipmentUi(runner != null ? runner.State : null);
+            }
+            if (captureOrders) ToggleEarthOrdersModal(true);
+            if (captureOp06Ghost || captureSystems || captureOrders)
+            {
+                yield return null;
+                yield return new WaitForEndOfFrame();
+            }
             if (Array.IndexOf(Environment.GetCommandLineArgs(), "--capture-settings") >= 0 && settingsMenu != null)
             {
                 settingsMenu.Open();
@@ -682,6 +704,15 @@ namespace MarsOutpost.Presentation
 
         private void OnBlueprintPlacementAttempted(FacilityKind kind, GridCoord coord, FacilityRotation rot, CommandResult res)
         {
+            if (res.Success && worldView != null)
+            {
+                buildDrawerOpen = false;
+                worldView.CancelBuildMode();
+                worldView.SelectParcel(coord);
+                RefreshOperationsBuildUi(runner != null ? runner.State : null);
+                RefreshParcelSelectionUi(runner != null ? runner.State : null);
+                return;
+            }
             if (!res.Success && feedbackPanel != null && feedbackText != null)
             {
                 feedbackText.text = OutpostStrings.FormatBlueprintFailureReason(res, kind, FacilityCatalog.GetSpec(kind).MaterialCost, runner?.State?.Materials ?? 0);
@@ -694,6 +725,14 @@ namespace MarsOutpost.Presentation
         private void OnWorldParcelSelected(GridCoord? coord)
         {
             selectedParcel = coord;
+            // Clicking a parcel before choosing a ghost opens its inspector for claiming.
+            if (coord.HasValue && buildDrawerOpen && (worldView == null || !worldView.ActiveBuildKind.HasValue))
+            {
+                buildDrawerOpen = false;
+                RefreshOperationsBuildUi(runner != null ? runner.State : null);
+            }
+            if (coord.HasValue && !buildDrawerOpen) systemsDrawerOpen = false;
+            RefreshEquipmentUi(runner != null ? runner.State : null);
             RefreshParcelSelectionUi(runner != null ? runner.State : null);
         }
 
@@ -816,11 +855,6 @@ namespace MarsOutpost.Presentation
             if (kb.digit1Key.wasPressedThisFrame) SelectCrew("crew-1");
             if (kb.digit2Key.wasPressedThisFrame) SelectCrew("crew-2");
             if (kb.digit3Key.wasPressedThisFrame) SelectCrew("crew-3");
-            if (kb.rKey.wasPressedThisFrame)
-            {
-                if (cameraController == null) cameraController = FindFirstObjectByType<MarsOutpostCameraController>();
-                if (cameraController != null) cameraController.ResetCameraView();
-            }
             if (kb.tKey.wasPressedThisFrame && worldView != null)
             {
                 worldView.ToggleDomeRoof();
@@ -1483,6 +1517,7 @@ namespace MarsOutpost.Presentation
             CreateCompactReserveMeter(topBar, new Vector2(640, -6), 150, out oxygenText, out oxygenFill);
             CreateCompactReserveMeter(topBar, new Vector2(800, -6), 150, out researchText, out researchFill);
             reserveNoteText = CreateText("ReserveNote", topBar, new Vector2(340, -38), new Vector2(610, 22), 14, FontStyle.Normal, TextAnchor.MiddleLeft, new Color(0.78f, 0.86f, 0.94f));
+            reserveNoteText.enabled = false;
 
             // Right: Utility Buttons Row 1 (y = -6, height = 26px)
             CreatePillButton(topBar, "BtnCamReset", new Vector2(964, -6), new Vector2(92, 26), out btnCamResetText, () =>
@@ -1526,6 +1561,36 @@ namespace MarsOutpost.Presentation
             btnGridToggleBg = btnGridToggle.GetComponent<Image>();
             btnGridToggleText.text = OutpostStrings.GetGridToggleButton(false);
             btnGridToggleObj.SetActive(false);
+
+            buildEntry = CreatePillButton(topBar, "BtnBuildMode", new Vector2(1536, -36), new Vector2(96, 24), out var buildEntryText, () =>
+            {
+                buildDrawerOpen = !buildDrawerOpen;
+                systemsDrawerOpen = false;
+                if (worldView != null)
+                {
+                    if (buildDrawerOpen) { worldView.SetGridVisible(true); worldView.ClearParcelSelection(); }
+                    else worldView.CancelBuildMode();
+                }
+                RefreshOperationsBuildUi(runner != null ? runner.State : null);
+                RefreshEquipmentUi(runner != null ? runner.State : null);
+                RefreshParcelSelectionUi(runner != null ? runner.State : null);
+            }).gameObject;
+            buildEntryText.text = OutpostStrings.TrEn("İnşa", "Build");
+            systemsEntry = CreatePillButton(topBar, "BtnSystems", new Vector2(1640, -36), new Vector2(96, 24), out var systemsEntryText, () =>
+            {
+                systemsDrawerOpen = !systemsDrawerOpen;
+                buildDrawerOpen = false;
+                if (worldView != null) { worldView.CancelBuildMode(); worldView.ClearParcelSelection(); }
+                RefreshOperationsBuildUi(runner != null ? runner.State : null);
+                RefreshEquipmentUi(runner != null ? runner.State : null);
+            }).gameObject;
+            systemsEntryText.text = OutpostStrings.TrEn("Sistemler", "Systems");
+            CreatePillButton(topBar, "BtnTools", new Vector2(1744, -36), new Vector2(78, 24), out var toolsText, () =>
+            {
+                toolsOpen = !toolsOpen;
+                RefreshEarthOrdersUi(runner != null ? runner.State : null);
+            });
+            toolsText.text = OutpostStrings.TrEn("Araçlar", "Tools");
 
             // Right: Audio & Navigation Row 2 (y = -36, height = 24px)
             btnSaveOpsObj = CreatePillButton(topBar, "BtnSaveOps", new Vector2(1236, -36), new Vector2(58, 24), out btnSaveOpsText, () =>
@@ -1581,6 +1646,7 @@ namespace MarsOutpost.Presentation
 
             cameraHintText = CreateText("CameraNavHint", topBar, new Vector2(1502, -37), new Vector2(400, 22), 13, FontStyle.Normal, TextAnchor.MiddleLeft, new Color(0.72f, 0.82f, 0.92f));
             cameraHintText.text = OutpostStrings.TrEn("WASD: Gez | Tekerlek: Yakınlaştır | R: Sıfırla", "WASD: Pan | Wheel: Zoom | R: Reset");
+            cameraHintText.enabled = false;
             RefreshAudioControls();
 
             // -------------------------------------------------------------
@@ -2064,9 +2130,28 @@ namespace MarsOutpost.Presentation
             earthOrdersModal.SetActive(false);
         }
 
+        public bool CloseContextDrawer()
+        {
+            if (earthOrdersModal != null && earthOrdersModal.activeSelf) { ToggleEarthOrdersModal(false); return true; }
+            if (!buildDrawerOpen && !systemsDrawerOpen && !toolsOpen) return false;
+            buildDrawerOpen = false; systemsDrawerOpen = false; toolsOpen = false;
+            RefreshOperationsBuildUi(runner != null ? runner.State : null);
+            RefreshEquipmentUi(runner != null ? runner.State : null);
+            RefreshParcelSelectionUi(runner != null ? runner.State : null);
+            RefreshEarthOrdersUi(runner != null ? runner.State : null);
+            return true;
+        }
+
         private void ToggleEarthOrdersModal(bool open)
         {
             if (earthOrdersModal == null) return;
+            if (open)
+            {
+                buildDrawerOpen = false; systemsDrawerOpen = false;
+                if (worldView != null) { worldView.CancelBuildMode(); worldView.ClearParcelSelection(); }
+                RefreshOperationsBuildUi(runner != null ? runner.State : null);
+                RefreshEquipmentUi(runner != null ? runner.State : null);
+            }
             earthOrdersModal.SetActive(open);
             MarsOutpostCameraController.IsMenuBlockingCameraInput = open;
             if (open) RefreshEarthOrdersUi(runner != null ? runner.State : null);
@@ -2089,9 +2174,11 @@ namespace MarsOutpost.Presentation
         private void RefreshEarthOrdersUi(MissionState state)
         {
             bool isOps = state != null && state.Mode == MissionMode.Operations;
-            if (btnEarthOrdersObj != null) btnEarthOrdersObj.SetActive(isOps);
-            if (btnSaveOpsObj != null) btnSaveOpsObj.SetActive(isOps);
-            if (btnLoadOpsObj != null) btnLoadOpsObj.SetActive(isOps);
+            if (btnEarthOrdersObj != null) btnEarthOrdersObj.SetActive(isOps && toolsOpen);
+            if (btnSaveOpsObj != null) btnSaveOpsObj.SetActive(isOps && toolsOpen);
+            if (btnLoadOpsObj != null) btnLoadOpsObj.SetActive(isOps && toolsOpen);
+            if (buildEntry != null) buildEntry.SetActive(isOps);
+            if (systemsEntry != null) systemsEntry.SetActive(isOps);
             if (btnSaveOpsText != null) btnSaveOpsText.text = OutpostStrings.TrEn("Kaydet", "Save");
             if (btnLoadOpsText != null) btnLoadOpsText.text = OutpostStrings.TrEn("Yükle", "Load");
             if (!isOps)
@@ -2195,9 +2282,9 @@ namespace MarsOutpost.Presentation
         private void RefreshEquipmentUi(MissionState state)
         {
             if (equipmentPanel == null) return;
-            bool visible = state.Mode == MissionMode.Operations;
-            equipmentPanel.SetActive(visible);
-            if (!visible) return;
+            bool isOps = state != null && state.Mode == MissionMode.Operations;
+            equipmentPanel.SetActive(isOps && systemsDrawerOpen);
+            if (!isOps) return;
             var r = state.Resources;
             int totalPanels = r.Panels != null ? r.Panels.Count : 0;
             int faultedPanels = 0;
@@ -2325,7 +2412,7 @@ namespace MarsOutpost.Presentation
             ParcelState cell = null;
             bool valid = state != null && state.Mode == MissionMode.Operations && state.Map != null && selectedParcel.HasValue
                 && state.Map.TryGetCell(selectedParcel.Value, out cell);
-            parcelCardPanel.SetActive(valid);
+            parcelCardPanel.SetActive(valid && !buildDrawerOpen && !systemsDrawerOpen);
             if (!valid || cell == null)
             {
                 selectedBlueprintId = null;
@@ -2627,8 +2714,8 @@ namespace MarsOutpost.Presentation
         {
             if (operationsBuildPanel == null) return;
             bool isOps = state != null && state.Mode == MissionMode.Operations && state.Map != null;
-            operationsBuildPanel.SetActive(isOps);
-            if (!isOps) return;
+            operationsBuildPanel.SetActive(isOps && buildDrawerOpen);
+            if (!isOps || !buildDrawerOpen) return;
 
             int bpCount = 0;
             if (state.Facilities != null)

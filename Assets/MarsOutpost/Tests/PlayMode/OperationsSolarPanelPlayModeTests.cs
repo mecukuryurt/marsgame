@@ -48,6 +48,8 @@ namespace MarsOutpost.Tests.PlayMode
             runner.InitializeOperationsMission();
             yield return null;
 
+            GameObject.Find("BtnSystems").GetComponent<Button>().onClick.Invoke();
+            yield return null;
             var equipTextField = typeof(MarsOutpostHud).GetField("equipmentStatusText", BindingFlags.Instance | BindingFlags.NonPublic);
             var parcelDetailsField = typeof(MarsOutpostHud).GetField("parcelDetailsText", BindingFlags.Instance | BindingFlags.NonPublic);
             var equipText = equipTextField?.GetValue(hud) as Text;

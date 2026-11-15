@@ -39,6 +39,9 @@ namespace MarsOutpost.Tests.PlayMode
             int startMaterials = runner.State.Materials;
             int startFacilities = runner.State.Facilities.Count;
 
+            Assert.That(GameObject.Find("OperationsBuildPanel"), Is.Null);
+            GameObject.Find("BtnBuildMode").GetComponent<Button>().onClick.Invoke();
+            yield return null;
             var btnBuildSolarGo = GameObject.Find("BtnBuildSolar");
             Assert.That(btnBuildSolarGo, Is.Not.Null);
             btnBuildSolarGo.GetComponent<Button>().onClick.Invoke();
@@ -95,7 +98,8 @@ namespace MarsOutpost.Tests.PlayMode
             yield return null;
 
             GridCoord validCell = FindClaimedBuildableCell(runner.State);
-            world.StartBuildMode(FacilityKind.SolarPanel);
+            GameObject.Find("BtnBuildMode").GetComponent<Button>().onClick.Invoke();
+            GameObject.Find("BtnBuildSolar").GetComponent<Button>().onClick.Invoke();
             world.SetHoveredBuildCell(validCell);
             yield return null;
 
@@ -129,6 +133,13 @@ namespace MarsOutpost.Tests.PlayMode
             Assert.That(solarBpCount, Is.EqualTo(1));
             Assert.That(placedSolar, Is.Not.Null);
             Assert.That(placedSolar.LifecycleStatus, Is.EqualTo(FacilityLifecycleStatus.Blueprint));
+            Assert.That(world.ActiveBuildKind, Is.Null);
+            Assert.That(GameObject.Find("OperationsBuildPanel"), Is.Null);
+            var assign = GameObject.Find("BtnBuildBlueprint");
+            Assert.That(assign, Is.Not.Null);
+            Assert.That(assign.GetComponent<Button>().interactable, Is.True);
+            assign.GetComponent<Button>().onClick.Invoke();
+            Assert.That(runner.State.Crew[0].ActiveSurfaceJobId, Is.Not.Null.And.Not.Empty);
             Assert.That(runner.State.Resources.Panels.Count, Is.EqualTo(3));
 
             // 3D scaffold visual exists in scene

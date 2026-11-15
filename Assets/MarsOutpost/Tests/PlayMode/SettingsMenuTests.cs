@@ -14,7 +14,7 @@ namespace MarsOutpost.Tests.PlayMode
     {
         private const string Prefix = "MarsOutpost.Settings.";
         private readonly Dictionary<string, object> saved = new Dictionary<string, object>();
-        private readonly string[] keys = { "Muted", "Volume", "Quality", "Fullscreen", "Width", "Height" };
+        private readonly string[] keys = { "Muted", "Volume", "Ambience", "Music", "Sfx", "Quality", "Fullscreen", "Width", "Height" };
         private SimulationRunner runner;
         private MarsOutpostSettingsMenu menu;
         private bool previousLanguage;
@@ -25,7 +25,7 @@ namespace MarsOutpost.Tests.PlayMode
             saved.Clear();
             foreach (var key in keys)
             {
-                saved[key] = !PlayerPrefs.HasKey(Prefix + key) ? null : key == "Volume"
+                saved[key] = !PlayerPrefs.HasKey(Prefix + key) ? null : (key == "Volume" || key == "Ambience" || key == "Music" || key == "Sfx")
                     ? (object)PlayerPrefs.GetFloat(Prefix + key) : PlayerPrefs.GetInt(Prefix + key);
                 PlayerPrefs.DeleteKey(Prefix + key);
             }
@@ -56,6 +56,28 @@ namespace MarsOutpost.Tests.PlayMode
 
         private T Field<T>(string name) => (T)typeof(MarsOutpostSettingsMenu)
             .GetField(name, BindingFlags.Instance | BindingFlags.NonPublic).GetValue(menu);
+
+        [UnityTest]
+        public IEnumerator MixerSettingsPersistAndOwnedLoopsAreReleased()
+        {
+            var audio = Object.FindFirstObjectByType<MarsOutpostAudio>();
+            Assert.That(audio, Is.Not.Null);
+            var owner = audio.gameObject;
+            int initialSources = owner.GetComponents<AudioSource>().Length;
+            menu.Open();
+            Field<Slider>("ambienceSlider").value = 0.21f;
+            Field<Slider>("musicSlider").value = 0.12f;
+            Field<Slider>("sfxSlider").value = 0.73f;
+            typeof(MarsOutpostSettingsMenu).GetMethod("Apply", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(menu, null);
+            Assert.That(audio.AmbienceVolume, Is.EqualTo(0.21f).Within(0.001f));
+            Assert.That(audio.MusicVolume, Is.EqualTo(0.12f).Within(0.001f));
+            Assert.That(audio.SfxVolume, Is.EqualTo(0.73f).Within(0.001f));
+            Assert.That(PlayerPrefs.GetFloat(Prefix + "Music"), Is.EqualTo(0.12f).Within(0.001f));
+            menu.Close();
+            Object.Destroy(audio);
+            yield return null;
+            Assert.That(owner.GetComponents<AudioSource>().Length, Is.EqualTo(initialSources - 2));
+        }
 
         [UnityTest]
         public IEnumerator OpenPausesCloseRestoresAndReopenDoesNotDuplicateEntry()

@@ -51,6 +51,8 @@ namespace MarsOutpost.Tests.PlayMode
             string targetId = runner.State.ChannelSchedules[1].ActiveTargetId;
             Assert.That(targetId, Is.Not.Null.And.Not.Empty);
 
+            GameObject.Find("BtnSystems").GetComponent<Button>().onClick.Invoke();
+            yield return null;
             var equipTextField = typeof(MarsOutpostHud).GetField("equipmentStatusText", BindingFlags.Instance | BindingFlags.NonPublic);
             var equipText = equipTextField?.GetValue(hud) as Text;
             Assert.That(equipText, Is.Not.Null);

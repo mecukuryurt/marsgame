@@ -89,7 +89,14 @@ namespace MarsOutpost.Tests.PlayMode
             Vector3 screenPos = cam.WorldToScreenPoint(targetWorld);
             Assert.That(screenPos.z, Is.GreaterThan(0f));
 
+            // In grid inspection mode a structure above the terrain must not move the selected cell.
+            worldView.SetGridVisible(true);
+            var obstruction = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            obstruction.transform.position = Vector3.Lerp(cam.transform.position, targetWorld, 0.5f);
+            obstruction.transform.localScale = Vector3.one * 2f;
+            Physics.SyncTransforms();
             bool handled = worldView.ProcessScreenClick(new Vector2(screenPos.x, screenPos.y));
+            Object.Destroy(obstruction);
             yield return null;
 
             Assert.That(handled, Is.True);

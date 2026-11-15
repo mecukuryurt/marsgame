@@ -268,7 +268,8 @@ namespace MarsOutpost.Presentation
                 // Reset view with 'R'
                 if (kb.rKey.wasPressedThisFrame)
                 {
-                    ResetCameraView();
+                    var world = FindFirstObjectByType<MarsOutpostWorldView>();
+                    if (world == null || !world.ActiveBuildKind.HasValue) ResetCameraView();
                 }
 
                 // Orbit rotation (Q/E) is intentionally disabled to maintain locked 2.5D angle

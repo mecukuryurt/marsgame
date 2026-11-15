@@ -31,7 +31,7 @@ namespace MarsOutpost.Presentation
         private static readonly Vector3 GalleyPos = new Vector3(-2.0f, 0f, 2.05f);
         private static readonly Vector3 ResearchLabPos = new Vector3(0.0f, 0f, 2.05f);
         private static readonly Vector3 BunksPos = new Vector3(-3.65f, 0f, -1.95f);
-        private static readonly Vector3 SolarArrayPos = new Vector3(4.65f, 0f, 0.25f);
+        private static readonly Vector3 SolarArrayPos = new Vector3(6f, 0f, 2f);
         private static readonly Vector3 SolarWorkPos = new Vector3(4.35f, 0f, -1.15f);
 
         private static readonly Vector3[] IdleSlots =
@@ -1136,7 +1136,7 @@ namespace MarsOutpost.Presentation
             bunksLabel = CreateWorldLabel("BunksLabel", BunksPos + new Vector3(0, 1.35f, 0), isTurkish ? "[UYKU / DINLENME]" : "[REST BUNKS]", 0.055f, new Color(0.75f, 0.88f, 1f));
 
             // -------------------------------------------------------------
-            // Station 5: Exterior Solar Array (SolarArrayPos = (4.65, 0, 0.25))
+            // Station 5: Exterior Solar Array (center of protected parcel 9,6)
             // -------------------------------------------------------------
             var solarRoot = new GameObject("SolarArrayStation");
             solarRoot.transform.SetParent(transform, false);
@@ -1193,7 +1193,8 @@ namespace MarsOutpost.Presentation
             solarDustPlateRenderer = dustPlate.GetComponent<Renderer>();
 
             // Power conduit cable running west towards habitat
-            CreateCubePrimitive("PowerCable", solarRoot.transform, new Vector3(-1.10f, 0.02f, -0.60f), new Vector3(2.2f, 0.03f, 0.06f), metalMat);
+            // The south port connects to the center of the protected work-cell network.
+            CreateCubePrimitive("PowerCable", solarRoot.transform, new Vector3(0f, 0.04f, -2f), new Vector3(0.08f, 0.06f, 4f), metalMat);
 
             solarLabel = CreateWorldLabel("SolarLabel", SolarArrayPos + new Vector3(0, 2.15f, 0), isTurkish ? "[GUNES]" : "[SOLAR]", 0.065f, new Color(1f, 0.92f, 0.75f));
         }
@@ -3232,20 +3233,30 @@ namespace MarsOutpost.Presentation
         // -------------------------------------------------------------
         // 3D Physics Raycast Click Handling
         // -------------------------------------------------------------
+        private Vector2 worldPressPosition;
+        private bool worldPressEligible;
+
         private void HandleWorldClick()
         {
             var mouse = Mouse.current;
             if (mouse == null) return;
-            bool leftClick = mouse.leftButton.wasPressedThisFrame;
-            bool rightClick = mouse.rightButton.wasPressedThisFrame;
-            if (!leftClick && !rightClick) return;
-            if (MarsOutpostCameraController.IsMenuBlockingCameraInput) return;
-            if (Keyboard.current != null && Keyboard.current.altKey.isPressed) return;
+            bool blocked = MarsOutpostCameraController.IsMenuBlockingCameraInput ||
+                (Keyboard.current != null && Keyboard.current.altKey.isPressed) ||
+                (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject());
+            if (mouse.leftButton.wasPressedThisFrame)
+            {
+                worldPressPosition = mouse.position.ReadValue();
+                worldPressEligible = !blocked;
+            }
+            if (mouse.rightButton.wasPressedThisFrame && !blocked && ActiveBuildKind.HasValue)
+                ProcessScreenClick(mouse.position.ReadValue(), true);
+            if (!mouse.leftButton.wasReleasedThisFrame) return;
             var camCtrl = mainCam != null ? mainCam.GetComponent<MarsOutpostCameraController>() : null;
-            if (camCtrl != null && (camCtrl.IsDraggingCamera || camCtrl.HasDraggedRecently)) return;
-            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
-
-            ProcessScreenClick(mouse.position.ReadValue(), rightClick);
+            bool dragged = (mouse.position.ReadValue() - worldPressPosition).sqrMagnitude > 36f ||
+                (camCtrl != null && (camCtrl.IsDraggingCamera || camCtrl.HasDraggedRecently));
+            if (worldPressEligible && !blocked && !dragged)
+                ProcessScreenClick(mouse.position.ReadValue());
+            worldPressEligible = false;
         }
 
         public bool ProcessScreenClick(Vector2 screenPos, bool isRightClick = false)
@@ -3275,6 +3286,18 @@ namespace MarsOutpost.Presentation
                     ClearParcelSelection();
                     return true;
                 }
+                return false;
+            }
+
+            // Grid mode is an explicit parcel inspection mode; structures do not intercept it.
+            if (IsGridVisible && latestState != null && latestState.Mode == MissionMode.Operations)
+            {
+                if (TryScreenPosToCell(screenPos, out GridCoord cell))
+                {
+                    SelectParcel(cell);
+                    return true;
+                }
+                ClearParcelSelection();
                 return false;
             }
 
@@ -3473,16 +3496,21 @@ namespace MarsOutpost.Presentation
             if (mainCam == null) return false;
 
             Ray ray = mainCam.ScreenPointToRay(screenPos);
-            Vector3 hitPoint;
-            if (Physics.Raycast(ray, out RaycastHit hit, 220f))
+            Vector3 hitPoint = Vector3.zero;
+            bool foundTerrain = false;
+            foreach (var hit in Physics.RaycastAll(ray, 220f))
             {
-                hitPoint = hit.point;
+                if (hit.collider != null && hit.collider.gameObject.name == "MarsTerrainMesh")
+                {
+                    hitPoint = hit.point;
+                    foundTerrain = true;
+                    break;
+                }
             }
-            else
+            if (!foundTerrain)
             {
                 Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
-                if (!groundPlane.Raycast(ray, out float enter))
-                    return false;
+                if (!groundPlane.Raycast(ray, out float enter)) return false;
                 hitPoint = ray.GetPoint(enter);
             }
 

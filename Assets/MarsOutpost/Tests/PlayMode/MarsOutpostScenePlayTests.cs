@@ -48,6 +48,8 @@ namespace MarsOutpost.Tests.PlayMode
             runner.SetPaused(true); // Publish the directly advanced test state to the HUD.
             int rejected = 0;
             runner.CommandRejected += _ => rejected++;
+            Assert.That(GameObject.Find("EquipmentPanel"), Is.Null);
+            GameObject.Find("BtnSystems").GetComponent<Button>().onClick.Invoke();
             var panel = GameObject.Find("BtnRepairPanel").GetComponent<Button>();
             var oxygen = GameObject.Find("BtnRepairOxygen").GetComponent<Button>();
             var water = GameObject.Find("BtnRepairWater").GetComponent<Button>();
@@ -67,6 +69,7 @@ namespace MarsOutpost.Tests.PlayMode
             runner.AssignEarthOrder(order.OrderId, "crew-1"); // Not accepted yet: feedback must fire.
             Assert.That(rejected, Is.EqualTo(3));
             Assert.That(GameObject.Find("FeedbackBanner"), Is.Not.Null);
+            GameObject.Find("BtnTools").GetComponent<Button>().onClick.Invoke();
             var save = GameObject.Find("BtnSaveOps").GetComponent<RectTransform>();
             var notes = GameObject.Find("ReserveNote").GetComponent<RectTransform>();
             Assert.That(save.anchoredPosition.x, Is.GreaterThan(notes.anchoredPosition.x + notes.rect.width));

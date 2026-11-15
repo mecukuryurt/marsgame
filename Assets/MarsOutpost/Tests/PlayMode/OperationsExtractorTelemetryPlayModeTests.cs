@@ -255,6 +255,8 @@ namespace MarsOutpost.Tests
             AdvanceRunnerSim(runner, 10.0);
             yield return null;
 
+            GameObject.Find("BtnSystems").GetComponent<Button>().onClick.Invoke();
+            yield return null;
             var waterBreakdown = typeof(MarsOutpostHud).GetField("waterFlowBreakdownText", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(hud) as Text;
             Assert.That(waterBreakdown, Is.Not.Null);
             Assert.That(waterBreakdown.text, Does.Match("Çıkarma|Extract"));

@@ -49,6 +49,9 @@ namespace MarsOutpost.Tests.PlayMode
             runner.InitializeOperationsMission();
             yield return null;
 
+            GameObject.Find("BtnBuildMode").GetComponent<Button>().onClick.Invoke();
+            yield return null;
+
             var btnBuildBatteryField = typeof(MarsOutpostHud).GetField("btnBuildBattery", BindingFlags.Instance | BindingFlags.NonPublic);
             var batteryTextField = typeof(MarsOutpostHud).GetField("batteryText", BindingFlags.Instance | BindingFlags.NonPublic);
             var parcelDetailsField = typeof(MarsOutpostHud).GetField("parcelDetailsText", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -102,6 +105,7 @@ namespace MarsOutpost.Tests.PlayMode
 
             Assert.That(batteryText.text, Does.Contain("/125"));
 
+            GameObject.Find("BtnBuildMode").GetComponent<Button>().onClick.Invoke();
             world.SelectParcel(target);
             yield return null;
             Assert.That(parcelDetails.text, Does.Contain("+25"));
