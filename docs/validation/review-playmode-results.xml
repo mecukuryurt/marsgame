@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="6" result="Passed" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-11-14 18:28:05Z" end-time="2026-11-14 18:28:16Z" duration="11.3656733">
+  <test-suite type="TestSuite" id="1015" name="marsoutpostgame" fullname="marsoutpostgame" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-11-14 18:28:05Z" end-time="2026-11-14 18:28:16Z" duration="11.365673" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1008" name="MarsOutpost.Tests.PlayMode.dll" fullname="/run/media/senesatka/storage/projects/marsgame/Library/ScriptAssemblies/MarsOutpost.Tests.PlayMode.dll" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-11-14 18:28:05Z" end-time="2026-11-14 18:28:16Z" duration="11.357472" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="179145" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1009" name="MarsOutpost" fullname="MarsOutpost" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-11-14 18:28:05Z" end-time="2026-11-14 18:28:16Z" duration="11.356675" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1010" name="Tests" fullname="MarsOutpost.Tests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-11-14 18:28:05Z" end-time="2026-11-14 18:28:16Z" duration="11.356079" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1011" name="PlayMode" fullname="MarsOutpost.Tests.PlayMode" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-11-14 18:28:05Z" end-time="2026-11-14 18:28:16Z" duration="11.355316" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1001" name="MarsOutpostScenePlayTests" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-11-14 18:28:05Z" end-time="2026-11-14 18:28:16Z" duration="11.353408" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1003" name="AudioSourcesFoodCommsAndNinetySecondDemoCompleteEndToEnd" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.AudioSourcesFoodCommsAndNinetySecondDemoCompleteEndToEnd" methodname="AudioSourcesFoodCommsAndNinetySecondDemoCompleteEndToEnd" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="1277024960" result="Passed" start-time="2026-11-14 18:28:05Z" end-time="2026-11-14 18:28:08Z" duration="2.423273" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1004" name="BilingualLanguageToggleAndHazardAlertBannerFunctionCleanly" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.BilingualLanguageToggleAndHazardAlertBannerFunctionCleanly" methodname="BilingualLanguageToggleAndHazardAlertBannerFunctionCleanly" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="691790988" result="Passed" start-time="2026-11-14 18:28:08Z" end-time="2026-11-14 18:28:08Z" duration="0.364287" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1006" name="CompactSciFiHudAnd3DCameraControllerAndDomeRoofFunctionCleanly" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.CompactSciFiHudAnd3DCameraControllerAndDomeRoofFunctionCleanly" methodname="CompactSciFiHudAnd3DCameraControllerAndDomeRoofFunctionCleanly" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="679226832" result="Passed" start-time="2026-11-14 18:28:08Z" end-time="2026-11-14 18:28:08Z" duration="0.364527" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1002" name="PlayableSceneLoadsBindsHudAndHandlesCommandsAndRestart" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.PlayableSceneLoadsBindsHudAndHandlesCommandsAndRestart" methodname="PlayableSceneLoadsBindsHudAndHandlesCommandsAndRestart" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="1439042152" result="Passed" start-time="2026-11-14 18:28:08Z" end-time="2026-11-14 18:28:10Z" duration="1.315583" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1005" name="SeamlessTaskSwitchingAndPauseOverlayFunctionCleanly" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.SeamlessTaskSwitchingAndPauseOverlayFunctionCleanly" methodname="SeamlessTaskSwitchingAndPauseOverlayFunctionCleanly" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="875018164" result="Passed" start-time="2026-11-14 18:28:10Z" end-time="2026-11-14 18:28:10Z" duration="0.403782" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1007" name="WorkingAstronautsAtInteriorStationsHaveAllBodyPartsVisibleAndProperlyOriented" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.WorkingAstronautsAtInteriorStationsHaveAllBodyPartsVisibleAndProperlyOriented" methodname="WorkingAstronautsAtInteriorStationsHaveAllBodyPartsVisibleAndProperlyOriented" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="65888620" result="Passed" start-time="2026-11-14 18:28:10Z" end-time="2026-11-14 18:28:16Z" duration="6.464943" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[DIAG] Crew_crew-1 pos=(-3.97, 0.00, 0.68) VisualPivot.localEuler=(8.00, 0.00, 0.00) localPos=(0.00, 0.00, 0.00)
+[DIAG]   Crew_crew-1/Torso: active=True enabled=True isVisible=False boundsCenterY=0.515 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/WaistBelt: active=True enabled=True isVisible=False boundsCenterY=0.337 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/NeckCollar: active=True enabled=True isVisible=False boundsCenterY=0.713 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/ChestModule: active=True enabled=True isVisible=False boundsCenterY=0.537 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/ChestStripe: active=True enabled=True isVisible=False boundsCenterY=0.535 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/PLSS: active=True enabled=True isVisible=False boundsCenterY=0.567 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/O2CanisterLeft: active=True enabled=True isVisible=False boundsCenterY=0.581 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/O2CanisterRight: active=True enabled=True isVisible=False boundsCenterY=0.581 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/PLSSValveBlock: active=True enabled=True isVisible=False boundsCenterY=0.744 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/AntennaRod: active=True enabled=True isVisible=False boundsCenterY=0.882 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/Helmet: active=True enabled=True isVisible=False boundsCenterY=0.812 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/Visor: active=True enabled=True isVisible=False boundsCenterY=0.821 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/LeftShoulderCap: active=True enabled=True isVisible=False boundsCenterY=0.693 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/LeftArmStripe: active=True enabled=True isVisible=False boundsCenterY=0.641 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/LeftArm: active=True enabled=True isVisible=False boundsCenterY=0.557 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/LeftGlove: active=True enabled=True isVisible=False boundsCenterY=0.403 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/RightShoulderCap: active=True enabled=True isVisible=False boundsCenterY=0.693 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/RightArmStripe: active=True enabled=True isVisible=False boundsCenterY=0.632 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/RightArm: active=True enabled=True isVisible=False boundsCenterY=0.534 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/RightGlove: active=True enabled=True isVisible=False boundsCenterY=0.354 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/LeftLeg: active=True enabled=True isVisible=False boundsCenterY=0.178 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/LeftKneeGuard: active=True enabled=True isVisible=False boundsCenterY=0.169 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/LeftBoot: active=True enabled=True isVisible=False boundsCenterY=-0.004 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/RightLeg: active=True enabled=True isVisible=False boundsCenterY=0.178 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/RightKneeGuard: active=True enabled=True isVisible=False boundsCenterY=0.169 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/RightBoot: active=True enabled=True isVisible=False boundsCenterY=-0.004 mat=Universal Render Pipeline/Lit
+[DIAG] Crew_crew-2 pos=(-0.04, 0.00, 0.69) VisualPivot.localEuler=(8.00, 0.00, 0.00) localPos=(0.00, 0.00, 0.00)
+[DIAG]   Crew_crew-2/Torso: active=True enabled=True isVisible=False boundsCenterY=0.515 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/WaistBelt: active=True enabled=True isVisible=False boundsCenterY=0.337 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/NeckCollar: active=True enabled=True isVisible=False boundsCenterY=0.713 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/ChestModule: active=True enabled=True isVisible=False boundsCenterY=0.537 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/ChestStripe: active=True enabled=True isVisible=False boundsCenterY=0.535 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/PLSS: active=True enabled=True isVisible=False boundsCenterY=0.567 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/O2CanisterLeft: active=True enabled=True isVisible=False boundsCenterY=0.581 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/O2CanisterRight: active=True enabled=True isVisible=False boundsCenterY=0.581 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/PLSSValveBlock: active=True enabled=True isVisible=False boundsCenterY=0.744 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/AntennaRod: active=True enabled=True isVisible=False boundsCenterY=0.882 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/Helmet: active=True enabled=True isVisible=False boundsCenterY=0.812 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/Visor: active=True enabled=True isVisible=False boundsCenterY=0.821 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/LeftShoulderCap: active=True enabled=True isVisible=False boundsCenterY=0.693 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/LeftArmStripe: active=True enabled=True isVisible=False boundsCenterY=0.639 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/LeftArm: active=True enabled=True isVisible=False boundsCenterY=0.554 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/LeftGlove: active=True enabled=True isVisible=False boundsCenterY=0.397 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/RightShoulderCap: active=True enabled=True isVisible=False boundsCenterY=0.693 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/RightArmStripe: active=True enabled=True isVisible=False boundsCenterY=0.632 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/RightArm: active=True enabled=True isVisible=False boundsCenterY=0.534 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/RightGlove: active=True enabled=True isVisible=False boundsCenterY=0.355 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/LeftLeg: active=True enabled=True isVisible=False boundsCenterY=0.178 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/LeftKneeGuard: active=True enabled=True isVisible=False boundsCenterY=0.169 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/LeftBoot: active=True enabled=True isVisible=False boundsCenterY=-0.004 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/RightLeg: active=True enabled=True isVisible=False boundsCenterY=0.178 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/RightKneeGuard: active=True enabled=True isVisible=False boundsCenterY=0.169 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/RightBoot: active=True enabled=True isVisible=False boundsCenterY=-0.004 mat=Universal Render Pipeline/Lit
+Saving results to: /home/senesatka/.config/unity3d/DefaultCompany/marsoutpostgame/TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

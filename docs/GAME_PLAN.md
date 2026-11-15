@@ -2,6 +2,9 @@
 
 Tarih: 14 Kasım 2026. Durum: T02 kaynak simülasyonu uygulandı; oynanabilir oyun henüz yok.
 
+Güncel uygulama iki solluk 3D/2.5D oyundur. Bu dosyanın ilk prototip kararları
+tarihsel tasarım referansıdır; güncel durum `RELEASE_NOTES.md` içindedir.
+
 Bu dosya tasarımın kaynağıdır. Uygulama sırası ve ajanlara verilecek görevler
 `IMPLEMENTATION_TASKS.md` içindedir. Sonraki değişikliklerde iki dosyayı birlikte güncelleyin.
 Güncel tam oyun kapsamı ve dış uygulayıcı devri `MASTER_PLAN.md` içindedir.

@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="72" result="Passed" total="72" passed="72" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-11-14 22:31:29Z" end-time="2026-11-14 22:31:31Z" duration="1.26979">
+  <test-suite type="TestSuite" id="1000" name="marsoutpostgame" fullname="marsoutpostgame" runstate="Runnable" testcasecount="72" result="Passed" start-time="2026-11-14 22:31:29Z" end-time="2026-11-14 22:31:31Z" duration="1.269790" total="72" passed="72" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1085" name="MarsOutpost.Tests.EditMode.dll" fullname="/run/media/senesatka/storage/projects/marsgame/Library/ScriptAssemblies/MarsOutpost.Tests.EditMode.dll" runstate="Runnable" testcasecount="72" result="Passed" start-time="2026-11-14 22:31:29Z" end-time="2026-11-14 22:31:31Z" duration="1.261453" total="72" passed="72" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="290040" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1086" name="MarsOutpost" fullname="MarsOutpost" runstate="Runnable" testcasecount="72" result="Passed" start-time="2026-11-14 22:31:29Z" end-time="2026-11-14 22:31:31Z" duration="1.260257" total="72" passed="72" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1087" name="Tests" fullname="MarsOutpost.Tests" runstate="Runnable" testcasecount="72" result="Passed" start-time="2026-11-14 22:31:29Z" end-time="2026-11-14 22:31:31Z" duration="1.259239" total="72" passed="72" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1001" name="CrewAndTaskSimulationTests" fullname="MarsOutpost.Tests.CrewAndTaskSimulationTests" classname="MarsOutpost.Tests.CrewAndTaskSimulationTests" runstate="Runnable" testcasecount="9" result="Passed" start-time="2026-11-14 22:31:29Z" end-time="2026-11-14 22:31:30Z" duration="0.064332" total="9" passed="9" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1002" name="CannotAssignTwoTasksToSameCrewMember" fullname="MarsOutpost.Tests.CrewAndTaskSimulationTests.CannotAssignTwoTasksToSameCrewMember" methodname="CannotAssignTwoTasksToSameCrewMember" classname="MarsOutpost.Tests.CrewAndTaskSimulationTests" runstate="Runnable" seed="1808120922" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.023954" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1004" name="CannotShareSingleTaskStationBetweenTwoCrewMembers" fullname="MarsOutpost.Tests.CrewAndTaskSimulationTests.CannotShareSingleTaskStationBetweenTwoCrewMembers" methodname="CannotShareSingleTaskStationBetweenTwoCrewMembers" classname="MarsOutpost.Tests.CrewAndTaskSimulationTests" runstate="Runnable" seed="1818406273" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.001755" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1006" name="ExhaustedCrewOutsideCanReturnToShelterEvenAtZeroStamina" fullname="MarsOutpost.Tests.CrewAndTaskSimulationTests.ExhaustedCrewOutsideCanReturnToShelterEvenAtZeroStamina" methodname="ExhaustedCrewOutsideCanReturnToShelterEvenAtZeroStamina" classname="MarsOutpost.Tests.CrewAndTaskSimulationTests" runstate="Runnable" seed="1296935312" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.012314" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1009" name="IndoorTasksRequireInsideLocationAndRestartResetsAll" fullname="MarsOutpost.Tests.CrewAndTaskSimulationTests.IndoorTasksRequireInsideLocationAndRestartResetsAll" methodname="IndoorTasksRequireInsideLocationAndRestartResetsAll" classname="MarsOutpost.Tests.CrewAndTaskSimulationTests" runstate="Runnable" seed="1550432233" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.003675" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1010" name="LargeAndSmallTicksProduceSameCrewStaminaAndTaskProgress" fullname="MarsOutpost.Tests.CrewAndTaskSimulationTests.LargeAndSmallTicksProduceSameCrewStaminaAndTaskProgress" methodname="LargeAndSmallTicksProduceSameCrewStaminaAndTaskProgress" classname="MarsOutpost.Tests.CrewAndTaskSimulationTests" runstate="Runnable" seed="565477957" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.004401" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1007" name="OneTimeMaintenanceRewardAppliedOnceAcrossCancelAndReassign" fullname="MarsOutpost.Tests.CrewAndTaskSimulationTests.OneTimeMaintenanceRewardAppliedOnceAcrossCancelAndReassign" methodname="OneTimeMaintenanceRewardAppliedOnceAcrossCancelAndReassign" classname="MarsOutpost.Tests.CrewAndTaskSimulationTests" runstate="Runnable" seed="1857022987" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.000955" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1003" name="ReplacementIsAtomicForOccupiedAndUnknownTasks" fullname="MarsOutpost.Tests.CrewAndTaskSimulationTests.ReplacementIsAtomicForOccupiedAndUnknownTasks" methodname="ReplacementIsAtomicForOccupiedAndUnknownTasks" classname="MarsOutpost.Tests.CrewAndTaskSimulationTests" runstate="Runnable" seed="922766306" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.000580" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1008" name="ResearchRequiresCrewAndEnergyAndScalesWithRemainingSolar" fullname="MarsOutpost.Tests.CrewAndTaskSimulationTests.ResearchRequiresCrewAndEnergyAndScalesWithRemainingSolar" methodname="ResearchRequiresCrewAndEnergyAndScalesWithRemainingSolar" classname="MarsOutpost.Tests.CrewAndTaskSimulationTests" runstate="Runnable" seed="310800124" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.000730" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1005" name="TaskStopsAtZeroStaminaAndExhaustedCrewMustRest" fullname="MarsOutpost.Tests.CrewAndTaskSimulationTests.TaskStopsAtZeroStaminaAndExhaustedCrewMustRest" methodname="TaskStopsAtZeroStaminaAndExhaustedCrewMustRest" classname="MarsOutpost.Tests.CrewAndTaskSimulationTests" runstate="Runnable" seed="1541452409" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.000491" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1011" name="DefaultMissionBalanceTests" fullname="MarsOutpost.Tests.DefaultMissionBalanceTests" classname="MarsOutpost.Tests.DefaultMissionBalanceTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.268787" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="ParameterizedMethod" id="1016" name="DefaultMissionRewardsActivePlans" fullname="MarsOutpost.Tests.DefaultMissionBalanceTests.DefaultMissionRewardsActivePlans" classname="MarsOutpost.Tests.DefaultMissionBalanceTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.043144" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1013" name="DefaultMissionRewardsActivePlans(0,Failed)" fullname="MarsOutpost.Tests.DefaultMissionBalanceTests.DefaultMissionRewardsActivePlans(0,Failed)" methodname="DefaultMissionRewardsActivePlans" classname="MarsOutpost.Tests.DefaultMissionBalanceTests" runstate="Runnable" seed="1424745228" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.018048" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1014" name="DefaultMissionRewardsActivePlans(1,Succeeded)" fullname="MarsOutpost.Tests.DefaultMissionBalanceTests.DefaultMissionRewardsActivePlans(1,Succeeded)" methodname="DefaultMissionRewardsActivePlans" classname="MarsOutpost.Tests.DefaultMissionBalanceTests" runstate="Runnable" seed="490963864" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.012071" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1015" name="DefaultMissionRewardsActivePlans(2,Succeeded)" fullname="MarsOutpost.Tests.DefaultMissionBalanceTests.DefaultMissionRewardsActivePlans(2,Succeeded)" methodname="DefaultMissionRewardsActivePlans" classname="MarsOutpost.Tests.DefaultMissionBalanceTests" runstate="Runnable" seed="66803675" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.012094" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-case id="1017" name="OperationsModeDoesNotEndAtTwoSolsAndIsolatesTrainingAndDemo" fullname="MarsOutpost.Tests.DefaultMissionBalanceTests.OperationsModeDoesNotEndAtTwoSolsAndIsolatesTrainingAndDemo" methodname="OperationsModeDoesNotEndAtTwoSolsAndIsolatesTrainingAndDemo" classname="MarsOutpost.Tests.DefaultMissionBalanceTests" runstate="Runnable" seed="1568600246" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.021974" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1012" name="ResearchPowerTradesBatteryForProgress" fullname="MarsOutpost.Tests.DefaultMissionBalanceTests.ResearchPowerTradesBatteryForProgress" methodname="ResearchPowerTradesBatteryForProgress" classname="MarsOutpost.Tests.DefaultMissionBalanceTests" runstate="Runnable" seed="1703273375" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.001258" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1018" name="ScienceBalanceSpendsAtomicallyAndDailyMealLogisticsRefillsAtSolStart" fullname="MarsOutpost.Tests.DefaultMissionBalanceTests.ScienceBalanceSpendsAtomicallyAndDailyMealLogisticsRefillsAtSolStart" methodname="ScienceBalanceSpendsAtomicallyAndDailyMealLogisticsRefillsAtSolStart" classname="MarsOutpost.Tests.DefaultMissionBalanceTests" runstate="Runnable" seed="1810686612" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.013797" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1019" name="WaterExtractorRespectsEnergyPriorityTankCapToggleAndHealthyLongRun" fullname="MarsOutpost.Tests.DefaultMissionBalanceTests.WaterExtractorRespectsEnergyPriorityTankCapToggleAndHealthyLongRun" methodname="WaterExtractorRespectsEnergyPriorityTankCapToggleAndHealthyLongRun" classname="MarsOutpost.Tests.DefaultMissionBalanceTests" runstate="Runnable" seed="2046781139" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.186735" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1020" name="EarthOrderInfrastructureTests" fullname="MarsOutpost.Tests.EarthOrderInfrastructureTests" classname="MarsOutpost.Tests.EarthOrderInfrastructureTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.035782" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1023" name="Earth01SoilSampleRequiresExteriorReturnThenInteriorAnalysisAndZeroScience" fullname="MarsOutpost.Tests.EarthOrderInfrastructureTests.Earth01SoilSampleRequiresExteriorReturnThenInteriorAnalysisAndZeroScience" methodname="Earth01SoilSampleRequiresExteriorReturnThenInteriorAnalysisAndZeroScience" classname="MarsOutpost.Tests.EarthOrderInfrastructureTests" runstate="Runnable" seed="113752565" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.003556" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1024" name="Earth02OxygenExperimentDivertsTenPercentOfActualProductionAndHaltsAtZeroProduction" fullname="MarsOutpost.Tests.EarthOrderInfrastructureTests.Earth02OxygenExperimentDivertsTenPercentOfActualProductionAndHaltsAtZeroProduction" methodname="Earth02OxygenExperimentDivertsTenPercentOfActualProductionAndHaltsAtZeroProduction" classname="MarsOutpost.Tests.EarthOrderInfrastructureTests" runstate="Runnable" seed="988939467" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.002439" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1025" name="Earth03RadiationSensorCalibrationRunsOutsideThenInsideReportAndAppliesRadiationRisk" fullname="MarsOutpost.Tests.EarthOrderInfrastructureTests.Earth03RadiationSensorCalibrationRunsOutsideThenInsideReportAndAppliesRadiationRisk" methodname="Earth03RadiationSensorCalibrationRunsOutsideThenInsideReportAndAppliesRadiationRisk" classname="MarsOutpost.Tests.EarthOrderInfrastructureTests" runstate="Runnable" seed="1674283417" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.002697" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1026" name="Earth04ThermalInsulationCheckUsesThreeEnergyUnitsAndDoesNotRepairSystemWear" fullname="MarsOutpost.Tests.EarthOrderInfrastructureTests.Earth04ThermalInsulationCheckUsesThreeEnergyUnitsAndDoesNotRepairSystemWear" methodname="Earth04ThermalInsulationCheckUsesThreeEnergyUnitsAndDoesNotRepairSystemWear" classname="MarsOutpost.Tests.EarthOrderInfrastructureTests" runstate="Runnable" seed="1758523903" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.001860" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1027" name="Earth05WaterQualityAnalysisRequiresTwoWaterAndTwoEnergyAndDoesNotHealWaterFault" fullname="MarsOutpost.Tests.EarthOrderInfrastructureTests.Earth05WaterQualityAnalysisRequiresTwoWaterAndTwoEnergyAndDoesNotHealWaterFault" methodname="Earth05WaterQualityAnalysisRequiresTwoWaterAndTwoEnergyAndDoesNotHealWaterFault" classname="MarsOutpost.Tests.EarthOrderInfrastructureTests" runstate="Runnable" seed="729497880" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.004745" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1028" name="Earth06AntennaAlignmentDrawsFiveEnergyOutsideAndRunsLinkTestInsideWithoutChangingCommsOrSchedule" fullname="MarsOutpost.Tests.EarthOrderInfrastructureTests.Earth06AntennaAlignmentDrawsFiveEnergyOutsideAndRunsLinkTestInsideWithoutChangingCommsOrSchedule" methodname="Earth06AntennaAlignmentDrawsFiveEnergyOutsideAndRunsLinkTestInsideWithoutChangingCommsOrSchedule" classname="MarsOutpost.Tests.EarthOrderInfrastructureTests" runstate="Runnable" seed="297597272" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.001883" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1021" name="EarthOrdersArriveAtSolThreeFiveSevenAndLargeTickDoesNotSkip" fullname="MarsOutpost.Tests.EarthOrderInfrastructureTests.EarthOrdersArriveAtSolThreeFiveSevenAndLargeTickDoesNotSkip" methodname="EarthOrdersArriveAtSolThreeFiveSevenAndLargeTickDoesNotSkip" classname="MarsOutpost.Tests.EarthOrderInfrastructureTests" runstate="Runnable" seed="606068559" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.012845" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1022" name="SeededBagDrawsAllSevenKindsWithoutRepeatAndAcceptAssignCancelWorkWithZeroScience" fullname="MarsOutpost.Tests.EarthOrderInfrastructureTests.SeededBagDrawsAllSevenKindsWithoutRepeatAndAcceptAssignCancelWorkWithZeroScience" methodname="SeededBagDrawsAllSevenKindsWithoutRepeatAndAcceptAssignCancelWorkWithZeroScience" classname="MarsOutpost.Tests.EarthOrderInfrastructureTests" runstate="Runnable" seed="1842335269" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.003301" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1029" name="EventAndOutcomeSimulationTests" fullname="MarsOutpost.Tests.EventAndOutcomeSimulationTests" classname="MarsOutpost.Tests.EventAndOutcomeSimulationTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.037420" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1036" name="DefaultScenarioEventsTraceToVerifiedNasaScienceEntries" fullname="MarsOutpost.Tests.EventAndOutcomeSimulationTests.DefaultScenarioEventsTraceToVerifiedNasaScienceEntries" methodname="DefaultScenarioEventsTraceToVerifiedNasaScienceEntries" classname="MarsOutpost.Tests.EventAndOutcomeSimulationTests" runstate="Runnable" seed="1473285752" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.001162" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1033" name="DustReducesSolarWithoutBeingClearedByPanelMaintenance" fullname="MarsOutpost.Tests.EventAndOutcomeSimulationTests.DustReducesSolarWithoutBeingClearedByPanelMaintenance" methodname="DustReducesSolarWithoutBeingClearedByPanelMaintenance" classname="MarsOutpost.Tests.EventAndOutcomeSimulationTests" runstate="Runnable" seed="662581706" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.000534" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1035" name="FailurePrecedesSuccessAndGoalOutcomeWithRestartWorks" fullname="MarsOutpost.Tests.EventAndOutcomeSimulationTests.FailurePrecedesSuccessAndGoalOutcomeWithRestartWorks" methodname="FailurePrecedesSuccessAndGoalOutcomeWithRestartWorks" classname="MarsOutpost.Tests.EventAndOutcomeSimulationTests" runstate="Runnable" seed="223740721" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.000931" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1030" name="FiveMinuteWarningAndSingleStartEndTransitionsWorkWithoutSkipping" fullname="MarsOutpost.Tests.EventAndOutcomeSimulationTests.FiveMinuteWarningAndSingleStartEndTransitionsWorkWithoutSkipping" methodname="FiveMinuteWarningAndSingleStartEndTransitionsWorkWithoutSkipping" classname="MarsOutpost.Tests.EventAndOutcomeSimulationTests" runstate="Runnable" seed="1941076874" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.000707" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1031" name="LargeAndSmallTicksProduceSameEventRiskAndDustEffects" fullname="MarsOutpost.Tests.EventAndOutcomeSimulationTests.LargeAndSmallTicksProduceSameEventRiskAndDustEffects" methodname="LargeAndSmallTicksProduceSameEventRiskAndDustEffects" classname="MarsOutpost.Tests.EventAndOutcomeSimulationTests" runstate="Runnable" seed="1648122028" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.030890" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1034" name="OxygenOutageCounterResetsOnRecoveryAndFailsAtLimit" fullname="MarsOutpost.Tests.EventAndOutcomeSimulationTests.OxygenOutageCounterResetsOnRecoveryAndFailsAtLimit" methodname="OxygenOutageCounterResetsOnRecoveryAndFailsAtLimit" classname="MarsOutpost.Tests.EventAndOutcomeSimulationTests" runstate="Runnable" seed="1562052542" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.000945" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1032" name="TenSecondReturnContinuesOutsideRadiationExposureUntilArrival" fullname="MarsOutpost.Tests.EventAndOutcomeSimulationTests.TenSecondReturnContinuesOutsideRadiationExposureUntilArrival" methodname="TenSecondReturnContinuesOutsideRadiationExposureUntilArrival" classname="MarsOutpost.Tests.EventAndOutcomeSimulationTests" runstate="Runnable" seed="886675465" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.000373" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1037" name="FoodAndCommsSimulationTests" fullname="MarsOutpost.Tests.FoodAndCommsSimulationTests" classname="MarsOutpost.Tests.FoodAndCommsSimulationTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.008402" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1041" name="EarthAdviceAdvancesDuringSleepAndTimestampsPastEventsAndResetsOnRestart" fullname="MarsOutpost.Tests.FoodAndCommsSimulationTests.EarthAdviceAdvancesDuringSleepAndTimestampsPastEventsAndResetsOnRestart" methodname="EarthAdviceAdvancesDuringSleepAndTimestampsPastEventsAndResetsOnRestart" classname="MarsOutpost.Tests.FoodAndCommsSimulationTests" runstate="Runnable" seed="858763012" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.002408" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1040" name="EarthAdviceArrivesAfter45SimSecondsBlocksSpamAndPausesWhenPaused" fullname="MarsOutpost.Tests.FoodAndCommsSimulationTests.EarthAdviceArrivesAfter45SimSecondsBlocksSpamAndPausesWhenPaused" methodname="EarthAdviceArrivesAfter45SimSecondsBlocksSpamAndPausesWhenPaused" classname="MarsOutpost.Tests.FoodAndCommsSimulationTests" runstate="Runnable" seed="161035193" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.002518" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1038" name="MealPreparationCostsStaminaGrantsFullNightRecoveryAndResetsNextSol" fullname="MarsOutpost.Tests.FoodAndCommsSimulationTests.MealPreparationCostsStaminaGrantsFullNightRecoveryAndResetsNextSol" methodname="MealPreparationCostsStaminaGrantsFullNightRecoveryAndResetsNextSol" classname="MarsOutpost.Tests.FoodAndCommsSimulationTests" runstate="Runnable" seed="927190568" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.001284" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1039" name="UnpreppedSleepFactorIsZeroPointSevenFiveAndCannotBeFarmedByReenteringSleep" fullname="MarsOutpost.Tests.FoodAndCommsSimulationTests.UnpreppedSleepFactorIsZeroPointSevenFiveAndCannotBeFarmedByReenteringSleep" methodname="UnpreppedSleepFactorIsZeroPointSevenFiveAndCannotBeFarmedByReenteringSleep" classname="MarsOutpost.Tests.FoodAndCommsSimulationTests" runstate="Runnable" seed="1417027433" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.000736" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1042" name="MissionSimulationTests" fullname="MarsOutpost.Tests.MissionSimulationTests" classname="MarsOutpost.Tests.MissionSimulationTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.140193" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1043" name="CalendarChangesAtConfiguredDayAndSolBoundaries" fullname="MarsOutpost.Tests.MissionSimulationTests.CalendarChangesAtConfiguredDayAndSolBoundaries" methodname="CalendarChangesAtConfiguredDayAndSolBoundaries" classname="MarsOutpost.Tests.MissionSimulationTests" runstate="Runnable" seed="1538815351" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.000548" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1049" name="DefaultCrewAndUnsupportedCommandsAreExplicit" fullname="MarsOutpost.Tests.MissionSimulationTests.DefaultCrewAndUnsupportedCommandsAreExplicit" methodname="DefaultCrewAndUnsupportedCommandsAreExplicit" classname="MarsOutpost.Tests.MissionSimulationTests" runstate="Runnable" seed="89816145" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.000346" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1048" name="FractionalStepsReachSolBoundary" fullname="MarsOutpost.Tests.MissionSimulationTests.FractionalStepsReachSolBoundary" methodname="FractionalStepsReachSolBoundary" classname="MarsOutpost.Tests.MissionSimulationTests" runstate="Runnable" seed="126664143" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.055315" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1045" name="InvalidConfigurationIsRejected" fullname="MarsOutpost.Tests.MissionSimulationTests.InvalidConfigurationIsRejected" methodname="InvalidConfigurationIsRejected" classname="MarsOutpost.Tests.MissionSimulationTests" runstate="Runnable" seed="1021736375" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.001428" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1047" name="LargeAndSmallStepsProduceSameCalendar" fullname="MarsOutpost.Tests.MissionSimulationTests.LargeAndSmallStepsProduceSameCalendar" methodname="LargeAndSmallStepsProduceSameCalendar" classname="MarsOutpost.Tests.MissionSimulationTests" runstate="Runnable" seed="788244015" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.078667" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1046" name="RestartRestoresInitialCalendarAndCopiedScenario" fullname="MarsOutpost.Tests.MissionSimulationTests.RestartRestoresInitialCalendarAndCopiedScenario" methodname="RestartRestoresInitialCalendarAndCopiedScenario" classname="MarsOutpost.Tests.MissionSimulationTests" runstate="Runnable" seed="103539156" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.001436" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1044" name="ZeroAndInvalidDeltasDoNotChangeTime" fullname="MarsOutpost.Tests.MissionSimulationTests.ZeroAndInvalidDeltasDoNotChangeTime" methodname="ZeroAndInvalidDeltasDoNotChangeTime" classname="MarsOutpost.Tests.MissionSimulationTests" runstate="Runnable" seed="51870668" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.000685" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1050" name="OperationsChannelSchedulerTests" fullname="MarsOutpost.Tests.OperationsChannelSchedulerTests" classname="MarsOutpost.Tests.OperationsChannelSchedulerTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.037122" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1057" name="DustStormReducesSolarToTwentyPercentComposesWithFaultsAndReschedules" fullname="MarsOutpost.Tests.OperationsChannelSchedulerTests.DustStormReducesSolarToTwentyPercentComposesWithFaultsAndReschedules" methodname="DustStormReducesSolarToTwentyPercentComposesWithFaultsAndReschedules" classname="MarsOutpost.Tests.OperationsChannelSchedulerTests" runstate="Runnable" seed="867480893" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.002404" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1051" name="FiveChannelsSampleWithinExactBoundsAndAreDeterministic" fullname="MarsOutpost.Tests.OperationsChannelSchedulerTests.FiveChannelsSampleWithinExactBoundsAndAreDeterministic" methodname="FiveChannelsSampleWithinExactBoundsAndAreDeterministic" classname="MarsOutpost.Tests.OperationsChannelSchedulerTests" runstate="Runnable" seed="717001562" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.001158" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1053" name="LargeTickMatchesOneSecondTicksAcrossChannelBoundaries" fullname="MarsOutpost.Tests.OperationsChannelSchedulerTests.LargeTickMatchesOneSecondTicksAcrossChannelBoundaries" methodname="LargeTickMatchesOneSecondTicksAcrossChannelBoundaries" classname="MarsOutpost.Tests.OperationsChannelSchedulerTests" runstate="Runnable" seed="1107837666" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.007809" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1056" name="OxygenProducerFaultHalvesCapacityAndRepairConsumesDoubleMaintenanceEnergy" fullname="MarsOutpost.Tests.OperationsChannelSchedulerTests.OxygenProducerFaultHalvesCapacityAndRepairConsumesDoubleMaintenanceEnergy" methodname="OxygenProducerFaultHalvesCapacityAndRepairConsumesDoubleMaintenanceEnergy" classname="MarsOutpost.Tests.OperationsChannelSchedulerTests" runstate="Runnable" seed="5440984" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.009327" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1054" name="RadiationChannelWarnsWakesSleepRunsActiveWindowAndRecoversAcuteRisk" fullname="MarsOutpost.Tests.OperationsChannelSchedulerTests.RadiationChannelWarnsWakesSleepRunsActiveWindowAndRecoversAcuteRisk" methodname="RadiationChannelWarnsWakesSleepRunsActiveWindowAndRecoversAcuteRisk" classname="MarsOutpost.Tests.OperationsChannelSchedulerTests" runstate="Runnable" seed="353442178" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.002793" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1052" name="ResolvingOneChannelDoesNotAffectOtherFourChannels" fullname="MarsOutpost.Tests.OperationsChannelSchedulerTests.ResolvingOneChannelDoesNotAffectOtherFourChannels" methodname="ResolvingOneChannelDoesNotAffectOtherFourChannels" classname="MarsOutpost.Tests.OperationsChannelSchedulerTests" runstate="Runnable" seed="1080392085" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.004934" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1055" name="SolarPanelFaultReducesOutputToTwoThirdsPreservesProgressOnCancelAndReschedulesOnRepair" fullname="MarsOutpost.Tests.OperationsChannelSchedulerTests.SolarPanelFaultReducesOutputToTwoThirdsPreservesProgressOnCancelAndReschedulesOnRepair" methodname="SolarPanelFaultReducesOutputToTwoThirdsPreservesProgressOnCancelAndReschedulesOnRepair" classname="MarsOutpost.Tests.OperationsChannelSchedulerTests" runstate="Runnable" seed="851078694" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.003279" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1058" name="WaterExtractorFaultHalvesExtractionAndRepairsAtomicallyWithTenScience" fullname="MarsOutpost.Tests.OperationsChannelSchedulerTests.WaterExtractorFaultHalvesExtractionAndRepairsAtomicallyWithTenScience" methodname="WaterExtractorFaultHalvesExtractionAndRepairsAtomicallyWithTenScience" classname="MarsOutpost.Tests.OperationsChannelSchedulerTests" runstate="Runnable" seed="355212131" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.003102" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1059" name="RenderingConfigurationTests" fullname="MarsOutpost.Tests.RenderingConfigurationTests" classname="MarsOutpost.Tests.RenderingConfigurationTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.040188" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1060" name="PipelineUses3DRendererAndSupportsMainLightShadows" fullname="MarsOutpost.Tests.RenderingConfigurationTests.PipelineUses3DRendererAndSupportsMainLightShadows" methodname="PipelineUses3DRendererAndSupportsMainLightShadows" classname="MarsOutpost.Tests.RenderingConfigurationTests" runstate="Runnable" seed="1703797980" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.039471" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1061" name="ResourceSimulationTests" fullname="MarsOutpost.Tests.ResourceSimulationTests" classname="MarsOutpost.Tests.ResourceSimulationTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:31Z" duration="0.604962" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1067" name="ConsumptionRunsOnTickAndRestartRestoresInitialValues" fullname="MarsOutpost.Tests.ResourceSimulationTests.ConsumptionRunsOnTickAndRestartRestoresInitialValues" methodname="ConsumptionRunsOnTickAndRestartRestoresInitialValues" classname="MarsOutpost.Tests.ResourceSimulationTests" runstate="Runnable" seed="172329875" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.000629" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1071" name="DefaultsSurviveTwoSolsAndResearchToggleDoesNotCreateUnstaffedLoad" fullname="MarsOutpost.Tests.ResourceSimulationTests.DefaultsSurviveTwoSolsAndResearchToggleDoesNotCreateUnstaffedLoad" methodname="DefaultsSurviveTwoSolsAndResearchToggleDoesNotCreateUnstaffedLoad" classname="MarsOutpost.Tests.ResourceSimulationTests" runstate="Runnable" seed="1877523903" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.000440" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1068" name="DepletionAndDayBoundariesArePartitionIndependent" fullname="MarsOutpost.Tests.ResourceSimulationTests.DepletionAndDayBoundariesArePartitionIndependent" methodname="DepletionAndDayBoundariesArePartitionIndependent" classname="MarsOutpost.Tests.ResourceSimulationTests" runstate="Runnable" seed="1556026609" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.004380" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1065" name="EmptyWaterCanFeedCrewAndLifeSupportFromWastewater" fullname="MarsOutpost.Tests.ResourceSimulationTests.EmptyWaterCanFeedCrewAndLifeSupportFromWastewater" methodname="EmptyWaterCanFeedCrewAndLifeSupportFromWastewater" classname="MarsOutpost.Tests.ResourceSimulationTests" runstate="Runnable" seed="1758184423" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.000378" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1072" name="FractionalResourceAndCalendarBoundariesMakeProgress" fullname="MarsOutpost.Tests.ResourceSimulationTests.FractionalResourceAndCalendarBoundariesMakeProgress" methodname="FractionalResourceAndCalendarBoundariesMakeProgress" classname="MarsOutpost.Tests.ResourceSimulationTests" runstate="Runnable" seed="936327464" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.112866" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1070" name="FreeOxygenProductionWorksWithoutWaterAndStopsAtCapacity" fullname="MarsOutpost.Tests.ResourceSimulationTests.FreeOxygenProductionWorksWithoutWaterAndStopsAtCapacity" methodname="FreeOxygenProductionWorksWithoutWaterAndStopsAtCapacity" classname="MarsOutpost.Tests.ResourceSimulationTests" runstate="Runnable" seed="797717625" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.000350" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1063" name="NoInputsMeansNoProductionAndConsumptionIsReported" fullname="MarsOutpost.Tests.ResourceSimulationTests.NoInputsMeansNoProductionAndConsumptionIsReported" methodname="NoInputsMeansNoProductionAndConsumptionIsReported" classname="MarsOutpost.Tests.ResourceSimulationTests" runstate="Runnable" seed="1387395010" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:30Z" duration="0.000241" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1069" name="OverflowAndWorkLimitFailAtomically" fullname="MarsOutpost.Tests.ResourceSimulationTests.OverflowAndWorkLimitFailAtomically" methodname="OverflowAndWorkLimitFailAtomically" classname="MarsOutpost.Tests.ResourceSimulationTests" runstate="Runnable" seed="922116840" result="Passed" start-time="2026-11-14 22:31:30Z" end-time="2026-11-14 22:31:31Z" duration="0.482192" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1064" name="RecyclingUsesOnlyWastewaterAndCanSupplyEmptyWater" fullname="MarsOutpost.Tests.ResourceSimulationTests.RecyclingUsesOnlyWastewaterAndCanSupplyEmptyWater" methodname="RecyclingUsesOnlyWastewaterAndCanSupplyEmptyWater" classname="MarsOutpost.Tests.ResourceSimulationTests" runstate="Runnable" seed="774831834" result="Passed" start-time="2026-11-14 22:31:31Z" end-time="2026-11-14 22:31:31Z" duration="0.000322" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1066" name="SolarAtEmptyBatteryGoesToLifeSupportBeforeRecycling" fullname="MarsOutpost.Tests.ResourceSimulationTests.SolarAtEmptyBatteryGoesToLifeSupportBeforeRecycling" methodname="SolarAtEmptyBatteryGoesToLifeSupportBeforeRecycling" classname="MarsOutpost.Tests.ResourceSimulationTests" runstate="Runnable" seed="277207858" result="Passed" start-time="2026-11-14 22:31:31Z" end-time="2026-11-14 22:31:31Z" duration="0.000224" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1062" name="SolarOnlyWorksDuringDayAndStopsAtCapacity" fullname="MarsOutpost.Tests.ResourceSimulationTests.SolarOnlyWorksDuringDayAndStopsAtCapacity" methodname="SolarOnlyWorksDuringDayAndStopsAtCapacity" classname="MarsOutpost.Tests.ResourceSimulationTests" runstate="Runnable" seed="970059538" result="Passed" start-time="2026-11-14 22:31:31Z" end-time="2026-11-14 22:31:31Z" duration="0.000222" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1073" name="SimulationStepperTests" fullname="MarsOutpost.Tests.SimulationStepperTests" classname="MarsOutpost.Tests.SimulationStepperTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-11-14 22:31:31Z" end-time="2026-11-14 22:31:31Z" duration="0.003391" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1076" name="FocusLossAndPauseDoNotCatchUpRealTimeOrAutoResume" fullname="MarsOutpost.Tests.SimulationStepperTests.FocusLossAndPauseDoNotCatchUpRealTimeOrAutoResume" methodname="FocusLossAndPauseDoNotCatchUpRealTimeOrAutoResume" classname="MarsOutpost.Tests.SimulationStepperTests" runstate="Runnable" seed="666088566" result="Passed" start-time="2026-11-14 22:31:31Z" end-time="2026-11-14 22:31:31Z" duration="0.000686" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1075" name="MaxStepsCapRetainsUnpausedAccumulatorWithoutDroppingTime" fullname="MarsOutpost.Tests.SimulationStepperTests.MaxStepsCapRetainsUnpausedAccumulatorWithoutDroppingTime" methodname="MaxStepsCapRetainsUnpausedAccumulatorWithoutDroppingTime" classname="MarsOutpost.Tests.SimulationStepperTests" runstate="Runnable" seed="1670192958" result="Passed" start-time="2026-11-14 22:31:31Z" end-time="2026-11-14 22:31:31Z" duration="0.000379" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1074" name="MidFrameReportStopsQueuedStepsAndPreventsEightXJumpAfterResume" fullname="MarsOutpost.Tests.SimulationStepperTests.MidFrameReportStopsQueuedStepsAndPreventsEightXJumpAfterResume" methodname="MidFrameReportStopsQueuedStepsAndPreventsEightXJumpAfterResume" classname="MarsOutpost.Tests.SimulationStepperTests" runstate="Runnable" seed="2133939579" result="Passed" start-time="2026-11-14 22:31:31Z" end-time="2026-11-14 22:31:31Z" duration="0.000521" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1077" name="RestartClearsPauseFlagsAndAccumulator" fullname="MarsOutpost.Tests.SimulationStepperTests.RestartClearsPauseFlagsAndAccumulator" methodname="RestartClearsPauseFlagsAndAccumulator" classname="MarsOutpost.Tests.SimulationStepperTests" runstate="Runnable" seed="862105635" result="Passed" start-time="2026-11-14 22:31:31Z" end-time="2026-11-14 22:31:31Z" duration="0.000413" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="1078" name="SleepAndSolReportTests" fullname="MarsOutpost.Tests.SleepAndSolReportTests" classname="MarsOutpost.Tests.SleepAndSolReportTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-11-14 22:31:31Z" end-time="2026-11-14 22:31:31Z" duration="0.015267" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1081" name="CancelSleepPreservesPartialRecoveryAndNoFreeStaminaAtSolChange" fullname="MarsOutpost.Tests.SleepAndSolReportTests.CancelSleepPreservesPartialRecoveryAndNoFreeStaminaAtSolChange" methodname="CancelSleepPreservesPartialRecoveryAndNoFreeStaminaAtSolChange" classname="MarsOutpost.Tests.SleepAndSolReportTests" runstate="Runnable" seed="1660633216" result="Passed" start-time="2026-11-14 22:31:31Z" end-time="2026-11-14 22:31:31Z" duration="0.000830" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1082" name="CriticalOxygenWakesCrewOnceAndReportAcknowledgePreservesAlertPause" fullname="MarsOutpost.Tests.SleepAndSolReportTests.CriticalOxygenWakesCrewOnceAndReportAcknowledgePreservesAlertPause" methodname="CriticalOxygenWakesCrewOnceAndReportAcknowledgePreservesAlertPause" classname="MarsOutpost.Tests.SleepAndSolReportTests" runstate="Runnable" seed="638856206" result="Passed" start-time="2026-11-14 22:31:31Z" end-time="2026-11-14 22:31:31Z" duration="0.000833" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1080" name="NightRadiationProcessedDuringSleepAndSolBoundaryProducesSingleReport" fullname="MarsOutpost.Tests.SleepAndSolReportTests.NightRadiationProcessedDuringSleepAndSolBoundaryProducesSingleReport" methodname="NightRadiationProcessedDuringSleepAndSolBoundaryProducesSingleReport" classname="MarsOutpost.Tests.SleepAndSolReportTests" runstate="Runnable" seed="1346363067" result="Passed" start-time="2026-11-14 22:31:31Z" end-time="2026-11-14 22:31:31Z" duration="0.001313" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1083" name="NormalSpeedStepsAndEightXSleepStepsProduceIdenticalResult" fullname="MarsOutpost.Tests.SleepAndSolReportTests.NormalSpeedStepsAndEightXSleepStepsProduceIdenticalResult" methodname="NormalSpeedStepsAndEightXSleepStepsProduceIdenticalResult" classname="MarsOutpost.Tests.SleepAndSolReportTests" runstate="Runnable" seed="493341435" result="Passed" start-time="2026-11-14 22:31:31Z" end-time="2026-11-14 22:31:31Z" duration="0.009053" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1079" name="SleepRejectedDuringDayAndWhenAnyCrewOutsideOrReturning" fullname="MarsOutpost.Tests.SleepAndSolReportTests.SleepRejectedDuringDayAndWhenAnyCrewOutsideOrReturning" methodname="SleepRejectedDuringDayAndWhenAnyCrewOutsideOrReturning" classname="MarsOutpost.Tests.SleepAndSolReportTests" runstate="Runnable" seed="1929797481" result="Passed" start-time="2026-11-14 22:31:31Z" end-time="2026-11-14 22:31:31Z" duration="0.000905" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1084" name="SolTwoEndProducesReportAndOutcomeAndRestartClearsSleepAndReports" fullname="MarsOutpost.Tests.SleepAndSolReportTests.SolTwoEndProducesReportAndOutcomeAndRestartClearsSleepAndReports" methodname="SolTwoEndProducesReportAndOutcomeAndRestartClearsSleepAndReports" classname="MarsOutpost.Tests.SleepAndSolReportTests" runstate="Runnable" seed="1624226264" result="Passed" start-time="2026-11-14 22:31:31Z" end-time="2026-11-14 22:31:31Z" duration="0.000793" asserts="0">
+              <properties>
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[Saving results to: /home/senesatka/.config/unity3d/DefaultCompany/marsoutpostgame/TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

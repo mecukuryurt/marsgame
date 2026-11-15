@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-11-14 20:10:48Z" end-time="2026-11-14 20:10:55Z" duration="7.7173208">
+  <test-suite type="TestSuite" id="1023" name="marsoutpostgame" fullname="marsoutpostgame" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-11-14 20:10:48Z" end-time="2026-11-14 20:10:55Z" duration="7.717321" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1016" name="MarsOutpost.Tests.PlayMode.dll" fullname="/run/media/senesatka/storage/projects/marsgame/Library/ScriptAssemblies/MarsOutpost.Tests.PlayMode.dll" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-11-14 20:10:48Z" end-time="2026-11-14 20:10:55Z" duration="7.709350" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="213973" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1017" name="MarsOutpost" fullname="MarsOutpost" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-11-14 20:10:48Z" end-time="2026-11-14 20:10:55Z" duration="7.708471" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1018" name="Tests" fullname="MarsOutpost.Tests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-11-14 20:10:48Z" end-time="2026-11-14 20:10:55Z" duration="7.707931" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1019" name="PlayMode" fullname="MarsOutpost.Tests.PlayMode" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-11-14 20:10:48Z" end-time="2026-11-14 20:10:55Z" duration="7.707423" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1001" name="CrewMovementVisualTests" fullname="MarsOutpost.Tests.PlayMode.CrewMovementVisualTests" classname="MarsOutpost.Tests.PlayMode.CrewMovementVisualTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-11-14 20:10:48Z" end-time="2026-11-14 20:10:55Z" duration="7.705771" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1003" name="SleepingAndRestingAlignAlongBunkAnchorsAndWakeCleanly" fullname="MarsOutpost.Tests.PlayMode.CrewMovementVisualTests.SleepingAndRestingAlignAlongBunkAnchorsAndWakeCleanly" methodname="SleepingAndRestingAlignAlongBunkAnchorsAndWakeCleanly" classname="MarsOutpost.Tests.PlayMode.CrewMovementVisualTests" runstate="Runnable" seed="370277616" result="Passed" start-time="2026-11-14 20:10:48Z" end-time="2026-11-14 20:10:52Z" duration="3.976288" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1002" name="WalkingStopsWhilePausedAndReturnFollowsCountdown" fullname="MarsOutpost.Tests.PlayMode.CrewMovementVisualTests.WalkingStopsWhilePausedAndReturnFollowsCountdown" methodname="WalkingStopsWhilePausedAndReturnFollowsCountdown" classname="MarsOutpost.Tests.PlayMode.CrewMovementVisualTests" runstate="Runnable" seed="1539236314" result="Passed" start-time="2026-11-14 20:10:52Z" end-time="2026-11-14 20:10:55Z" duration="3.714839" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: /home/senesatka/.config/unity3d/DefaultCompany/marsoutpostgame/TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

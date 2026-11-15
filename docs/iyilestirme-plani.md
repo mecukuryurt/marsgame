@@ -1,5 +1,10 @@
 # Mars Outpost — Hata Analiz Raporu ve İyileştirme Planı
 
+> Tarihsel analiz: burada önerilen poz, MSAA ve ikon çalışmaları uygulanmıştır.
+> Güncel renderer/zemin/ayar menüsü ve gerçek test/build kanıtı RELEASE_NOTES.md
+> ve VALIDATION.md içindedir. Aşağıdaki eski satır numaraları güncel referans değildir.
+
+
 Ekran görüntüsü ve proje dosyaları (`Assets/Settings/UniversalRP.asset`, `ProjectSettings/QualitySettings.asset`, `Assets/MarsOutpost/Runtime/Presentation/MarsOutpostWorldView.cs`, `Assets/MarsOutpost/Runtime/Presentation/MarsOutpostHud.cs`) incelendi. Tespit edilen **4 ana sorunun kök nedenleri** ve **çözüm planı** aşağıdadır.
 
 ---

@@ -5,6 +5,10 @@ Tarih: 14 Kasım 2026. Oyun tasarımı: `GAME_PLAN.md`.
 Güncel tam teslim kapsamı ve devir düzeni: `MASTER_PLAN.md`.
 Antigravity başlangıç promptu: `ANTIGRAVITY_PROMPT.md`.
 
+T00–T12 sonrasında denge, atomik görev değiştirme, 3D renderer/zemin/hareket ve
+kalıcı ayar menüsü Terra/Luna ile uygulandı. Güncel kanıt ve açık kalan insan/teslim
+işleri RELEASE_NOTES.md içindedir. İlk görevlendirmeler tarihsel olarak korunmuştur.
+
 T00 ortam kontrolü, T01 saat ve T02 kaynak simülasyonu tamamlandı. Kullanıcı talebiyle
 Unity 6000.3.28f1 sürümüne geçildi; gerçek Unity EditMode çalıştırmasında 18/18 test geçti.
 Bu belge bir sonraki uygulayıcının sohbet geçmişine ihtiyaç duymadan başlayabilmesi

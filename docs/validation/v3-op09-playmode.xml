@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="28" result="Passed" total="28" passed="28" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-11-15 08:50:19Z" end-time="2026-11-15 08:50:56Z" duration="37.065276">
+  <test-suite type="TestSuite" id="1045" name="marsoutpostgame" fullname="marsoutpostgame" runstate="Runnable" testcasecount="28" result="Passed" start-time="2026-11-15 08:50:19Z" end-time="2026-11-15 08:50:56Z" duration="37.065276" total="28" passed="28" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1038" name="MarsOutpost.Tests.PlayMode.dll" fullname="/run/media/senesatka/storage/projects/marsgame/Library/ScriptAssemblies/MarsOutpost.Tests.PlayMode.dll" runstate="Runnable" testcasecount="28" result="Passed" start-time="2026-11-15 08:50:19Z" end-time="2026-11-15 08:50:56Z" duration="37.057099" total="28" passed="28" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="1243422" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1039" name="MarsOutpost" fullname="MarsOutpost" runstate="Runnable" testcasecount="28" result="Passed" start-time="2026-11-15 08:50:19Z" end-time="2026-11-15 08:50:56Z" duration="37.055993" total="28" passed="28" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1040" name="Tests" fullname="MarsOutpost.Tests" runstate="Runnable" testcasecount="28" result="Passed" start-time="2026-11-15 08:50:19Z" end-time="2026-11-15 08:50:56Z" duration="37.055324" total="28" passed="28" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1041" name="PlayMode" fullname="MarsOutpost.Tests.PlayMode" runstate="Runnable" testcasecount="28" result="Passed" start-time="2026-11-15 08:50:19Z" end-time="2026-11-15 08:50:56Z" duration="37.054550" total="28" passed="28" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1001" name="CrewMovementVisualTests" fullname="MarsOutpost.Tests.PlayMode.CrewMovementVisualTests" classname="MarsOutpost.Tests.PlayMode.CrewMovementVisualTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-11-15 08:50:19Z" end-time="2026-11-15 08:50:33Z" duration="13.548832" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1005" name="EnvironmentalPoolsSeparateAndStayOutsideProtectedInteriorVolume" fullname="MarsOutpost.Tests.PlayMode.CrewMovementVisualTests.EnvironmentalPoolsSeparateAndStayOutsideProtectedInteriorVolume" methodname="EnvironmentalPoolsSeparateAndStayOutsideProtectedInteriorVolume" classname="MarsOutpost.Tests.PlayMode.CrewMovementVisualTests" runstate="Runnable" seed="1163552716" result="Passed" start-time="2026-11-15 08:50:19Z" end-time="2026-11-15 08:50:21Z" duration="1.902441" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1004" name="ReturningFollowsAirlockTangentSmoothlyWithoutBackwardWalkOrSnap" fullname="MarsOutpost.Tests.PlayMode.CrewMovementVisualTests.ReturningFollowsAirlockTangentSmoothlyWithoutBackwardWalkOrSnap" methodname="ReturningFollowsAirlockTangentSmoothlyWithoutBackwardWalkOrSnap" classname="MarsOutpost.Tests.PlayMode.CrewMovementVisualTests" runstate="Runnable" seed="2111415587" result="Passed" start-time="2026-11-15 08:50:21Z" end-time="2026-11-15 08:50:26Z" duration="4.706430" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1003" name="SleepingAndRestingAlignAlongBunkAnchorsAndWakeCleanly" fullname="MarsOutpost.Tests.PlayMode.CrewMovementVisualTests.SleepingAndRestingAlignAlongBunkAnchorsAndWakeCleanly" methodname="SleepingAndRestingAlignAlongBunkAnchorsAndWakeCleanly" classname="MarsOutpost.Tests.PlayMode.CrewMovementVisualTests" runstate="Runnable" seed="1470929310" result="Passed" start-time="2026-11-15 08:50:26Z" end-time="2026-11-15 08:50:29Z" duration="3.205102" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1002" name="WalkingStopsWhilePausedAndReturnFollowsCountdown" fullname="MarsOutpost.Tests.PlayMode.CrewMovementVisualTests.WalkingStopsWhilePausedAndReturnFollowsCountdown" methodname="WalkingStopsWhilePausedAndReturnFollowsCountdown" classname="MarsOutpost.Tests.PlayMode.CrewMovementVisualTests" runstate="Runnable" seed="2026313267" result="Passed" start-time="2026-11-15 08:50:29Z" end-time="2026-11-15 08:50:33Z" duration="3.719305" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1006" name="MarsOutpostScenePlayTests" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-11-15 08:50:33Z" end-time="2026-11-15 08:50:47Z" duration="14.123976" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1010" name="AudioSourcesFoodCommsAndNinetySecondDemoCompleteEndToEnd" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.AudioSourcesFoodCommsAndNinetySecondDemoCompleteEndToEnd" methodname="AudioSourcesFoodCommsAndNinetySecondDemoCompleteEndToEnd" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="94701681" result="Passed" start-time="2026-11-15 08:50:33Z" end-time="2026-11-15 08:50:33Z" duration="0.707929" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1011" name="BilingualLanguageToggleAndHazardAlertBannerFunctionCleanly" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.BilingualLanguageToggleAndHazardAlertBannerFunctionCleanly" methodname="BilingualLanguageToggleAndHazardAlertBannerFunctionCleanly" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="713984605" result="Passed" start-time="2026-11-15 08:50:33Z" end-time="2026-11-15 08:50:34Z" duration="0.857594" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1013" name="CompactSciFiHudAnd3DCameraControllerAndDomeRoofFunctionCleanly" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.CompactSciFiHudAnd3DCameraControllerAndDomeRoofFunctionCleanly" methodname="CompactSciFiHudAnd3DCameraControllerAndDomeRoofFunctionCleanly" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="563352466" result="Passed" start-time="2026-11-15 08:50:34Z" end-time="2026-11-15 08:50:37Z" duration="2.615041" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1007" name="LoadingOperationsAtSolBoundaryKeepsVisibleReportAndExplicitPause" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.LoadingOperationsAtSolBoundaryKeepsVisibleReportAndExplicitPause" methodname="LoadingOperationsAtSolBoundaryKeepsVisibleReportAndExplicitPause" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="1900249171" result="Passed" start-time="2026-11-15 08:50:37Z" end-time="2026-11-15 08:50:37Z" duration="0.540438" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1008" name="OperationsEquipmentControlsAndEarthOrderRejectionsReachThePlayer" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.OperationsEquipmentControlsAndEarthOrderRejectionsReachThePlayer" methodname="OperationsEquipmentControlsAndEarthOrderRejectionsReachThePlayer" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="970989656" result="Passed" start-time="2026-11-15 08:50:37Z" end-time="2026-11-15 08:50:38Z" duration="0.487866" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1009" name="PlayableSceneLoadsBindsHudAndHandlesCommandsAndRestart" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.PlayableSceneLoadsBindsHudAndHandlesCommandsAndRestart" methodname="PlayableSceneLoadsBindsHudAndHandlesCommandsAndRestart" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="590580203" result="Passed" start-time="2026-11-15 08:50:38Z" end-time="2026-11-15 08:50:40Z" duration="1.722151" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1012" name="SeamlessTaskSwitchingAndPauseOverlayFunctionCleanly" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.SeamlessTaskSwitchingAndPauseOverlayFunctionCleanly" methodname="SeamlessTaskSwitchingAndPauseOverlayFunctionCleanly" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="613846214" result="Passed" start-time="2026-11-15 08:50:40Z" end-time="2026-11-15 08:50:40Z" duration="0.509572" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1014" name="WorkingAstronautsAtInteriorStationsHaveAllBodyPartsVisibleAndProperlyOriented" fullname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests.WorkingAstronautsAtInteriorStationsHaveAllBodyPartsVisibleAndProperlyOriented" methodname="WorkingAstronautsAtInteriorStationsHaveAllBodyPartsVisibleAndProperlyOriented" classname="MarsOutpost.Tests.PlayMode.MarsOutpostScenePlayTests" runstate="Runnable" seed="2051927193" result="Passed" start-time="2026-11-15 08:50:40Z" end-time="2026-11-15 08:50:47Z" duration="6.679277" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[[DIAG] Crew_crew-1 pos=(-3.97, 0.00, 0.68) VisualPivot.localEuler=(8.00, 0.00, 0.00) localPos=(0.00, 0.00, 0.00)
+[DIAG]   Crew_crew-1/Torso: active=True enabled=True isVisible=False boundsCenterY=0.515 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/WaistBelt: active=True enabled=True isVisible=False boundsCenterY=0.337 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/NeckCollar: active=True enabled=True isVisible=False boundsCenterY=0.713 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/ChestModule: active=True enabled=True isVisible=False boundsCenterY=0.537 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/ChestStripe: active=True enabled=True isVisible=False boundsCenterY=0.535 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/PLSS: active=True enabled=True isVisible=False boundsCenterY=0.567 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/O2CanisterLeft: active=True enabled=True isVisible=False boundsCenterY=0.581 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/O2CanisterRight: active=True enabled=True isVisible=False boundsCenterY=0.581 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/PLSSValveBlock: active=True enabled=True isVisible=False boundsCenterY=0.744 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/AntennaRod: active=True enabled=True isVisible=False boundsCenterY=0.882 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/Helmet: active=True enabled=True isVisible=False boundsCenterY=0.812 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/Visor: active=True enabled=True isVisible=False boundsCenterY=0.821 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/LeftShoulderCap: active=True enabled=True isVisible=False boundsCenterY=0.693 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/LeftArmStripe: active=True enabled=True isVisible=False boundsCenterY=0.633 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/LeftArm: active=True enabled=True isVisible=False boundsCenterY=0.537 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/LeftGlove: active=True enabled=True isVisible=False boundsCenterY=0.362 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/RightShoulderCap: active=True enabled=True isVisible=False boundsCenterY=0.693 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/RightArmStripe: active=True enabled=True isVisible=False boundsCenterY=0.636 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/RightArm: active=True enabled=True isVisible=False boundsCenterY=0.544 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/RightGlove: active=True enabled=True isVisible=False boundsCenterY=0.377 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/LeftLeg: active=True enabled=True isVisible=False boundsCenterY=0.178 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/LeftKneeGuard: active=True enabled=True isVisible=False boundsCenterY=0.169 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/LeftBoot: active=True enabled=True isVisible=False boundsCenterY=-0.004 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/RightLeg: active=True enabled=True isVisible=False boundsCenterY=0.178 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/RightKneeGuard: active=True enabled=True isVisible=False boundsCenterY=0.169 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-1/RightBoot: active=True enabled=True isVisible=False boundsCenterY=-0.004 mat=Universal Render Pipeline/Lit
+[DIAG] Crew_crew-2 pos=(-0.04, 0.00, 0.69) VisualPivot.localEuler=(8.00, 0.00, 0.00) localPos=(0.00, 0.00, 0.00)
+[DIAG]   Crew_crew-2/Torso: active=True enabled=True isVisible=False boundsCenterY=0.515 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/WaistBelt: active=True enabled=True isVisible=False boundsCenterY=0.337 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/NeckCollar: active=True enabled=True isVisible=False boundsCenterY=0.713 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/ChestModule: active=True enabled=True isVisible=False boundsCenterY=0.537 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/ChestStripe: active=True enabled=True isVisible=False boundsCenterY=0.535 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/PLSS: active=True enabled=True isVisible=False boundsCenterY=0.567 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/O2CanisterLeft: active=True enabled=True isVisible=False boundsCenterY=0.581 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/O2CanisterRight: active=True enabled=True isVisible=False boundsCenterY=0.581 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/PLSSValveBlock: active=True enabled=True isVisible=False boundsCenterY=0.744 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/AntennaRod: active=True enabled=True isVisible=False boundsCenterY=0.882 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/Helmet: active=True enabled=True isVisible=False boundsCenterY=0.812 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/Visor: active=True enabled=True isVisible=False boundsCenterY=0.821 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/LeftShoulderCap: active=True enabled=True isVisible=False boundsCenterY=0.693 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/LeftArmStripe: active=True enabled=True isVisible=False boundsCenterY=0.642 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/LeftArm: active=True enabled=True isVisible=False boundsCenterY=0.561 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/LeftGlove: active=True enabled=True isVisible=False boundsCenterY=0.413 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/RightShoulderCap: active=True enabled=True isVisible=False boundsCenterY=0.693 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/RightArmStripe: active=True enabled=True isVisible=False boundsCenterY=0.632 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/RightArm: active=True enabled=True isVisible=False boundsCenterY=0.533 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/RightGlove: active=True enabled=True isVisible=False boundsCenterY=0.353 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/LeftLeg: active=True enabled=True isVisible=False boundsCenterY=0.178 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/LeftKneeGuard: active=True enabled=True isVisible=False boundsCenterY=0.169 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/LeftBoot: active=True enabled=True isVisible=False boundsCenterY=-0.004 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/RightLeg: active=True enabled=True isVisible=False boundsCenterY=0.178 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/RightKneeGuard: active=True enabled=True isVisible=False boundsCenterY=0.169 mat=Universal Render Pipeline/Lit
+[DIAG]   Crew_crew-2/RightBoot: active=True enabled=True isVisible=False boundsCenterY=-0.004 mat=Universal Render Pipeline/Lit
+]]></output>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1015" name="OperationsBuildGhostPlayModeTests" fullname="MarsOutpost.Tests.PlayMode.OperationsBuildGhostPlayModeTests" classname="MarsOutpost.Tests.PlayMode.OperationsBuildGhostPlayModeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-11-15 08:50:47Z" end-time="2026-11-15 08:50:49Z" duration="2.588643" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1016" name="BuildGhost_PreviewColorRotationCancel_And_NoMaterialSpentOnCancel" fullname="MarsOutpost.Tests.PlayMode.OperationsBuildGhostPlayModeTests.BuildGhost_PreviewColorRotationCancel_And_NoMaterialSpentOnCancel" methodname="BuildGhost_PreviewColorRotationCancel_And_NoMaterialSpentOnCancel" classname="MarsOutpost.Tests.PlayMode.OperationsBuildGhostPlayModeTests" runstate="Runnable" seed="1589707964" result="Passed" start-time="2026-11-15 08:50:47Z" end-time="2026-11-15 08:50:48Z" duration="0.746986" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1017" name="DoubleClickSameFrame_UiClick_InvalidCell_And_BlueprintScaffoldSpawn" fullname="MarsOutpost.Tests.PlayMode.OperationsBuildGhostPlayModeTests.DoubleClickSameFrame_UiClick_InvalidCell_And_BlueprintScaffoldSpawn" methodname="DoubleClickSameFrame_UiClick_InvalidCell_And_BlueprintScaffoldSpawn" classname="MarsOutpost.Tests.PlayMode.OperationsBuildGhostPlayModeTests" runstate="Runnable" seed="1132361528" result="Passed" start-time="2026-11-15 08:50:48Z" end-time="2026-11-15 08:50:49Z" duration="1.839935" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1018" name="OperationsBuildMotionPlayModeTests" fullname="MarsOutpost.Tests.PlayMode.OperationsBuildMotionPlayModeTests" classname="MarsOutpost.Tests.PlayMode.OperationsBuildMotionPlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-11-15 08:50:49Z" end-time="2026-11-15 08:50:50Z" duration="0.808353" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1019" name="HudBuildAssignment_PlaysAnimatedWork_PausesCleanly_TransitionsToCommissionedAndSurvivesSaveLoad" fullname="MarsOutpost.Tests.PlayMode.OperationsBuildMotionPlayModeTests.HudBuildAssignment_PlaysAnimatedWork_PausesCleanly_TransitionsToCommissionedAndSurvivesSaveLoad" methodname="HudBuildAssignment_PlaysAnimatedWork_PausesCleanly_TransitionsToCommissionedAndSurvivesSaveLoad" classname="MarsOutpost.Tests.PlayMode.OperationsBuildMotionPlayModeTests" runstate="Runnable" seed="453878033" result="Passed" start-time="2026-11-15 08:50:49Z" end-time="2026-11-15 08:50:50Z" duration="0.806226" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1020" name="OperationsNetworkPlayModeTests" fullname="MarsOutpost.Tests.PlayMode.OperationsNetworkPlayModeTests" classname="MarsOutpost.Tests.PlayMode.OperationsNetworkPlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-11-15 08:50:50Z" end-time="2026-11-15 08:50:51Z" duration="0.549489" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1021" name="NetworkVisualsAndHudShowDisconnectedReasonUntilUtilityBridgeCommissioned" fullname="MarsOutpost.Tests.PlayMode.OperationsNetworkPlayModeTests.NetworkVisualsAndHudShowDisconnectedReasonUntilUtilityBridgeCommissioned" methodname="NetworkVisualsAndHudShowDisconnectedReasonUntilUtilityBridgeCommissioned" classname="MarsOutpost.Tests.PlayMode.OperationsNetworkPlayModeTests" runstate="Runnable" seed="2071995430" result="Passed" start-time="2026-11-15 08:50:50Z" end-time="2026-11-15 08:50:51Z" duration="0.547043" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1022" name="OperationsParcelSelectionPlayModeTests" fullname="MarsOutpost.Tests.PlayMode.OperationsParcelSelectionPlayModeTests" classname="MarsOutpost.Tests.PlayMode.OperationsParcelSelectionPlayModeTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-11-15 08:50:51Z" end-time="2026-11-15 08:50:52Z" duration="1.180823" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1023" name="GridToggleAndMaterialsStayHiddenInTrainingAndAppearInOperations" fullname="MarsOutpost.Tests.PlayMode.OperationsParcelSelectionPlayModeTests.GridToggleAndMaterialsStayHiddenInTrainingAndAppearInOperations" methodname="GridToggleAndMaterialsStayHiddenInTrainingAndAppearInOperations" classname="MarsOutpost.Tests.PlayMode.OperationsParcelSelectionPlayModeTests" runstate="Runnable" seed="889289380" result="Passed" start-time="2026-11-15 08:50:51Z" end-time="2026-11-15 08:50:51Z" duration="0.429971" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1024" name="ScreenClickSelectsDomainParcelHidesUnscannedGeologyAndClaimsAtomically" fullname="MarsOutpost.Tests.PlayMode.OperationsParcelSelectionPlayModeTests.ScreenClickSelectsDomainParcelHidesUnscannedGeologyAndClaimsAtomically" methodname="ScreenClickSelectsDomainParcelHidesUnscannedGeologyAndClaimsAtomically" classname="MarsOutpost.Tests.PlayMode.OperationsParcelSelectionPlayModeTests" runstate="Runnable" seed="17702378" result="Passed" start-time="2026-11-15 08:50:51Z" end-time="2026-11-15 08:50:52Z" duration="0.374047" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1025" name="StationPriorityAndEscapeOrRightClickFilterPreserveCrewCommands" fullname="MarsOutpost.Tests.PlayMode.OperationsParcelSelectionPlayModeTests.StationPriorityAndEscapeOrRightClickFilterPreserveCrewCommands" methodname="StationPriorityAndEscapeOrRightClickFilterPreserveCrewCommands" classname="MarsOutpost.Tests.PlayMode.OperationsParcelSelectionPlayModeTests" runstate="Runnable" seed="255515672" result="Passed" start-time="2026-11-15 08:50:52Z" end-time="2026-11-15 08:50:52Z" duration="0.373573" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1026" name="OperationsSolarPanelPlayModeTests" fullname="MarsOutpost.Tests.PlayMode.OperationsSolarPanelPlayModeTests" classname="MarsOutpost.Tests.PlayMode.OperationsSolarPanelPlayModeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-11-15 08:50:52Z" end-time="2026-11-15 08:50:52Z" duration="0.391212" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1027" name="FourSolarPanelsRenderDistinctlyAndHudReflectsLiveCountAndOutput" fullname="MarsOutpost.Tests.PlayMode.OperationsSolarPanelPlayModeTests.FourSolarPanelsRenderDistinctlyAndHudReflectsLiveCountAndOutput" methodname="FourSolarPanelsRenderDistinctlyAndHudReflectsLiveCountAndOutput" classname="MarsOutpost.Tests.PlayMode.OperationsSolarPanelPlayModeTests" runstate="Runnable" seed="668976567" result="Passed" start-time="2026-11-15 08:50:52Z" end-time="2026-11-15 08:50:52Z" duration="0.389587" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1028" name="OperationsSurfaceMotionPlayModeTests" fullname="MarsOutpost.Tests.PlayMode.OperationsSurfaceMotionPlayModeTests" classname="MarsOutpost.Tests.PlayMode.OperationsSurfaceMotionPlayModeTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-11-15 08:50:52Z" end-time="2026-11-15 08:50:54Z" duration="1.636628" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1031" name="CameraPansAcrossFullOperationsGridWithoutChangingLockedPitchOrYaw" fullname="MarsOutpost.Tests.PlayMode.OperationsSurfaceMotionPlayModeTests.CameraPansAcrossFullOperationsGridWithoutChangingLockedPitchOrYaw" methodname="CameraPansAcrossFullOperationsGridWithoutChangingLockedPitchOrYaw" classname="MarsOutpost.Tests.PlayMode.OperationsSurfaceMotionPlayModeTests" runstate="Runnable" seed="132351178" result="Passed" start-time="2026-11-15 08:50:52Z" end-time="2026-11-15 08:50:53Z" duration="0.356761" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1029" name="SurfaceWalkAndReturnSmoothAcross15_30_60Fps_And_InteriorTaskWaitsForArrival" fullname="MarsOutpost.Tests.PlayMode.OperationsSurfaceMotionPlayModeTests.SurfaceWalkAndReturnSmoothAcross15_30_60Fps_And_InteriorTaskWaitsForArrival" methodname="SurfaceWalkAndReturnSmoothAcross15_30_60Fps_And_InteriorTaskWaitsForArrival" classname="MarsOutpost.Tests.PlayMode.OperationsSurfaceMotionPlayModeTests" runstate="Runnable" seed="35638718" result="Passed" start-time="2026-11-15 08:50:53Z" end-time="2026-11-15 08:50:53Z" duration="0.653165" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1030" name="SurfaceWalkRespectsPauseAnd8xSpeed_AndCancelReleasesJob" fullname="MarsOutpost.Tests.PlayMode.OperationsSurfaceMotionPlayModeTests.SurfaceWalkRespectsPauseAnd8xSpeed_AndCancelReleasesJob" methodname="SurfaceWalkRespectsPauseAnd8xSpeed_AndCancelReleasesJob" classname="MarsOutpost.Tests.PlayMode.OperationsSurfaceMotionPlayModeTests" runstate="Runnable" seed="1936921034" result="Passed" start-time="2026-11-15 08:50:53Z" end-time="2026-11-15 08:50:54Z" duration="0.624886" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1032" name="SettingsMenuTests" fullname="MarsOutpost.Tests.PlayMode.SettingsMenuTests" classname="MarsOutpost.Tests.PlayMode.SettingsMenuTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-11-15 08:50:54Z" end-time="2026-11-15 08:50:56Z" duration="2.223331" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1037" name="AspectFramingMenuCameraGuardAndResolutionValidationWorkCleanly" fullname="MarsOutpost.Tests.PlayMode.SettingsMenuTests.AspectFramingMenuCameraGuardAndResolutionValidationWorkCleanly" methodname="AspectFramingMenuCameraGuardAndResolutionValidationWorkCleanly" classname="MarsOutpost.Tests.PlayMode.SettingsMenuTests" runstate="Runnable" seed="1016837108" result="Passed" start-time="2026-11-15 08:50:54Z" end-time="2026-11-15 08:50:54Z" duration="0.384615" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1036" name="CancelDoesNotSaveDraftChanges" fullname="MarsOutpost.Tests.PlayMode.SettingsMenuTests.CancelDoesNotSaveDraftChanges" methodname="CancelDoesNotSaveDraftChanges" classname="MarsOutpost.Tests.PlayMode.SettingsMenuTests" runstate="Runnable" seed="1695893035" result="Passed" start-time="2026-11-15 08:50:54Z" end-time="2026-11-15 08:50:55Z" duration="0.360035" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1034" name="ClosingSettingsKeepsPriorPauseAndNewFocusPause" fullname="MarsOutpost.Tests.PlayMode.SettingsMenuTests.ClosingSettingsKeepsPriorPauseAndNewFocusPause" methodname="ClosingSettingsKeepsPriorPauseAndNewFocusPause" classname="MarsOutpost.Tests.PlayMode.SettingsMenuTests" runstate="Runnable" seed="1118046337" result="Passed" start-time="2026-11-15 08:50:55Z" end-time="2026-11-15 08:50:55Z" duration="0.383906" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1033" name="OpenPausesCloseRestoresAndReopenDoesNotDuplicateEntry" fullname="MarsOutpost.Tests.PlayMode.SettingsMenuTests.OpenPausesCloseRestoresAndReopenDoesNotDuplicateEntry" methodname="OpenPausesCloseRestoresAndReopenDoesNotDuplicateEntry" classname="MarsOutpost.Tests.PlayMode.SettingsMenuTests" runstate="Runnable" seed="525275202" result="Passed" start-time="2026-11-15 08:50:55Z" end-time="2026-11-15 08:50:56Z" duration="0.662123" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1035" name="QualityDropdownOpensAndApplySurvivesCloseAndRecreation" fullname="MarsOutpost.Tests.PlayMode.SettingsMenuTests.QualityDropdownOpensAndApplySurvivesCloseAndRecreation" methodname="QualityDropdownOpensAndApplySurvivesCloseAndRecreation" classname="MarsOutpost.Tests.PlayMode.SettingsMenuTests" runstate="Runnable" seed="323808148" result="Passed" start-time="2026-11-15 08:50:56Z" end-time="2026-11-15 08:50:56Z" duration="0.428900" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: /home/senesatka/.config/unity3d/DefaultCompany/marsoutpostgame/TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

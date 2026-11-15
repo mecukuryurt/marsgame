@@ -26,13 +26,13 @@ namespace MarsOutpost.Presentation
         public const float DefaultPitch = 43.0f;
         public const float DefaultYaw = 0.0f;
 
-        // Bounded Pan & Zoom Limits
+        // Bounded Pan & Zoom Limits (covers full 16x16 Operations parcel grid x[-32,32], z[-24,40])
         public const float MinDistance = 8.0f;
-        public const float MaxDistance = 18.5f;
-        public const float MinPivotX = -3.8f;
-        public const float MaxPivotX = 4.8f;
-        public const float MinPivotZ = -2.8f;
-        public const float MaxPivotZ = 3.0f;
+        public const float MaxDistance = 24.0f;
+        public const float MinPivotX = -32.0f;
+        public const float MaxPivotX = 32.0f;
+        public const float MinPivotZ = -24.0f;
+        public const float MaxPivotZ = 40.0f;
 
         public const float MinPitch = 43.0f;
         public const float MaxPitch = 43.0f;
@@ -76,13 +76,41 @@ namespace MarsOutpost.Presentation
 
         public bool IsDraggingCamera => isPanDragging;
         public bool HasDraggedRecently => IsDraggingCamera || dragGraceTimer > 0f;
+        public static bool IsMenuBlockingCameraInput { get; set; }
+
+        public static float ComputeAspectAdjustedDefaultDistance(float aspect)
+        {
+            const float referenceAspect = 16f / 9f;
+            if (aspect <= 0.01f || aspect >= referenceAspect - 0.01f)
+                return DefaultDistance;
+
+            float scaled = DefaultDistance * (referenceAspect / Mathf.Max(1.2f, aspect));
+            return Mathf.Clamp(scaled, DefaultDistance, MaxDistance);
+        }
+
+        private float GetAspectDefaultDistance()
+        {
+            var cam = GetComponent<Camera>();
+            float aspect = cam != null ? cam.aspect : (Screen.height > 0 ? (float)Screen.width / Screen.height : 16f / 9f);
+            return ComputeAspectAdjustedDefaultDistance(aspect);
+        }
 
         public void ResetCameraView()
         {
             targetYaw = DefaultYaw;
             targetPitch = DefaultPitch;
-            targetDistance = DefaultDistance;
+            targetDistance = GetAspectDefaultDistance();
             targetPivot = DefaultPivot;
+        }
+
+        public void FocusWorldPoint(Vector3 worldPoint, bool immediate = false)
+        {
+            SetCameraPose(
+                new Vector3(worldPoint.x, DefaultPivot.y, worldPoint.z),
+                targetDistance,
+                DefaultPitch,
+                DefaultYaw,
+                immediate);
         }
 
         public void SetCameraPose(Vector3 pivot, float distance, float pitch, float yaw, bool immediate = false)
@@ -107,10 +135,11 @@ namespace MarsOutpost.Presentation
 
         private void Awake()
         {
+            float initialDist = GetAspectDefaultDistance();
             currentPivot = DefaultPivot;
             targetPivot = DefaultPivot;
-            currentDistance = DefaultDistance;
-            targetDistance = DefaultDistance;
+            currentDistance = initialDist;
+            targetDistance = initialDist;
             currentPitch = DefaultPitch;
             targetPitch = DefaultPitch;
             currentYaw = DefaultYaw;
@@ -138,6 +167,12 @@ namespace MarsOutpost.Presentation
             {
                 dragGraceTimer -= Time.unscaledDeltaTime;
                 if (dragGraceTimer < 0f) dragGraceTimer = 0f;
+            }
+
+            if (IsMenuBlockingCameraInput)
+            {
+                isPanDragging = false;
+                return;
             }
 
             var mouse = Mouse.current;

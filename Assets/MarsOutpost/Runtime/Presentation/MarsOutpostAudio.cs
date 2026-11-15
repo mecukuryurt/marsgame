@@ -143,7 +143,15 @@ namespace MarsOutpost.Presentation
         private void PlayClip(AudioClip clip)
         {
             if (IsMuted || Volume <= 0.001f || audioSource == null || clip == null) return;
-            audioSource.PlayOneShot(clip, Volume);
+            // AudioSource.volume already applies the user's master volume.
+            audioSource.PlayOneShot(clip, 1f);
+        }
+
+        private void OnDestroy()
+        {
+            if (taskCompleteClip != null) Destroy(taskCompleteClip);
+            if (warningClip != null) Destroy(warningClip);
+            if (errorClip != null) Destroy(errorClip);
         }
 
         private static AudioClip CreateToneSequenceClip(string clipName, float[] frequencies, float noteSeconds, float gain)

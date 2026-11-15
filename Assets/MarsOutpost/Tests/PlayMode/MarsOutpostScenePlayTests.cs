@@ -12,6 +12,71 @@ namespace MarsOutpost.Tests.PlayMode
     public class MarsOutpostScenePlayTests
     {
         [UnityTest]
+        public IEnumerator LoadingOperationsAtSolBoundaryKeepsVisibleReportAndExplicitPause()
+        {
+            SceneManager.LoadScene("MarsOutpost", LoadSceneMode.Single);
+            yield return null; yield return null;
+            var runner = Object.FindFirstObjectByType<SimulationRunner>();
+            runner.InitializeOperationsMission(); runner.SetPaused(true);
+            runner.Simulation.Tick(720);
+            string path = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "mars-review-" + System.Guid.NewGuid() + ".json");
+            try
+            {
+                Assert.That(runner.SaveOperationsToFile(path).Success, Is.True);
+                runner.RestartMission();
+                Assert.That(runner.LoadOperationsFromFile(path).Success, Is.True);
+                Assert.That(runner.Stepper.UserPaused, Is.True);
+                Assert.That(GameObject.Find("SolReportModal"), Is.Not.Null);
+                GameObject.Find("BtnCloseSolReport").GetComponent<Button>().onClick.Invoke();
+                Assert.That(runner.State.SolReportPauseRequested, Is.False);
+                Assert.That(runner.Stepper.UserPaused, Is.True);
+                runner.SetPaused(false); runner.Stepper.AdvanceFrame(1);
+                Assert.That(runner.State.ElapsedSeconds, Is.GreaterThan(720));
+            }
+            finally { if (System.IO.File.Exists(path)) System.IO.File.Delete(path); }
+        }
+
+        [UnityTest]
+        public IEnumerator OperationsEquipmentControlsAndEarthOrderRejectionsReachThePlayer()
+        {
+            SceneManager.LoadScene("MarsOutpost", LoadSceneMode.Single);
+            yield return null; yield return null;
+            var runner = Object.FindFirstObjectByType<SimulationRunner>();
+            runner.InitializeOperationsMission();
+            runner.SetPaused(true);
+            runner.Simulation.Tick(1850);
+            runner.SetPaused(true); // Publish the directly advanced test state to the HUD.
+            int rejected = 0;
+            runner.CommandRejected += _ => rejected++;
+            var panel = GameObject.Find("BtnRepairPanel").GetComponent<Button>();
+            var oxygen = GameObject.Find("BtnRepairOxygen").GetComponent<Button>();
+            var water = GameObject.Find("BtnRepairWater").GetComponent<Button>();
+            Assert.That(panel.interactable && oxygen.interactable && water.interactable, Is.True);
+            water.onClick.Invoke();
+            Assert.That(rejected, Is.EqualTo(1));
+            Assert.That(runner.State.Resources.WaterExtractorFaulted, Is.True);
+            panel.onClick.Invoke();
+            Assert.That(runner.State.Crew[0].ActiveTaskId, Is.EqualTo("panel-repair"));
+            oxygen.onClick.Invoke(); // Outside astronaut cannot switch to an indoor repair.
+            Assert.That(rejected, Is.EqualTo(2));
+            Assert.That(runner.State.Crew[0].ActiveTaskId, Is.EqualTo("panel-repair"));
+            runner.ReturnToShelter("crew-1"); runner.Simulation.Tick(10); runner.SetPaused(true);
+            oxygen.onClick.Invoke();
+            Assert.That(runner.State.Crew[0].ActiveTaskId, Is.EqualTo("o2-repair"));
+            var order = runner.State.EarthOrders[0];
+            runner.AssignEarthOrder(order.OrderId, "crew-1"); // Not accepted yet: feedback must fire.
+            Assert.That(rejected, Is.EqualTo(3));
+            Assert.That(GameObject.Find("FeedbackBanner"), Is.Not.Null);
+            var save = GameObject.Find("BtnSaveOps").GetComponent<RectTransform>();
+            var notes = GameObject.Find("ReserveNote").GetComponent<RectTransform>();
+            Assert.That(save.anchoredPosition.x, Is.GreaterThan(notes.anchoredPosition.x + notes.rect.width));
+            GameObject.Find("BtnToggleExtractor").GetComponent<Button>().onClick.Invoke();
+            Assert.That(runner.State.Resources.WaterExtractorEnabled, Is.False);
+            runner.InitializeDefaultMission();
+            Assert.That(GameObject.Find("EquipmentPanel"), Is.Null);
+        }
+
+        [UnityTest]
         public IEnumerator PlayableSceneLoadsBindsHudAndHandlesCommandsAndRestart()
         {
             SceneManager.LoadScene("MarsOutpost", LoadSceneMode.Single);
@@ -71,7 +136,10 @@ namespace MarsOutpost.Tests.PlayMode
             var runner = Object.FindFirstObjectByType<SimulationRunner>();
             var audio = Object.FindFirstObjectByType<MarsOutpostAudio>();
             Assert.That(audio, Is.Not.Null);
-            Assert.That(audio.IsMuted, Is.False);
+            // Saved user settings are legitimate; test the controls relative to their initial values.
+            bool savedMute = audio.IsMuted;
+            float savedVolume = audio.Volume;
+            audio.SetMuted(false);
 
             // Audio controls
             var btnMute = GameObject.Find("BtnMuteAudio")?.GetComponent<Button>();
@@ -81,9 +149,11 @@ namespace MarsOutpost.Tests.PlayMode
             btnMute.onClick.Invoke();
             Assert.That(audio.IsMuted, Is.True);
             btnVolDown.onClick.Invoke();
-            Assert.That(audio.Volume, Is.LessThan(0.55f));
+            Assert.That(audio.Volume, Is.EqualTo(Mathf.Clamp01(savedVolume - .2f)).Within(.001f));
             btnMute.onClick.Invoke();
             Assert.That(audio.IsMuted, Is.False);
+            audio.SetMuted(savedMute);
+            audio.SetVolume(savedVolume);
 
             // Sources modal opens & pauses, then closes cleanly
             GameObject.Find("BtnSources")?.GetComponent<Button>()?.onClick.Invoke();

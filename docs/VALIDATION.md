@@ -1,5 +1,37 @@
 # Doğrulama kaydı
 
+## Güncel V2 kontrolü — 15 Kasım 2026
+
+Bağımsız kaynak incelemesi ve son düzeltmeler `operations-v2/REVIEW.md` içinde.
+Unity 6000.3.28f1: **91/91 EditMode**, **17/17 PlayMode**, çıkış kodları 0.
+Kanıtlar `validation/v2-review-editmode.xml`, `validation/v2-review-playmode.xml`.
+Linux `Build/Linux/MarsOutpost.x86_64` yeniden derlendi; normal açılış 1440×900
+ve güncel uyku görseli incelendi. Diğer iki ekran boyutu ve gerçek kullanıcı
+playtesti eksik; CP04/CP17 NeedsVerification. Aşağıdaki kayıtlar tarihseldir.
+
+
+## Önceki revizyon — 14 Kasım denge, 3D kalite ve ayarlar
+
+Güncel kapsam RELEASE_NOTES.md içindedir. Yeni gerçek Unity koşusunda 53/53
+EditMode ve 11/11 PlayMode testi geçti. Kanıtlar validation/current-editmode-results.xml
+ve validation/current-playmode-results.xml içindedir. Aşağıdaki T00–T12 kayıtları
+tarihsel geliştirme adımlarıdır.
+
+
+### Güncel Linux build ve grafik kontrolü
+
+Son Linux derlemesi Unity6000.3.28f1 ile BuildLinuxDesktop üzerinden tamamlandı;
+çıkış kodu 0. Log: /tmp/marsgame-final-build.log (geçici).
+Yeni binary Build/Linux/MarsOutpost.x86_64 içindedir.
+Gerçek grafik çıktısı, DISPLAY=:0 üzerinden 1920x1080 oyun ve ayar menüsü
+görüntüleriyle incelendi. Her iki başarılı grafik kontrol çıkış kodu 0 verdi.
+Kanıtlar: validation/game-1920x1080.png ve validation/settings-1920x1080.png.
+1280x720 tekrarında odak beklemesi görüldü; batch alternatifi siyah görüntü
+ürettiği için görsel başarı sayılmadı ve çıktı teslim kanıtından çıkarıldı.
+3D ışık/gölgeler, mat zemin, ayar girişinin radar başlığından ayrılması,
+menü kaydırıcısı ve kontrollerinin yerleşimi görüldü. Yeni shader/renderer
+hatası veya pembe materyal gözlenmedi. Bu kontrol insan kullanıcı denemesi değildir.
+
 ## Güncel durum — Unity 6000.3.28f1 / T02
 
 Kullanıcının yeni talebiyle proje kurulu **6000.3.28f1 (8f082d2fe476)** sürümüne

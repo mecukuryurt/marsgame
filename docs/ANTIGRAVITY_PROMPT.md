@@ -1,5 +1,9 @@
 # Antigravity uygulayıcısına verilecek prompt
 
+> Bu prompt önceki iki solluk geliştirme içindir. Güncel istekte aşağıdaki eski
+> promptu çalıştırmayın; `operations-v2/START_PROMPT.md` içindeki başlangıç veya
+> devam promptunu kullanın. Yeni görevlerin durumu `operations-v2/PROGRESS.md` içindedir.
+
 Aşağıdaki metni, marsgame proje klasörü Antigravity'de açıkken uygulayıcıya verin.
 Model adı burada bir yetenek iddiası değildir; kullanıcı uygulayıcıyı kendisi seçer.
 

@@ -19,6 +19,28 @@ namespace MarsOutpost.Editor
     {
         public const string ScenePath = "Assets/MarsOutpost/Scenes/MarsOutpost.unity";
 
+        // Import explicitly before building: on a fresh checkout the pipeline can be
+        // queried while its renderer asset is still waiting in the import queue.
+        private static void Ensure3DRenderer()
+        {
+            const string rendererPath = "Assets/Settings/MarsRenderer3D.asset";
+            const string pipelinePath = "Assets/Settings/UniversalRP.asset";
+            AssetDatabase.ImportAsset(rendererPath, ImportAssetOptions.ForceSynchronousImport);
+            var renderer = AssetDatabase.LoadAssetAtPath<UniversalRendererData>(rendererPath);
+            if (renderer == null)
+                throw new System.InvalidOperationException("Mars 3D renderer asset is missing or invalid: " + rendererPath);
+            var pipeline = AssetDatabase.LoadAssetAtPath<UniversalRenderPipelineAsset>(pipelinePath);
+            if (pipeline == null)
+                throw new System.InvalidOperationException("Mars render pipeline asset is missing: " + pipelinePath);
+            var settings = new SerializedObject(pipeline);
+            var list = settings.FindProperty("m_RendererDataList");
+            int index = settings.FindProperty("m_DefaultRendererIndex").intValue;
+            if (index < 0 || index >= list.arraySize || list.GetArrayElementAtIndex(index).objectReferenceValue != renderer)
+                throw new System.InvalidOperationException("The Mars pipeline must use MarsRenderer3D as its default renderer.");
+            if (pipeline.scriptableRenderer == null)
+                throw new System.InvalidOperationException("The Mars 3D renderer could not be created.");
+        }
+
         [MenuItem("MarsOutpost/Build or Update Playable Scene")]
         public static void BuildSceneMenu()
         {
@@ -32,6 +54,7 @@ namespace MarsOutpost.Editor
 
         public static void BuildScene(bool interactive)
         {
+            Ensure3DRenderer();
             EnsureFolder("Assets/MarsOutpost", "Scenes");
 
             Scene scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);

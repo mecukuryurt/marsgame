@@ -36,6 +36,24 @@ namespace MarsOutpost.Tests
         }
 
         [Test]
+        public void ReplacementIsAtomicForOccupiedAndUnknownTasks()
+        {
+            var sim = new MissionSimulation(new MissionConfig(), new MissionScenario());
+            Assert.That(sim.AssignTask("crew-1", "research").Success, Is.True);
+            Assert.That(sim.AssignTask("crew-2", "meal-prep").Success, Is.True);
+
+            Assert.That(sim.ReplaceTask("crew-1", "meal-prep").Success, Is.False);
+            Assert.That(sim.ReplaceTask("crew-1", "missing").Success, Is.False);
+            Assert.That(GetCrew(sim.State, "crew-1").ActiveTaskId, Is.EqualTo("research"));
+            Assert.That(GetTask(sim.State, "research").AssignedCrewId, Is.EqualTo("crew-1"));
+            Assert.That(GetTask(sim.State, "meal-prep").AssignedCrewId, Is.EqualTo("crew-2"));
+
+            Assert.That(sim.ReplaceTask("crew-1", "system-maintenance").Success, Is.True);
+            Assert.That(GetTask(sim.State, "research").AssignedCrewId, Is.Null);
+            Assert.That(GetTask(sim.State, "system-maintenance").AssignedCrewId, Is.EqualTo("crew-1"));
+        }
+
+        [Test]
         public void CannotShareSingleTaskStationBetweenTwoCrewMembers()
         {
             var sim = new MissionSimulation(new MissionConfig(), new MissionScenario());

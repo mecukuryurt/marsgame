@@ -1,4 +1,19 @@
 # Mars Outpost — Gelecek Sürüm Yol Haritası (Future Technical Roadmap)
+> Tarihsel genişleme önerisidir. 15 Kasım 2026 itibarıyla uygulanabilir sonraki plan [Koloni Genişlemesi V3](expansion-v3/PLAN.md) paketindedir. V3 henüz kodlanmadı. Bu eski belgedeki sayılar ve Unity bağımlı örnek veri tipleri doğrudan uygulanacak gereksinim değildir.
+
+## Güncel uygulama ayrımı — 15 Kasım 2026
+
+- Operations V2: temel su çıkarıcı, üç başlangıç paneli/arızaları, bağımsız olaylar,
+  Dünya emirleri ve kayıt uygulanmıştır; doğrulama `operations-v2/REVIEW.md` içindedir.
+- Parsel tahsisi, oyuncunun panel/batarya/su tesisi inşası, keşif, ek sığınak ve
+  rover henüz uygulanmadı. **OP00–OP32** planı `expansion-v3/` içindedir.
+- Hydrogen başlangıç promptu: [START_PROMPT.md](expansion-v3/START_PROMPT.md).
+- Güncel gelecek iş durumu: [PROGRESS.md](expansion-v3/PROGRESS.md).
+- Aşağıdaki uzun vadeli GIS/sondaj fiziği iddiaları V3'ün tamamlanmış özelliği
+  veya doğrulanmış mühendislik değeri değildir; V3 kapsamı kendi PLAN'ında tanımlıdır.
+
+---
+
 **Doküman Sürümü:** 1.0.0-PROPOSAL  
 **Hedef Kitle:** Mühendislik & Tasarım Ekibi, Simülasyon Geliştiricileri  
 **Bağlam:** NASA Bilimsel Verilerine ve ISRU (In-Situ Resource Utilization) İlkelerine Dayalı Genişletme Mimarisi  

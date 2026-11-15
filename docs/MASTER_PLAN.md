@@ -1,7 +1,14 @@
 # Mars Outpost — tamamlanabilir oyun ve dış uygulayıcı planı
 
+> Yeni kullanıcı talebi için öncelikli plan `operations-v2/PLAN.md`, özellikler
+> `operations-v2/FEATURES.md`, küçük teslimler `operations-v2/CHECKPOINTS.md` ve
+> başlangıç promptu `operations-v2/START_PROMPT.md` içindedir. Bu eski plan,
+> V2'nin değiştirdiği süreklilik/olay/Dünya görevleri konularında uygulanmamalıdır.
+
 Durum: 14 Kasım 2026; planlama teslimi. Bu belge oyun kodunu uygulama talebi değildir.
 Uygulayıcı: kullanıcının Antigravity içinde seçtiği Hydrogen. Planlayıcı/inceleyen: Sol.
+
+> Güncel ürün 3D dünya ve 2.5D kameraya geçmiştir; bu belge ilk kapsam/tasarım referansıdır. Uygulanmış özellikler ve son kalite/ayar menüsü revizyonu için `RELEASE_NOTES.md` ve `IMPLEMENTATION_TASKS.md` esas alınmalıdır.
 
 ## 1. Okuma sırası ve mevcut durum
 

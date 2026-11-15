@@ -48,6 +48,7 @@ namespace MarsOutpost.Presentation
         private string selectedCrewId = "crew-1";
         private float feedbackTimer;
         private bool isScreenshotMode;
+        private MarsOutpostSettingsMenu settingsMenu;
 
         // Center Pause Overlay
         private GameObject pauseOverlayPanel;
@@ -203,6 +204,78 @@ namespace MarsOutpost.Presentation
         private Text sourcesBody;
         private Text sourcesCloseText;
 
+        private GameObject earthOrdersModal;
+        private Text btnEarthOrdersText;
+        private GameObject btnEarthOrdersObj;
+        private GameObject btnSaveOpsObj;
+        private Text btnSaveOpsText;
+        private GameObject btnLoadOpsObj;
+        private Text btnLoadOpsText;
+        private Text earthOrdersTitle;
+        private Text earthOrdersBody;
+        private Text earthOrdersHistoryText;
+        private Text btnOrderAcceptText;
+        private Text btnOrderAssignText;
+        private Text btnOrderCancelText;
+        private Text btnOrderPrevText;
+        private Text btnOrderNextText;
+        private Text btnOrderCloseText;
+        private int earthOrderPageIndex;
+        private int lastKnownEarthOrderCount;
+
+        private GameObject equipmentPanel;
+        private Text equipmentStatusText;
+        private Text waterFlowBreakdownText;
+        private Button panelRepairButton, oxygenRepairButton, waterRepairButton, extractorToggleButton, btnFocusExtractor, btnRecallSurfaceJob;
+        private Text panelRepairText, oxygenRepairText, waterRepairText, extractorToggleText, btnFocusExtractorText, btnRecallSurfaceJobText;
+        private int focusExtractorCycleIndex;
+
+        // Expansion V3 (OP03): Grid Toggle, Materials & Parcel Selection Card
+        private GameObject btnGridToggleObj;
+        private Button btnGridToggle;
+        private Image btnGridToggleBg;
+        private Text btnGridToggleText;
+        private Text materialsText;
+        private GameObject parcelCardPanel;
+        private Text parcelTitleText;
+        private Text parcelDetailsText;
+        private Text parcelReasonText;
+        private Button btnClaimParcel;
+        private Image btnClaimParcelBg;
+        private Text btnClaimParcelText;
+        private Button btnSurfaceWalk;
+        private Image btnSurfaceWalkBg;
+        private Text btnSurfaceWalkText;
+        private Button btnBuildBlueprint;
+        private Image btnBuildBlueprintBg;
+        private Text btnBuildBlueprintText;
+        private Button btnRepairParcel;
+        private Image btnRepairParcelBg;
+        private Text btnRepairParcelText;
+        private Button btnCancelBlueprint;
+        private Image btnCancelBlueprintBg;
+        private Text btnCancelBlueprintText;
+        private Button btnDismantleFacility;
+        private Image btnDismantleFacilityBg;
+        private Text btnDismantleFacilityText;
+        private Button btnToggleSiteExtractor;
+        private Image btnToggleSiteExtractorBg;
+        private Text btnToggleSiteExtractorText;
+        private string selectedBlueprintId;
+        private string selectedFaultFacilityId;
+        private string selectedDismantleFacilityId;
+        private string selectedExtractorFacilityId;
+        private GridCoord? selectedParcel;
+
+        // Operations Build Catalog & Ghost Status Panel (OP06+)
+        private GameObject operationsBuildPanel;
+        private Text buildCatalogTitleText;
+        private Text buildGhostInfoText;
+        private Text buildNoticeText;
+        private Button btnBuildLine, btnBuildSolar, btnBuildBattery, btnBuildExtractor, btnRotateGhost, btnCancelGhost;
+        private Image btnBuildLineBg, btnBuildSolarBg, btnBuildBatteryBg, btnBuildExtractorBg;
+        private Text btnBuildLineText, btnBuildSolarText, btnBuildBatteryText, btnBuildExtractorText, btnRotateGhostText, btnCancelGhostText;
+
         // Color Palette
         private static readonly Color PanelBg = new Color(0.04f, 0.07f, 0.12f, 0.90f);
         private static readonly Color CardBg = new Color(0.08f, 0.12f, 0.18f, 0.92f);
@@ -293,6 +366,13 @@ namespace MarsOutpost.Presentation
 
         private void Start()
         {
+            var canvas = GetComponentInChildren<Canvas>();
+            if (canvas != null)
+            {
+                settingsMenu = canvas.GetComponent<MarsOutpostSettingsMenu>();
+                if (settingsMenu == null)
+                    settingsMenu = canvas.gameObject.AddComponent<MarsOutpostSettingsMenu>();
+            }
             if (worldView != null)
                 worldView.SetLanguage(OutpostStrings.IsTurkish);
 
@@ -316,15 +396,223 @@ namespace MarsOutpost.Presentation
 
         private IEnumerator CaptureScreenshotAndQuit(string outputPath)
         {
+            bool captureOp03Grid = Array.IndexOf(Environment.GetCommandLineArgs(), "--capture-op03-grid") >= 0;
+            bool captureOp05Surface = Array.IndexOf(Environment.GetCommandLineArgs(), "--capture-op05-surface") >= 0;
+            bool captureOp06Ghost = Array.IndexOf(Environment.GetCommandLineArgs(), "--capture-op06-ghost") >= 0;
+            bool captureOp14Extractor = Array.IndexOf(Environment.GetCommandLineArgs(), "--capture-op14-extractor") >= 0;
             if (runner != null)
             {
-                runner.AssignTask("crew-1", "panel-maintenance");
-                runner.AssignTask("crew-2", "research");
-                runner.Stepper.AdvanceFrame(1.5);
+                if (captureOp03Grid || captureOp05Surface || captureOp06Ghost || captureOp14Extractor)
+                    runner.InitializeOperationsMission();
+
+                if (captureOp14Extractor)
+                {
+                    var map = runner.State.Map;
+                    ParcelState iceCell = null;
+                    foreach (var cell in map.Cells)
+                    {
+                        if (cell.IsExplored && cell.IsScanned && cell.IsBuildable &&
+                            cell.Protection == StarterProtectionKind.None &&
+                            cell.ResourceKind == ParcelResourceKind.Ice &&
+                            cell.RemainingWater > 0)
+                        {
+                            iceCell = cell;
+                            break;
+                        }
+                    }
+
+                    if (iceCell != null)
+                    {
+                        // Claim and bridge shortest cardinal path from core-connected line to iceCell.
+                        var q = new Queue<GridCoord>();
+                        var parent = new Dictionary<GridCoord, GridCoord>();
+                        foreach (var c in map.Cells)
+                        {
+                            if (c.IsClaimed || c.Protection != StarterProtectionKind.None)
+                            {
+                                parent[c.Coord] = c.Coord;
+                                q.Enqueue(c.Coord);
+                            }
+                        }
+                        while (q.Count > 0 && !parent.ContainsKey(iceCell.Coord))
+                        {
+                            var cur = q.Dequeue();
+                            foreach (var n in map.Config.GetCardinalNeighbors(cur))
+                            {
+                                if (!map.TryGetCell(n, out var nCell) || parent.ContainsKey(n) || !nCell.IsExplored)
+                                    continue;
+                                parent[n] = cur;
+                                q.Enqueue(n);
+                            }
+                        }
+                        var claimSeq = new List<GridCoord>();
+                        if (parent.ContainsKey(iceCell.Coord))
+                        {
+                            var step = iceCell.Coord;
+                            while (!parent[step].Equals(step))
+                            {
+                                claimSeq.Add(step);
+                                step = parent[step];
+                            }
+                            claimSeq.Reverse();
+                            for (int i = 0; i < claimSeq.Count; i++)
+                            {
+                                if (!runner.State.Map.GetCell(claimSeq[i]).IsClaimed)
+                                    runner.ClaimParcel(claimSeq[i]);
+                            }
+                        }
+
+                        var connected = UtilityNetwork.ComputeConnectedLineCells(runner.State.Map);
+                        var lq = new Queue<GridCoord>();
+                        var lparent = new Dictionary<GridCoord, GridCoord>();
+                        foreach (var lc in connected) { lparent[lc] = lc; lq.Enqueue(lc); }
+                        GridCoord? bridgeEnd = null;
+                        while (lq.Count > 0 && !bridgeEnd.HasValue)
+                        {
+                            var cur = lq.Dequeue();
+                            foreach (var n in map.Config.GetCardinalNeighbors(cur))
+                            {
+                                if (n == iceCell.Coord && cur != iceCell.Coord) { bridgeEnd = cur; break; }
+                                if (!map.TryGetCell(n, out var nCell) || lparent.ContainsKey(n) || !nCell.IsClaimed || !nCell.IsBuildable || nCell.HasUtilityLine || !string.IsNullOrEmpty(nCell.UtilityBlueprintId)) continue;
+                                lparent[n] = cur;
+                                lq.Enqueue(n);
+                            }
+                        }
+                        if (bridgeEnd.HasValue)
+                        {
+                            var lineSeq = new List<GridCoord>();
+                            var cur = bridgeEnd.Value;
+                            while (!lparent[cur].Equals(cur)) { lineSeq.Add(cur); cur = lparent[cur]; }
+                            lineSeq.Reverse();
+                            for (int i = 0; i < lineSeq.Count; i++)
+                            {
+                                var bp = runner.PlaceBlueprint(FacilityKind.UtilityLine, lineSeq[i]);
+                                if (bp.Success)
+                                {
+                                    runner.AssignBuildBlueprint("crew-1", bp.Reason);
+                                    for (int t = 0; t < 30; t++) runner.Stepper.Simulation.Tick(2.0);
+                                    runner.ReturnToShelter("crew-1");
+                                    for (int t = 0; t < 20; t++) runner.Stepper.Simulation.Tick(2.0);
+                                }
+                            }
+                        }
+
+                        var exBp = runner.PlaceBlueprint(FacilityKind.WaterExtractor, iceCell.Coord);
+                        if (exBp.Success)
+                        {
+                            runner.AssignBuildBlueprint("crew-1", exBp.Reason);
+                            for (int t = 0; t < 60; t++) runner.Stepper.Simulation.Tick(2.0);
+                            runner.ReturnToShelter("crew-1");
+                            for (int t = 0; t < 25; t++) runner.Stepper.Simulation.Tick(2.0);
+                        }
+
+                        // Advance active extraction a few seconds so rate/stock/totals are live!
+                        runner.AssignTask("crew-2", "research");
+                        for (int t = 0; t < 6; t++) runner.Stepper.Simulation.Tick(2.0);
+
+                        if (worldView != null)
+                        {
+                            worldView.SetGridVisible(true);
+                            worldView.ApplyState(runner.State);
+                            worldView.SelectParcel(iceCell.Coord);
+                            var cam = FindFirstObjectByType<MarsOutpostCameraController>();
+                            if (cam != null && worldView.TryGetParcelWorldCenter(iceCell.Coord, out var wp))
+                                cam.FocusWorldPoint(wp, immediate: true);
+                        }
+                    }
+                }
+                else if (captureOp05Surface)
+                {
+                    runner.AssignSurfaceWork("crew-1", new GridCoord(11, 8), workRequiredSeconds: 15.0);
+                    runner.AssignTask("crew-2", "research");
+                    runner.Stepper.Simulation.Tick(4.0);
+                }
+                else if (captureOp06Ghost)
+                {
+                    // Claim up to 3 buildable neighbors (spend 6 mats -> 34 left), then place 1 line blueprint (-1 -> 33) + 1 solar blueprint (-12 -> 21) and hover green ghost.
+                    int claimedCount = 0;
+                    for (int pass = 0; pass < 3 && claimedCount < 3; pass++)
+                    {
+                        foreach (var cell in runner.State.Map.Cells)
+                        {
+                            if (claimedCount >= 3) break;
+                            if (!cell.IsClaimed && cell.IsExplored && cell.IsBuildable && cell.Protection == StarterProtectionKind.None)
+                            {
+                                if (runner.ClaimParcel(cell.Coord).Success)
+                                    claimedCount++;
+                            }
+                        }
+                    }
+
+                    // Place UtilityLine blueprint on SolarWorkCoord (9,5), SolarPanel blueprint on first other valid claimed cell, and hover Ghost on another.
+                    runner.PlaceBlueprint(FacilityKind.UtilityLine, ParcelMap.SolarWorkCoord, FacilityRotation.Deg0);
+                    GridCoord? placedSolar = null;
+                    GridCoord? ghostHover = null;
+                    foreach (var cell in runner.State.Map.Cells)
+                    {
+                        if (cell.IsClaimed && cell.IsBuildable && cell.Protection == StarterProtectionKind.None && string.IsNullOrEmpty(cell.FacilityId) && cell.Coord != ParcelMap.SolarWorkCoord)
+                        {
+                            if (!placedSolar.HasValue)
+                            {
+                                var r = runner.PlaceBlueprint(FacilityKind.SolarPanel, cell.Coord, FacilityRotation.Deg90);
+                                if (r.Success) placedSolar = cell.Coord;
+                            }
+                            else if (!ghostHover.HasValue)
+                            {
+                                if (runner.ValidateBlueprintPlacement(FacilityKind.SolarPanel, cell.Coord, FacilityRotation.Deg0, out _).Success)
+                                    ghostHover = cell.Coord;
+                            }
+                        }
+                    }
+
+                    runner.AssignTask("crew-2", "research");
+                    runner.Stepper.AdvanceFrame(0.5);
+                    if (worldView != null)
+                    {
+                        worldView.SetGridVisible(true);
+                        worldView.ApplyState(runner.State);
+                        worldView.StartBuildMode(FacilityKind.SolarPanel);
+                        if (ghostHover.HasValue) worldView.SetHoveredBuildCell(ghostHover.Value);
+                    }
+                }
+                else
+                {
+                    runner.AssignTask("crew-1", "panel-maintenance");
+                    runner.AssignTask("crew-2", "research");
+                    runner.Stepper.AdvanceFrame(1.5);
+                }
+            }
+            if ((captureOp03Grid || captureOp05Surface || captureOp06Ghost) && worldView != null)
+            {
+                worldView.SetGridVisible(true);
+                if (captureOp06Ghost)
+                {
+                    var cam = FindFirstObjectByType<MarsOutpostCameraController>();
+                    if (cam != null)
+                        cam.FocusWorldPoint(new Vector3(4.0f, 0.2f, -2.0f), immediate: true);
+                }
+                else
+                {
+                    worldView.SelectParcel(captureOp05Surface ? new GridCoord(11, 8) : new GridCoord(8, 4));
+                    if (captureOp05Surface)
+                    {
+                        worldView.ApplyState(runner.State);
+                        var cam = FindFirstObjectByType<MarsOutpostCameraController>();
+                        if (cam != null)
+                            cam.FocusWorldPoint(new Vector3(10.0f, 0.2f, 6.0f), immediate: true);
+                    }
+                }
             }
             for (int f = 0; f < 10; f++)
                 yield return null;
             yield return new WaitForEndOfFrame();
+
+            if (Array.IndexOf(Environment.GetCommandLineArgs(), "--capture-settings") >= 0 && settingsMenu != null)
+            {
+                settingsMenu.Open();
+                yield return null;
+                yield return new WaitForEndOfFrame();
+            }
 
             int w = Screen.width;
             int h = Screen.height;
@@ -350,6 +638,11 @@ namespace MarsOutpost.Presentation
                 worldView.CrewSelected += HandleWorldCrewSelected;
                 worldView.StationClicked += OnWorldStationClicked;
                 worldView.DomeRoofChanged += OnDomeRoofChanged;
+                worldView.ParcelSelected += OnWorldParcelSelected;
+                worldView.GridVisibilityChanged += OnGridVisibilityChanged;
+                worldView.BuildModeChanged += OnWorldBuildModeChanged;
+                worldView.BuildGhostUpdated += OnWorldBuildGhostUpdated;
+                worldView.BlueprintPlacementAttempted += OnBlueprintPlacementAttempted;
                 worldView.SetLanguage(OutpostStrings.IsTurkish);
             }
 
@@ -369,12 +662,62 @@ namespace MarsOutpost.Presentation
                 worldView.CrewSelected -= HandleWorldCrewSelected;
                 worldView.StationClicked -= OnWorldStationClicked;
                 worldView.DomeRoofChanged -= OnDomeRoofChanged;
+                worldView.ParcelSelected -= OnWorldParcelSelected;
+                worldView.GridVisibilityChanged -= OnGridVisibilityChanged;
+                worldView.BuildModeChanged -= OnWorldBuildModeChanged;
+                worldView.BuildGhostUpdated -= OnWorldBuildGhostUpdated;
+                worldView.BlueprintPlacementAttempted -= OnBlueprintPlacementAttempted;
             }
+        }
+
+        private void OnWorldBuildModeChanged(FacilityKind? kind)
+        {
+            RefreshOperationsBuildUi(runner != null ? runner.State : null);
+        }
+
+        private void OnWorldBuildGhostUpdated()
+        {
+            RefreshOperationsBuildUi(runner != null ? runner.State : null);
+        }
+
+        private void OnBlueprintPlacementAttempted(FacilityKind kind, GridCoord coord, FacilityRotation rot, CommandResult res)
+        {
+            if (!res.Success && feedbackPanel != null && feedbackText != null)
+            {
+                feedbackText.text = OutpostStrings.FormatBlueprintFailureReason(res, kind, FacilityCatalog.GetSpec(kind).MaterialCost, runner?.State?.Materials ?? 0);
+                feedbackPanel.SetActive(true);
+                feedbackTimer = 4.0f;
+            }
+            RefreshOperationsBuildUi(runner != null ? runner.State : null);
+        }
+
+        private void OnWorldParcelSelected(GridCoord? coord)
+        {
+            selectedParcel = coord;
+            RefreshParcelSelectionUi(runner != null ? runner.State : null);
+        }
+
+        private void OnGridVisibilityChanged(bool visible)
+        {
+            UpdateGridToggleButtonVisual(runner != null ? runner.State : null);
         }
 
         private void OnDomeRoofChanged(bool visible)
         {
             UpdateDomeRoofButtonVisual();
+        }
+
+        private void UpdateGridToggleButtonVisual(MissionState state)
+        {
+            bool isOps = state != null && state.Mode == MissionMode.Operations && state.Map != null;
+            if (btnGridToggleObj != null) btnGridToggleObj.SetActive(isOps);
+            if (!isOps) return;
+
+            bool gridVisible = worldView != null && worldView.IsGridVisible;
+            if (btnGridToggleText != null)
+                btnGridToggleText.text = OutpostStrings.GetGridToggleButton(gridVisible);
+            if (btnGridToggleBg != null)
+                btnGridToggleBg.color = gridVisible ? AccentCyan : new Color(0.20f, 0.34f, 0.44f, 1f);
         }
 
         private void UpdateDomeRoofButtonVisual()
@@ -393,7 +736,8 @@ namespace MarsOutpost.Presentation
                     feedbackPanel.SetActive(false);
             }
 
-            HandleShortcuts();
+            if (settingsMenu == null || !settingsMenu.IsOpen)
+                HandleShortcuts();
             UpdateHazardBannerVisuals();
             UpdateSafetyButtonVisuals();
             UpdatePauseOverlay(runner != null ? runner.State : null);
@@ -518,6 +862,8 @@ namespace MarsOutpost.Presentation
         {
             OutpostStrings.IsTurkish = turkish;
 
+            RefreshEarthOrdersUi(runner != null ? runner.State : null);
+
             if (btnLangText != null)
                 btnLangText.text = OutpostStrings.GetLangButton();
             if (crewHeaderText != null)
@@ -529,7 +875,7 @@ namespace MarsOutpost.Presentation
             if (btnCamResetText != null)
                 btnCamResetText.text = OutpostStrings.GetCameraResetButton();
             if (cameraHintText != null)
-                cameraHintText.text = OutpostStrings.GetCameraNavigationHint();
+                cameraHintText.text = OutpostStrings.TrEn("WASD: Gez | Tekerlek: Yakınlaştır | R: Sıfırla", "WASD: Pan | Wheel: Zoom | R: Reset");
             UpdateDomeRoofButtonVisual();
 
             if (sourcesTitle != null)
@@ -603,22 +949,7 @@ namespace MarsOutpost.Presentation
         {
             if (runner == null || runner.State == null) return;
 
-            CrewState selected = null;
-            for (int i = 0; i < runner.State.Crew.Count; i++)
-            {
-                if (runner.State.Crew[i].Id == selectedCrewId)
-                {
-                    selected = runner.State.Crew[i];
-                    break;
-                }
-            }
-
-            if (selected != null && selected.Status == CrewStatus.Working && selected.ActiveTaskId != null && selected.ActiveTaskId != taskId)
-            {
-                runner.CancelTask(selectedCrewId);
-            }
-
-            runner.AssignTask(selectedCrewId, taskId);
+            runner.ReplaceTask(selectedCrewId, taskId);
         }
 
         private void Refresh(MissionState state)
@@ -654,17 +985,47 @@ namespace MarsOutpost.Presentation
 
             var res = state.Resources;
             double researchGoal = runner != null ? runner.ActiveResearchGoal : 120;
-            UpdateBar(batteryText, batteryFill, OutpostStrings.GetBatteryLabel(), res.Battery, 100, new Color(0.92f, 0.74f, 0.22f));
+            double batteryMax = state.EffectiveBatteryCapacity > 0 ? state.EffectiveBatteryCapacity : 100;
+            UpdateBar(batteryText, batteryFill, OutpostStrings.GetBatteryLabel(), res.Battery, batteryMax, new Color(0.92f, 0.74f, 0.22f));
             UpdateBar(waterText, waterFill, OutpostStrings.GetWaterLabel(), res.Water, 100, new Color(0.28f, 0.68f, 0.92f));
             string o2Status = res.Oxygen < 20 ? OutpostStrings.TrEn("DÜŞÜK!", "LOW!") : OutpostStrings.TrEn("İYİ", "OK");
             UpdateBar(oxygenText, oxygenFill, $"{OutpostStrings.GetOxygenLabel()} ({o2Status})", res.Oxygen, 100, res.Oxygen < 20 ? AccentRed : AccentGreen);
-            UpdateBar(researchText, researchFill, OutpostStrings.GetResearchLabel(), res.ResearchProgress, researchGoal, new Color(0.68f, 0.52f, 0.96f));
+            if (state.Mode == MissionMode.Operations)
+            {
+                string sciLabel = OutpostStrings.TrEn("Bilim", "Science");
+                researchText.text = OutpostStrings.TrEn($"Araş.: {res.ResearchProgress:0.#} | {sciLabel}: {res.ScienceBalance:0.#}",
+                    $"Research: {res.ResearchProgress:0.#} | {sciLabel}: {res.ScienceBalance:0.#}");
+                if (researchFill != null) researchFill.fillAmount = 1f;
+            }
+            else
+            {
+                UpdateBar(researchText, researchFill, OutpostStrings.GetResearchLabel(), res.ResearchProgress, researchGoal, new Color(0.68f, 0.52f, 0.96f));
+            }
+
+            RefreshEarthOrdersUi(state);
+            RefreshEquipmentUi(state);
+            RefreshParcelSelectionUi(state);
+            RefreshOperationsBuildUi(state);
+            UpdateGridToggleButtonVisual(state);
+            if (materialsText != null)
+            {
+                bool showMats = state.Mode == MissionMode.Operations && state.Map != null;
+                materialsText.gameObject.SetActive(showMats);
+                if (showMats)
+                    materialsText.text = OutpostStrings.TrEn($"Malzeme: {state.Materials}/{state.MaterialCapacity}", $"Materials: {state.Materials}/{state.MaterialCapacity}");
+            }
 
             if (btnLangText != null)
                 btnLangText.text = OutpostStrings.GetLangButton();
 
             if (btnModeText != null && runner != null)
-                btnModeText.text = runner.IsDemoMode ? OutpostStrings.TrEn("90sn Demo", "90s Demo") : OutpostStrings.TrEn("2-Sol Standart", "2-Sol Std");
+            {
+                btnModeText.text = runner.CurrentMode == MissionMode.Operations
+                    ? OutpostStrings.TrEn("Operasyon", "Operations")
+                    : runner.CurrentMode == MissionMode.Demo
+                        ? OutpostStrings.TrEn("90sn Demo", "90s Demo")
+                        : OutpostStrings.TrEn("2-Sol Eğitim", "2-Sol Training");
+            }
 
             if (btnCamResetText != null)
                 btnCamResetText.text = OutpostStrings.GetCameraResetButton();
@@ -672,17 +1033,24 @@ namespace MarsOutpost.Presentation
             UpdateDomeRoofButtonVisual();
             RefreshAudioControls();
 
+            double panelHealth = SolarProduction.GetPanelHealthFactor(res, state.Facilities);
             string solarNote = state.IsNight
                 ? OutpostStrings.TrEn("Gece: Güneş Yok (Batarya)", "Night: 0 Solar (Battery)")
-                : OutpostStrings.TrEn($"Güneş: %{(1 - res.PanelFouling) * (1 - res.AtmosphericDustLoss) * 100:0}", $"Solar: {(1 - res.PanelFouling) * (1 - res.AtmosphericDustLoss) * 100:0}%");
+                : OutpostStrings.TrEn($"Güneş: %{panelHealth * (1 - res.PanelFouling) * (1 - res.AtmosphericDustLoss) * 100:0}", $"Solar: {panelHealth * (1 - res.PanelFouling) * (1 - res.AtmosphericDustLoss) * 100:0}%");
             string dustNote = res.AtmosphericDustLoss > 0
                 ? OutpostStrings.TrEn($" | Toz -%{(res.AtmosphericDustLoss * 100):0}", $" | Dust -{(res.AtmosphericDustLoss * 100):0}%")
                 : "";
             string researchNote = res.ResearchEnabled
                 ? OutpostStrings.TrEn($" | Lab %{(res.LastResearchRateFactor * 100):0}", $" | Lab {(res.LastResearchRateFactor * 100):0}%")
                 : OutpostStrings.TrEn(" | Lab KAPALI", " | Lab OFF");
-            string modeTag = runner != null && runner.IsDemoMode ? " | Demo" : " | 2-Sol";
-            reserveNoteText.text = $"{solarNote}{dustNote}{researchNote}{modeTag}";
+            string overflowNote = res.BatteryOverflowLostTotal > 0
+                ? OutpostStrings.TrEn($" | Taşma -{res.BatteryOverflowLostTotal:0.#}", $" | Overflow -{res.BatteryOverflowLostTotal:0.#}")
+                : "";
+            string modeTag = runner == null ? ""
+                : runner.CurrentMode == MissionMode.Operations ? OutpostStrings.TrEn(" | Operasyon", " | Operations")
+                : runner.CurrentMode == MissionMode.Demo ? " | Demo"
+                : OutpostStrings.TrEn(" | Eğitim (2-Sol)", " | Training (2-Sol)");
+            reserveNoteText.text = $"{solarNote}{dustNote}{researchNote}{overflowNote}{modeTag}";
 
             // Tutorial guide strip
             if (!tutorialDismissed && tutorialPanel != null)
@@ -768,8 +1136,30 @@ namespace MarsOutpost.Presentation
                 selectedRiskText.text = OutpostStrings.TrEn($"Kalkan/Risk: {selected.RiskScore:0.#}/100", $"{OutpostStrings.RiskLabel}: {selected.RiskScore:0.#}/100");
                 selectedRiskText.color = selected.RiskScore >= 60 ? AccentRed : (selected.RiskScore >= 25 ? AccentAmber : new Color(0.82f, 0.90f, 0.96f));
 
-                if (selectedStatsText != null)
-                    selectedStatsText.text = $"{selectedLocationText.text} | {selectedStatusText.text}";
+                SurfaceJobState activeSJob = null;
+                if (!string.IsNullOrEmpty(selected.ActiveSurfaceJobId) && state.SurfaceJobs != null)
+                {
+                    for (int j = 0; j < state.SurfaceJobs.Count; j++)
+                    {
+                        if (state.SurfaceJobs[j].JobId == selected.ActiveSurfaceJobId)
+                        {
+                            activeSJob = state.SurfaceJobs[j];
+                            break;
+                        }
+                    }
+                }
+                if (activeSJob != null)
+                {
+                    string jobSummary = OutpostStrings.FormatSurfaceJobSummary(activeSJob);
+                    selectedStatusText.text = jobSummary;
+                    if (selectedStatsText != null)
+                        selectedStatsText.text = $"{selectedLocationText.text} | {jobSummary}";
+                }
+                else
+                {
+                    if (selectedStatsText != null)
+                        selectedStatsText.text = $"{selectedLocationText.text} | {selectedStatusText.text}";
+                }
                 if (selectedRiskNoteText != null)
                     selectedRiskNoteText.text = OutpostStrings.GetRiskExplanation();
             }
@@ -956,7 +1346,7 @@ namespace MarsOutpost.Presentation
                 eventProgressFill.color = new Color(0.95f, 0.22f, 0.22f, 1f);
 
                 string advice = active.Kind == EventKind.Radiation
-                    ? OutpostStrings.TrEn("[!] GÜNEŞ FIRTINASI AKTİF!\nSığınakta kal!", "[!] SOLAR STORM ACTIVE!\nStay sheltered!")
+                    ? OutpostStrings.TrEn("[!] GÜNEŞ FIRTINASI AKTİF!\nSığınakta kal! (Şematik eğitim gösterimi)", "[!] SOLAR STORM ACTIVE!\nStay sheltered! (Schematic educational view)")
                     : OutpostStrings.TrEn("[!] TOZ FIRTINASI AKTİF!\nGüneş enerjisi düştü!", "[!] DUST STORM ACTIVE!\nSolar power reduced!");
                 eventText.text = advice;
                 if (eventCardText != null) eventCardText.text = advice;
@@ -1084,13 +1474,15 @@ namespace MarsOutpost.Presentation
             clockText.horizontalOverflow = HorizontalWrapMode.Overflow;
             speedText = CreateText("SpeedText", topBar, new Vector2(16, -34), new Vector2(130, 24), 15, FontStyle.Bold, TextAnchor.MiddleLeft, Color.white);
             speedText.horizontalOverflow = HorizontalWrapMode.Overflow;
+            materialsText = CreateText("MaterialsText", topBar, new Vector2(158, -34), new Vector2(176, 24), 14, FontStyle.Bold, TextAnchor.MiddleLeft, new Color(0.96f, 0.84f, 0.42f));
+            materialsText.gameObject.SetActive(false);
 
             // Center: Compact Resource Bars
             CreateCompactReserveMeter(topBar, new Vector2(340, -6), 140, out batteryText, out batteryFill);
             CreateCompactReserveMeter(topBar, new Vector2(490, -6), 140, out waterText, out waterFill);
             CreateCompactReserveMeter(topBar, new Vector2(640, -6), 150, out oxygenText, out oxygenFill);
             CreateCompactReserveMeter(topBar, new Vector2(800, -6), 150, out researchText, out researchFill);
-            reserveNoteText = CreateText("ReserveNote", topBar, new Vector2(340, -38), new Vector2(610, 22), 12, FontStyle.Normal, TextAnchor.MiddleLeft, new Color(0.78f, 0.86f, 0.94f));
+            reserveNoteText = CreateText("ReserveNote", topBar, new Vector2(340, -38), new Vector2(610, 22), 14, FontStyle.Normal, TextAnchor.MiddleLeft, new Color(0.78f, 0.86f, 0.94f));
 
             // Right: Utility Buttons Row 1 (y = -6, height = 26px)
             CreatePillButton(topBar, "BtnCamReset", new Vector2(964, -6), new Vector2(92, 26), out btnCamResetText, () =>
@@ -1113,8 +1505,7 @@ namespace MarsOutpost.Presentation
             CreatePillButton(topBar, "BtnModeToggle", new Vector2(1164, -6), new Vector2(100, 26), out btnModeText, () =>
             {
                 if (runner == null) return;
-                if (runner.IsDemoMode) runner.InitializeDefaultMission();
-                else runner.InitializeDemoMission();
+                runner.CycleMode();
             });
 
             CreatePillButton(topBar, "BtnLang", new Vector2(1270, -6), new Vector2(74, 26), out btnLangText, () =>
@@ -1127,7 +1518,45 @@ namespace MarsOutpost.Presentation
             CreatePillButton(topBar, "BtnSources", new Vector2(1434, -6), new Vector2(96, 26), out btnSourcesText, () => ToggleSourcesModal(true));
             btnSourcesText.text = OutpostStrings.GetSourcesButton();
 
+            btnGridToggle = CreatePillButton(topBar, "BtnGridToggle", new Vector2(1536, -6), new Vector2(96, 26), out btnGridToggleText, () =>
+            {
+                if (worldView != null) worldView.ToggleGrid();
+            }, new Color(0.20f, 0.34f, 0.44f, 1f));
+            btnGridToggleObj = btnGridToggle.gameObject;
+            btnGridToggleBg = btnGridToggle.GetComponent<Image>();
+            btnGridToggleText.text = OutpostStrings.GetGridToggleButton(false);
+            btnGridToggleObj.SetActive(false);
+
             // Right: Audio & Navigation Row 2 (y = -36, height = 24px)
+            btnSaveOpsObj = CreatePillButton(topBar, "BtnSaveOps", new Vector2(1236, -36), new Vector2(58, 24), out btnSaveOpsText, () =>
+            {
+                string savePath = System.IO.Path.Combine(Application.persistentDataPath, "operations_save.json");
+                var res = runner.SaveOperationsToFile(savePath);
+                if (res.Success && feedbackPanel != null && feedbackText != null)
+                {
+                    feedbackText.text = OutpostStrings.TrEn("Operasyon kaydedildi.", "Operations saved.");
+                    feedbackPanel.SetActive(true);
+                    feedbackTimer = 3.0f;
+                }
+            }, new Color(0.18f, 0.36f, 0.28f, 1f)).gameObject;
+            btnSaveOpsText.text = OutpostStrings.TrEn("Kaydet", "Save");
+
+            btnLoadOpsObj = CreatePillButton(topBar, "BtnLoadOps", new Vector2(1298, -36), new Vector2(58, 24), out btnLoadOpsText, () =>
+            {
+                string savePath = System.IO.Path.Combine(Application.persistentDataPath, "operations_save.json");
+                var res = runner.LoadOperationsFromFile(savePath);
+                if (res.Success && feedbackPanel != null && feedbackText != null)
+                {
+                    feedbackText.text = OutpostStrings.TrEn("Kayıt yüklendi (Duraklatıldı).", "Save loaded (Paused).");
+                    feedbackPanel.SetActive(true);
+                    feedbackTimer = 3.0f;
+                }
+            }, new Color(0.24f, 0.30f, 0.44f, 1f)).gameObject;
+            btnLoadOpsText.text = OutpostStrings.TrEn("Yükle", "Load");
+
+            btnEarthOrdersObj = CreatePillButton(topBar, "BtnEarthOrders", new Vector2(1360, -36), new Vector2(134, 24), out btnEarthOrdersText, () => ToggleEarthOrdersModal(true), new Color(0.18f, 0.30f, 0.46f, 1f)).gameObject;
+            btnEarthOrdersText.text = OutpostStrings.TrEn("Dünya Emirleri (0)", "Earth Orders (0)");
+
             CreatePillButton(topBar, "BtnMuteAudio", new Vector2(964, -36), new Vector2(88, 24), out btnMuteText, () =>
             {
                 if (audioController != null) audioController.ToggleMute();
@@ -1150,14 +1579,14 @@ namespace MarsOutpost.Presentation
             });
             vUpTxt.text = "Vol+";
 
-            cameraHintText = CreateText("CameraNavHint", topBar, new Vector2(1236, -37), new Vector2(670, 22), 11, FontStyle.Normal, TextAnchor.MiddleLeft, new Color(0.72f, 0.82f, 0.92f));
-            cameraHintText.text = OutpostStrings.GetCameraNavigationHint();
+            cameraHintText = CreateText("CameraNavHint", topBar, new Vector2(1502, -37), new Vector2(400, 22), 13, FontStyle.Normal, TextAnchor.MiddleLeft, new Color(0.72f, 0.82f, 0.92f));
+            cameraHintText.text = OutpostStrings.TrEn("WASD: Gez | Tekerlek: Yakınlaştır | R: Sıfırla", "WASD: Pan | Wheel: Zoom | R: Reset");
             RefreshAudioControls();
 
             // -------------------------------------------------------------
-            // 2. LEFT PANEL (Width = 256px, between y = -74 and y = +88)
+            // 2. LEFT PANEL (Width = 256px, between y = -74 and y = +104 to clear BottomCommandDock)
             // -------------------------------------------------------------
-            var leftPanel = CreateSlicedPanel("LeftCrewPanel", root, new Vector2(0, 0), new Vector2(0, 1), new Vector2(12, 88), new Vector2(268, -74), PanelBg, panelFrameSprite);
+            var leftPanel = CreateSlicedPanel("LeftCrewPanel", root, new Vector2(0, 0), new Vector2(0, 1), new Vector2(12, 104), new Vector2(268, -74), PanelBg, panelFrameSprite);
 
             crewHeaderText = CreateText("CrewHeader", leftPanel, new Vector2(10, -8), new Vector2(236, 24), 15, FontStyle.Bold, TextAnchor.MiddleLeft, Color.white);
             crewHeaderText.text = OutpostStrings.TrEn("ASTRONOTLAR (1-3)", "CREW (Keys 1-3)");
@@ -1445,12 +1874,857 @@ namespace MarsOutpost.Presentation
             CreatePillButton(srcRect, "BtnCloseSources", new Vector2(300, -536), new Vector2(240, 48), out sourcesCloseText, () => ToggleSourcesModal(false));
             sourcesCloseText.text = OutpostStrings.TrEn("Kapat", "Close");
             sourcesModal.SetActive(false);
+
+            var equipmentRect = CreateSlicedPanel("EquipmentPanel", root, new Vector2(1, 1), new Vector2(1, 1),
+                new Vector2(-290, -478), new Vector2(-12, -218), CardBg, panelFrameSprite);
+            equipmentPanel = equipmentRect.gameObject;
+            equipmentStatusText = CreateText("EquipmentStatus", equipmentRect, new Vector2(8, -6), new Vector2(262, 42),
+                13, FontStyle.Bold, TextAnchor.UpperLeft, Color.white);
+            waterFlowBreakdownText = CreateText("WaterFlowBreakdown", equipmentRect, new Vector2(8, -48), new Vector2(262, 34),
+                11, FontStyle.Normal, TextAnchor.UpperLeft, new Color(0.70f, 0.90f, 1.0f));
+            panelRepairButton = CreatePillButton(equipmentRect, "BtnRepairPanel", new Vector2(8, -86), new Vector2(262, 28),
+                out panelRepairText, () => AssignOrReplaceTask("panel-repair"), AccentAmber);
+            oxygenRepairButton = CreatePillButton(equipmentRect, "BtnRepairOxygen", new Vector2(8, -120), new Vector2(262, 28),
+                out oxygenRepairText, () => AssignOrReplaceTask("o2-repair"), AccentAmber);
+            waterRepairButton = CreatePillButton(equipmentRect, "BtnRepairWater", new Vector2(8, -154), new Vector2(262, 28),
+                out waterRepairText, () => runner.RepairWaterExtractor(), AccentBlue);
+            extractorToggleButton = CreatePillButton(equipmentRect, "BtnToggleExtractor", new Vector2(8, -188), new Vector2(146, 30),
+                out extractorToggleText, () => runner.SetWaterExtractorEnabled(!runner.State.Resources.WaterExtractorEnabled));
+            btnFocusExtractor = CreatePillButton(equipmentRect, "BtnFocusExtractor", new Vector2(160, -188), new Vector2(110, 30),
+                out btnFocusExtractorText, FocusPrimaryExtractorSite, new Color(0.18f, 0.36f, 0.50f, 1f));
+            btnFocusExtractorText.fontSize = 11;
+            btnRecallSurfaceJob = CreatePillButton(equipmentRect, "BtnRecallSurfaceJob", new Vector2(8, -224), new Vector2(262, 28),
+                out btnRecallSurfaceJobText, RecallFirstActiveSurfaceCrew, new Color(0.46f, 0.24f, 0.16f, 1f));
+            btnRecallSurfaceJobText.fontSize = 11;
+
+            // Right-side Operations Parcel Selection Card (below EquipmentPanel, above BottomCommandDock)
+            var parcelRect = CreateSlicedPanel("ParcelSelectionCard", root, new Vector2(1, 1), new Vector2(1, 1),
+                new Vector2(-290, -764), new Vector2(-12, -486), CardBg, panelFrameSprite);
+            parcelCardPanel = parcelRect.gameObject;
+            parcelTitleText = CreateText("ParcelTitle", parcelRect, new Vector2(10, -6), new Vector2(214, 24),
+                15, FontStyle.Bold, TextAnchor.MiddleLeft, AccentCyan);
+            CreatePillButton(parcelRect, "BtnCloseParcel", new Vector2(236, -6), new Vector2(32, 24), out var closeParcelTxt, () =>
+            {
+                if (worldView != null) worldView.ClearParcelSelection();
+                else OnWorldParcelSelected(null);
+            });
+            closeParcelTxt.text = "X";
+            parcelDetailsText = CreateText("ParcelDetails", parcelRect, new Vector2(10, -30), new Vector2(258, 114),
+                11, FontStyle.Normal, TextAnchor.UpperLeft, new Color(0.90f, 0.94f, 0.98f));
+            parcelReasonText = CreateText("ParcelReason", parcelRect, new Vector2(10, -146), new Vector2(258, 36),
+                12, FontStyle.Bold, TextAnchor.MiddleLeft, AccentAmber);
+            btnClaimParcel = CreatePillButton(parcelRect, "BtnClaimParcel", new Vector2(10, -186), new Vector2(124, 34),
+                out btnClaimParcelText, () =>
+                {
+                    if (runner != null && selectedParcel.HasValue)
+                        runner.ClaimParcel(selectedParcel.Value);
+                }, AccentGreen);
+            btnClaimParcelBg = btnClaimParcel.GetComponent<Image>();
+            btnSurfaceWalk = CreatePillButton(parcelRect, "BtnSurfaceWalk", new Vector2(142, -186), new Vector2(126, 34),
+                out btnSurfaceWalkText, () =>
+                {
+                    if (runner != null && selectedParcel.HasValue && !string.IsNullOrEmpty(selectedCrewId))
+                        runner.AssignSurfaceWork(selectedCrewId, selectedParcel.Value, workRequiredSeconds: 10.0);
+                }, AccentBlue);
+            btnSurfaceWalkBg = btnSurfaceWalk.GetComponent<Image>();
+            btnBuildBlueprint = CreatePillButton(parcelRect, "BtnBuildBlueprint", new Vector2(10, -226), new Vector2(146, 36),
+                out btnBuildBlueprintText, () =>
+                {
+                    if (runner != null && !string.IsNullOrEmpty(selectedCrewId) && !string.IsNullOrEmpty(selectedBlueprintId))
+                        runner.AssignBuildBlueprint(selectedCrewId, selectedBlueprintId);
+                }, AccentAmber);
+            btnBuildBlueprintBg = btnBuildBlueprint.GetComponent<Image>();
+            btnBuildBlueprintText.fontSize = 12;
+            btnBuildBlueprint.gameObject.SetActive(false);
+
+            btnCancelBlueprint = CreatePillButton(parcelRect, "BtnCancelBlueprint", new Vector2(162, -226), new Vector2(106, 36),
+                out btnCancelBlueprintText, () =>
+                {
+                    if (runner != null && !string.IsNullOrEmpty(selectedBlueprintId))
+                        runner.CancelBlueprint(selectedBlueprintId);
+                }, new Color(0.55f, 0.20f, 0.18f, 1f));
+            btnCancelBlueprintBg = btnCancelBlueprint.GetComponent<Image>();
+            btnCancelBlueprintText.fontSize = 11;
+            btnCancelBlueprint.gameObject.SetActive(false);
+
+            btnRepairParcel = CreatePillButton(parcelRect, "BtnRepairParcel", new Vector2(10, -226), new Vector2(146, 36),
+                out btnRepairParcelText, () =>
+                {
+                    if (runner != null && !string.IsNullOrEmpty(selectedCrewId) && !string.IsNullOrEmpty(selectedFaultFacilityId))
+                        runner.AssignRepairPanel(selectedCrewId, selectedFaultFacilityId);
+                }, AccentAmber);
+            btnRepairParcelBg = btnRepairParcel.GetComponent<Image>();
+            btnRepairParcelText.fontSize = 12;
+            btnRepairParcel.gameObject.SetActive(false);
+
+            btnDismantleFacility = CreatePillButton(parcelRect, "BtnDismantleFacility", new Vector2(10, -226), new Vector2(258, 36),
+                out btnDismantleFacilityText, () =>
+                {
+                    if (runner != null && !string.IsNullOrEmpty(selectedDismantleFacilityId))
+                        runner.DismantleFacility(selectedDismantleFacilityId);
+                }, new Color(0.55f, 0.22f, 0.18f, 1f));
+            btnDismantleFacilityBg = btnDismantleFacility.GetComponent<Image>();
+            btnDismantleFacilityText.fontSize = 12;
+            btnDismantleFacility.gameObject.SetActive(false);
+
+            btnToggleSiteExtractor = CreatePillButton(parcelRect, "BtnToggleSiteExtractor", new Vector2(10, -226), new Vector2(146, 36),
+                out btnToggleSiteExtractorText, () =>
+                {
+                    if (runner != null && !string.IsNullOrEmpty(selectedExtractorFacilityId))
+                    {
+                        var fac = FindFacilityById(runner.State, selectedExtractorFacilityId);
+                        if (fac != null)
+                            runner.SetFacilityEnabled(fac.FacilityId, !fac.IsEnabled);
+                    }
+                }, AccentBlue);
+            btnToggleSiteExtractorBg = btnToggleSiteExtractor.GetComponent<Image>();
+            btnToggleSiteExtractorText.fontSize = 11;
+            btnToggleSiteExtractor.gameObject.SetActive(false);
+            parcelCardPanel.SetActive(false);
+
+            // Right-side Operations Build Catalog Panel (below ParcelSelectionCard, above BottomCommandDock)
+            var buildRect = CreateSlicedPanel("OperationsBuildPanel", root, new Vector2(1, 0), new Vector2(1, 0),
+                new Vector2(-290, 102), new Vector2(-12, 348), CardBg, panelFrameSprite);
+            operationsBuildPanel = buildRect.gameObject;
+            buildCatalogTitleText = CreateText("BuildCatalogTitle", buildRect, new Vector2(10, -6), new Vector2(258, 24),
+                14, FontStyle.Bold, TextAnchor.MiddleLeft, AccentCyan);
+            btnBuildLine = CreatePillButton(buildRect, "BtnBuildLine", new Vector2(10, -34), new Vector2(61, 42),
+                out btnBuildLineText, () =>
+                {
+                    if (worldView != null) worldView.StartBuildMode(FacilityKind.UtilityLine);
+                }, ButtonBg);
+            btnBuildLineBg = btnBuildLine.GetComponent<Image>();
+            btnBuildLineText.fontSize = 10;
+
+            btnBuildSolar = CreatePillButton(buildRect, "BtnBuildSolar", new Vector2(75, -34), new Vector2(61, 42),
+                out btnBuildSolarText, () =>
+                {
+                    if (worldView != null) worldView.StartBuildMode(FacilityKind.SolarPanel);
+                }, ButtonBg);
+            btnBuildSolarBg = btnBuildSolar.GetComponent<Image>();
+            btnBuildSolarText.fontSize = 10;
+
+            btnBuildBattery = CreatePillButton(buildRect, "BtnBuildBattery", new Vector2(140, -34), new Vector2(61, 42),
+                out btnBuildBatteryText, () =>
+                {
+                    if (worldView != null) worldView.StartBuildMode(FacilityKind.Battery);
+                }, ButtonBg);
+            btnBuildBatteryBg = btnBuildBattery.GetComponent<Image>();
+            btnBuildBatteryText.fontSize = 10;
+
+            btnBuildExtractor = CreatePillButton(buildRect, "BtnBuildExtractor", new Vector2(205, -34), new Vector2(61, 42),
+                out btnBuildExtractorText, () =>
+                {
+                    if (worldView != null) worldView.StartBuildMode(FacilityKind.WaterExtractor);
+                }, ButtonBg);
+            btnBuildExtractorBg = btnBuildExtractor.GetComponent<Image>();
+            btnBuildExtractorText.fontSize = 10;
+
+            buildGhostInfoText = CreateText("BuildGhostInfo", buildRect, new Vector2(10, -82), new Vector2(258, 76),
+                12, FontStyle.Bold, TextAnchor.UpperLeft, Color.white);
+
+            btnRotateGhost = CreatePillButton(buildRect, "BtnRotateGhost", new Vector2(10, -162), new Vector2(124, 34),
+                out btnRotateGhostText, () =>
+                {
+                    if (worldView != null) worldView.RotateBuildGhost();
+                }, ButtonBg);
+            btnRotateGhostText.fontSize = 12;
+
+            btnCancelGhost = CreatePillButton(buildRect, "BtnCancelGhost", new Vector2(144, -162), new Vector2(124, 34),
+                out btnCancelGhostText, () =>
+                {
+                    if (worldView != null) worldView.CancelBuildMode();
+                }, AccentRed);
+            btnCancelGhostText.fontSize = 12;
+
+            buildNoticeText = CreateText("BuildNotice", buildRect, new Vector2(10, -202), new Vector2(258, 38),
+                11, FontStyle.Normal, TextAnchor.MiddleLeft, new Color(0.76f, 0.84f, 0.94f));
+            operationsBuildPanel.SetActive(false);
+
+            // Earth Orders Modal (Operations mode)
+            var ordRect = CreateSlicedPanel("EarthOrdersModal", root, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(-420, -300), new Vector2(420, 300), new Color(0.07f, 0.09f, 0.13f, 0.98f), panelFrameSprite);
+            earthOrdersModal = ordRect.gameObject;
+            earthOrdersTitle = CreateText("EarthOrdersTitle", ordRect, new Vector2(24, -16), new Vector2(792, 40), 22, FontStyle.Bold, TextAnchor.MiddleCenter, AccentBlue);
+            earthOrdersBody = CreateText("EarthOrdersBody", ordRect, new Vector2(24, -64), new Vector2(792, 230), 15, FontStyle.Normal, TextAnchor.UpperLeft, Color.white);
+            earthOrdersHistoryText = CreateText("EarthOrdersHistory", ordRect, new Vector2(24, -304), new Vector2(792, 160), 13, FontStyle.Normal, TextAnchor.UpperLeft, new Color(0.78f, 0.84f, 0.92f));
+            CreatePillButton(ordRect, "BtnOrderPrev", new Vector2(24, -476), new Vector2(110, 40), out btnOrderPrevText, () =>
+            {
+                if (earthOrderPageIndex > 0) earthOrderPageIndex--;
+                RefreshEarthOrdersUi(runner != null ? runner.State : null);
+            });
+            CreatePillButton(ordRect, "BtnOrderNext", new Vector2(142, -476), new Vector2(110, 40), out btnOrderNextText, () =>
+            {
+                earthOrderPageIndex++;
+                RefreshEarthOrdersUi(runner != null ? runner.State : null);
+            });
+            CreatePillButton(ordRect, "BtnOrderAccept", new Vector2(276, -476), new Vector2(160, 40), out btnOrderAcceptText, () => ExecuteEarthOrderAction("accept"), AccentGreen);
+            CreatePillButton(ordRect, "BtnOrderAssign", new Vector2(444, -476), new Vector2(190, 40), out btnOrderAssignText, () => ExecuteEarthOrderAction("assign"), AccentBlue);
+            CreatePillButton(ordRect, "BtnOrderCancel", new Vector2(642, -476), new Vector2(174, 40), out btnOrderCancelText, () => ExecuteEarthOrderAction("cancel"), AccentRed);
+            CreatePillButton(ordRect, "BtnCloseOrders", new Vector2(300, -536), new Vector2(240, 48), out btnOrderCloseText, () => ToggleEarthOrdersModal(false));
+            earthOrdersModal.SetActive(false);
+        }
+
+        private void ToggleEarthOrdersModal(bool open)
+        {
+            if (earthOrdersModal == null) return;
+            earthOrdersModal.SetActive(open);
+            MarsOutpostCameraController.IsMenuBlockingCameraInput = open;
+            if (open) RefreshEarthOrdersUi(runner != null ? runner.State : null);
+            UpdatePauseOverlay(runner != null ? runner.State : null);
+        }
+
+        private void ExecuteEarthOrderAction(string action)
+        {
+            if (runner == null || runner.Simulation == null || runner.State == null) return;
+            var orders = runner.State.EarthOrders;
+            if (orders == null || orders.Count == 0) return;
+            int idx = Mathf.Clamp(earthOrderPageIndex, 0, orders.Count - 1);
+            var order = orders[idx];
+            if (action == "accept") runner.AcceptEarthOrder(order.OrderId);
+            else if (action == "cancel") runner.CancelEarthOrder(order.OrderId);
+            else if (action == "assign") runner.AssignEarthOrder(order.OrderId, selectedCrewId);
+            RefreshEarthOrdersUi(runner.State);
+        }
+
+        private void RefreshEarthOrdersUi(MissionState state)
+        {
+            bool isOps = state != null && state.Mode == MissionMode.Operations;
+            if (btnEarthOrdersObj != null) btnEarthOrdersObj.SetActive(isOps);
+            if (btnSaveOpsObj != null) btnSaveOpsObj.SetActive(isOps);
+            if (btnLoadOpsObj != null) btnLoadOpsObj.SetActive(isOps);
+            if (btnSaveOpsText != null) btnSaveOpsText.text = OutpostStrings.TrEn("Kaydet", "Save");
+            if (btnLoadOpsText != null) btnLoadOpsText.text = OutpostStrings.TrEn("Yükle", "Load");
+            if (!isOps)
+            {
+                if (earthOrdersModal != null && earthOrdersModal.activeSelf) ToggleEarthOrdersModal(false);
+                return;
+            }
+
+            int total = state.EarthOrders != null ? state.EarthOrders.Count : 0;
+            int pending = 0;
+            if (state.EarthOrders != null)
+            {
+                for (int i = 0; i < state.EarthOrders.Count; i++)
+                {
+                    var st = state.EarthOrders[i].Status;
+                    if (st == EarthOrderStatus.Received || st == EarthOrderStatus.Accepted || st == EarthOrderStatus.InProgress)
+                        pending++;
+                }
+            }
+
+            if (total != lastKnownEarthOrderCount)
+            {
+                lastKnownEarthOrderCount = total;
+            }
+
+            if (btnEarthOrdersText != null)
+                btnEarthOrdersText.text = OutpostStrings.TrEn($"Dünya Emirleri ({pending})", $"Earth Orders ({pending})");
+
+            if (earthOrdersModal == null || !earthOrdersModal.activeSelf) return;
+
+            if (earthOrdersTitle != null)
+                earthOrdersTitle.text = OutpostStrings.TrEn("DÜNYA OPERASYON EMİRLERİ (Bilim Ödülü: 0)", "EARTH OPERATIONS ORDERS (Science Reward: 0)");
+            if (btnOrderPrevText != null) btnOrderPrevText.text = OutpostStrings.TrEn("Önceki", "Prev");
+            if (btnOrderNextText != null) btnOrderNextText.text = OutpostStrings.TrEn("Sonraki", "Next");
+            if (btnOrderAcceptText != null) btnOrderAcceptText.text = OutpostStrings.TrEn("Kabul Et", "Accept");
+            if (btnOrderAssignText != null) btnOrderAssignText.text = OutpostStrings.TrEn($"Ata ({selectedCrewId})", $"Assign ({selectedCrewId})");
+            if (btnOrderCancelText != null) btnOrderCancelText.text = OutpostStrings.TrEn("İptal Et", "Cancel");
+            if (btnOrderCloseText != null) btnOrderCloseText.text = OutpostStrings.TrEn("Kapat", "Close");
+
+            if (total == 0)
+            {
+                if (earthOrdersBody != null)
+                    earthOrdersBody.text = OutpostStrings.TrEn(
+                        "Henüz Dünya emri ulaşmadı. İlk emir Sol 3 başında (ardından her 2 sol) ulaşır.",
+                        "No Earth orders arrived yet. First order arrives at Sol 3 start (then every 2 sols).");
+                if (earthOrdersHistoryText != null) earthOrdersHistoryText.text = "";
+                return;
+            }
+
+            earthOrderPageIndex = Mathf.Clamp(earthOrderPageIndex, 0, total - 1);
+            var cur = state.EarthOrders[earthOrderPageIndex];
+            if (earthOrdersBody != null)
+            {
+                earthOrdersBody.text = OutpostStrings.TrEn(
+                    $"Emir {earthOrderPageIndex + 1}/{total}: {cur.Code} ({cur.OrderId})\n" +
+                    $"Başlık: {GetOrderTitle(cur)}\n" +
+                    $"Durum: {cur.Status} | Varış: Sol {cur.ArrivalSol} | Önerilen Hedef: Sol {cur.AdvisoryDeadlineSol}\n" +
+                    $"Aşama {cur.CurrentStepIndex + 1}/{cur.StepCount} ({OutpostStrings.FormatLocation(cur.CurrentStep.Location)}): {cur.StepProgressSeconds:0.#} / {cur.StepRequiredSeconds:0.#} sn\n" +
+                    "Dış aşamadan sonra Sığınağa Dön, ardından sonraki aşamayı ata. Bilim ödülü: 0.",
+                    $"Order {earthOrderPageIndex + 1}/{total}: {cur.Code} ({cur.OrderId})\n" +
+                    $"Title: {cur.Title}\n" +
+                    $"Status: {cur.Status} | Arrival: Sol {cur.ArrivalSol} | Advisory Deadline: Sol {cur.AdvisoryDeadlineSol}\n" +
+                    $"Step {cur.CurrentStepIndex + 1}/{cur.StepCount} ({cur.CurrentStep.Location}): {cur.StepProgressSeconds:0.#} / {cur.StepRequiredSeconds:0.#} s\n" +
+                    "After exterior work, Return to Shelter, then assign the next stage. Science reward: 0.");
+            }
+
+            if (earthOrdersHistoryText != null)
+            {
+                var lines = new System.Text.StringBuilder();
+                lines.AppendLine(OutpostStrings.TrEn("Son Tamamlanan / İptal Edilen Emirler:", "Recent Completed / Cancelled Orders:"));
+                int shown = 0;
+                for (int i = state.EarthOrders.Count - 1; i >= 0 && shown < 5; i--)
+                {
+                    var o = state.EarthOrders[i];
+                    if (o.Status == EarthOrderStatus.Completed || o.Status == EarthOrderStatus.Cancelled)
+                    {
+                        lines.AppendLine($"- {o.Code} [{o.Status}]: {o.CompletionSummary}");
+                        shown++;
+                    }
+                }
+                if (shown == 0) lines.AppendLine("-");
+                earthOrdersHistoryText.text = lines.ToString();
+            }
+        }
+
+        private static string GetOrderTitle(EarthOrderState order)
+        {
+            if (!OutpostStrings.IsTurkish) return order.Title;
+            switch (order.Kind)
+            {
+                case EarthOrderKind.SoilSample: return "Toprak örneği topla ve incele";
+                case EarthOrderKind.OxygenExperiment: return "Oksijen üretimiyle özel deney yap";
+                case EarthOrderKind.RadiationSensorCalibration: return "Dış radyasyon sensörünü kalibre et";
+                case EarthOrderKind.ThermalInsulationCheck: return "Habitatın ısı yalıtımını kontrol et";
+                case EarthOrderKind.WaterQualityAnalysis: return "Su kalitesi numunesini analiz et";
+                case EarthOrderKind.AntennaAlignment: return "Haberleşme antenini hizala";
+                default: return "Acil durum stoklarını denetle";
+            }
+        }
+
+        private void RefreshEquipmentUi(MissionState state)
+        {
+            if (equipmentPanel == null) return;
+            bool visible = state.Mode == MissionMode.Operations;
+            equipmentPanel.SetActive(visible);
+            if (!visible) return;
+            var r = state.Resources;
+            int totalPanels = r.Panels != null ? r.Panels.Count : 0;
+            int faultedPanels = 0;
+            int onlineHealthy = 0;
+            if (r.Panels != null)
+            {
+                for (int i = 0; i < r.Panels.Count; i++)
+                {
+                    var p = r.Panels[i];
+                    if (p.IsFaulted)
+                        faultedPanels++;
+                    else if (SolarProduction.IsPanelOnline(p, state.Facilities))
+                        onlineHealthy++;
+                }
+            }
+            string targetNote = OutpostStrings.FormatActivePanelFaultSummary(state);
+            equipmentStatusText.text = OutpostStrings.TrEn(
+                $"SİSTEMLER | Panel: {onlineHealthy}/{totalPanels}{targetNote}\nO₂: %{(r.OxygenProducerFaulted ? 50 : 100)} | Su: %{(r.WaterExtractorFaulted ? 50 : 100)}",
+                $"SYSTEMS | Panels: {onlineHealthy}/{totalPanels}{targetNote}\nO2: {(r.OxygenProducerFaulted ? 50 : 100)}% | Water: {(r.WaterExtractorFaulted ? 50 : 100)}%");
+            if (waterFlowBreakdownText != null)
+                waterFlowBreakdownText.text = OutpostStrings.FormatWaterBreakdownSummary(state);
+            panelRepairText.text = OutpostStrings.TrEn("Arızalı Paneli Tamir Et · 60sn (Kir Değil)", "Repair Faulted Panel · Outside / 60s");
+            oxygenRepairText.text = OutpostStrings.TrEn("O₂ Tamir · 20 Enerji / 40sn", "O2 Repair · 20 Energy / 40s");
+            waterRepairText.text = OutpostStrings.TrEn("Su Çıkarıcıyı Düzelt · 10 Bilim", "Repair Water Extractor · 10 Science");
+            extractorToggleText.text = r.WaterExtractorEnabled ? OutpostStrings.TrEn("Ana Su: AÇIK", "Master H2O: ON") : OutpostStrings.TrEn("Ana Su: KAPALI", "Master H2O: OFF");
+            bool active = state.Outcome == MissionOutcome.InProgress;
+            panelRepairButton.interactable = active && faultedPanels > 0;
+            oxygenRepairButton.interactable = active && r.OxygenProducerFaulted;
+            waterRepairButton.interactable = active && r.WaterExtractorFaulted;
+            extractorToggleButton.interactable = active;
+
+            bool hasSiteExtractor = state.Facilities != null && HasAnyWaterExtractorFacility(state);
+            if (btnFocusExtractor != null && btnFocusExtractorText != null)
+            {
+                btnFocusExtractorText.text = hasSiteExtractor
+                    ? OutpostStrings.TrEn("Tesise Odak", "Focus Site")
+                    : OutpostStrings.TrEn("Buz Su Yok", "No H2O Site");
+                btnFocusExtractor.interactable = hasSiteExtractor && state.Mode == MissionMode.Operations;
+            }
+            if (btnRecallSurfaceJob != null && btnRecallSurfaceJobText != null)
+            {
+                string busyCrewId = FindActiveSurfaceCrewId(state);
+                bool canRecall = active && !string.IsNullOrEmpty(busyCrewId);
+                btnRecallSurfaceJob.interactable = canRecall;
+                btnRecallSurfaceJobText.text = canRecall
+                    ? OutpostStrings.TrEn($"Yüzey Ekibini Geri Çağır ({busyCrewId})", $"Recall Surface Crew ({busyCrewId})")
+                    : OutpostStrings.TrEn("Aktif Yüzey İşi Yok", "No Active Surface Job");
+            }
+        }
+
+        private static bool HasAnyWaterExtractorFacility(MissionState state)
+        {
+            if (state?.Facilities == null) return false;
+            for (int i = 0; i < state.Facilities.Count; i++)
+            {
+                var f = state.Facilities[i];
+                if (f != null && !f.IsProtectedStarter &&
+                    FacilityCatalog.TryGetSpec(f.Kind, out var spec) && spec.WaterProductionRate > 0)
+                    return true;
+            }
+            return false;
+        }
+
+        private static string FindActiveSurfaceCrewId(MissionState state)
+        {
+            if (state?.Crew == null || state.SurfaceJobs == null || state.SurfaceJobs.Count == 0)
+                return null;
+            for (int i = 0; i < state.Crew.Count; i++)
+            {
+                var c = state.Crew[i];
+                if (!string.IsNullOrEmpty(c.ActiveSurfaceJobId))
+                    return c.Id;
+            }
+            return null;
+        }
+
+        private void FocusPrimaryExtractorSite()
+        {
+            var state = runner?.State;
+            if (state?.Facilities == null || worldView == null)
+                return;
+
+            var extractors = new List<FacilityState>();
+            for (int i = 0; i < state.Facilities.Count; i++)
+            {
+                var f = state.Facilities[i];
+                if (f != null && !f.IsProtectedStarter &&
+                    FacilityCatalog.TryGetSpec(f.Kind, out var spec) && spec.WaterProductionRate > 0)
+                    extractors.Add(f);
+            }
+            if (extractors.Count == 0)
+                return;
+
+            var chosen = extractors[focusExtractorCycleIndex % extractors.Count];
+            focusExtractorCycleIndex++;
+            if (!worldView.IsGridVisible)
+                worldView.SetGridVisible(true);
+            worldView.SelectParcel(chosen.Origin);
+            if (cameraController == null) cameraController = FindFirstObjectByType<MarsOutpostCameraController>();
+            if (cameraController != null && worldView.TryGetParcelWorldCenter(chosen.Origin, out var wp))
+                cameraController.FocusWorldPoint(wp, immediate: false);
+        }
+
+        private void RecallFirstActiveSurfaceCrew()
+        {
+            var state = runner?.State;
+            string crewId = FindActiveSurfaceCrewId(state);
+            if (runner != null && !string.IsNullOrEmpty(crewId))
+                runner.ReturnToShelter(crewId);
+        }
+
+        private static FacilityState FindFacilityById(MissionState state, string facilityId)
+        {
+            if (state?.Facilities == null || string.IsNullOrEmpty(facilityId))
+                return null;
+            for (int i = 0; i < state.Facilities.Count; i++)
+                if (state.Facilities[i].FacilityId == facilityId)
+                    return state.Facilities[i];
+            return null;
+        }
+
+        private void RefreshParcelSelectionUi(MissionState state)
+        {
+            if (parcelCardPanel == null) return;
+            ParcelState cell = null;
+            bool valid = state != null && state.Mode == MissionMode.Operations && state.Map != null && selectedParcel.HasValue
+                && state.Map.TryGetCell(selectedParcel.Value, out cell);
+            parcelCardPanel.SetActive(valid);
+            if (!valid || cell == null)
+            {
+                selectedBlueprintId = null;
+                selectedFaultFacilityId = null;
+                if (btnBuildBlueprint != null) btnBuildBlueprint.gameObject.SetActive(false);
+                if (btnRepairParcel != null) btnRepairParcel.gameObject.SetActive(false);
+                return;
+            }
+
+            GridCoord coord = selectedParcel.Value;
+            parcelTitleText.text = OutpostStrings.TrEn($"PARSEL ({coord.X}, {coord.Z})", $"PARCEL ({coord.X}, {coord.Z})");
+
+            string terrainStr = OutpostStrings.FormatParcelTerrain(cell.Terrain);
+            string walkStr = cell.IsPassable ? OutpostStrings.TrEn("Açık", "Passable") : OutpostStrings.TrEn("Kapalı", "Blocked");
+            string exploredStr = cell.IsExplored ? OutpostStrings.TrEn("Keşfedildi", "Explored") : OutpostStrings.TrEn("Keşifsiz", "Unexplored");
+            string claimStr = cell.Protection != StarterProtectionKind.None
+                ? OutpostStrings.TrEn("Başlangıç Tesisi", "Starter Facility")
+                : (cell.IsClaimed ? OutpostStrings.TrEn("Tahsisli", "Claimed") : OutpostStrings.TrEn("Tahsissiz", "Unclaimed"));
+            string lineStr = cell.HasUtilityLine
+                ? OutpostStrings.TrEn("Var (Kablo)", "Present (Line)")
+                : OutpostStrings.TrEn("Yok", "None");
+
+            // Never leak unscanned geology or unexplored solar factor!
+            string solarLine = cell.IsExplored
+                ? OutpostStrings.TrEn($"Güneş Katsayısı: %{cell.SolarFactor * 100:0}", $"Solar Factor: {cell.SolarFactor * 100:0}%")
+                : OutpostStrings.TrEn("Güneş Katsayısı: Bilinmiyor", "Solar Factor: Unknown");
+            string resourceLine = OutpostStrings.TrEn("Kaynak: ", "Resource: ") + OutpostStrings.FormatParcelResource(cell);
+
+            FacilityState primaryFac = FindFacilityById(state, cell.FacilityId);
+            FacilityState utilBpFac = FindFacilityById(state, cell.UtilityBlueprintId);
+            FacilityState bpFac = (utilBpFac != null && utilBpFac.LifecycleStatus == FacilityLifecycleStatus.Blueprint)
+                ? utilBpFac
+                : (primaryFac != null && primaryFac.LifecycleStatus == FacilityLifecycleStatus.Blueprint ? primaryFac : null);
+            FacilityState shownFac = bpFac ?? primaryFac ?? utilBpFac;
+
+            string facLine = "";
+            if (shownFac != null)
+            {
+                string facName = OutpostStrings.FormatFacilityName(shownFac.Kind);
+                string statusStr = OutpostStrings.FormatFacilityLifecycle(shownFac.LifecycleStatus);
+                if (shownFac.LifecycleStatus == FacilityLifecycleStatus.Blueprint)
+                {
+                    double pct = shownFac.WorkRequiredSeconds > 0
+                        ? Math.Min(100.0, (shownFac.WorkProgressSeconds / shownFac.WorkRequiredSeconds) * 100.0)
+                        : 0.0;
+                    string cancelNotice = OutpostStrings.FormatCancelBlueprintNotice(shownFac);
+                    facLine = OutpostStrings.TrEn(
+                        $"\nYapı: {facName} [{statusStr} %{pct:0}]\nİlerleme: {shownFac.WorkProgressSeconds:0.#}/{shownFac.WorkRequiredSeconds:0.#} sn | Enerji: {shownFac.EnergySpentTotal:0.#}/{shownFac.EnergyRequiredTotal:0.#}\n{cancelNotice}",
+                        $"\nStruct: {facName} [{statusStr} {pct:0}%]\nWork: {shownFac.WorkProgressSeconds:0.#}/{shownFac.WorkRequiredSeconds:0.#}s | Energy: {shownFac.EnergySpentTotal:0.#}/{shownFac.EnergyRequiredTotal:0.#}\n{cancelNotice}");
+                }
+                else
+                {
+                    string connStr = OutpostStrings.FormatFacilityConnectionStatus(shownFac, state.Map, coord);
+                    double solarRate = runner?.Simulation?.Config?.Resources?.SolarRate ?? 0.30;
+                    double baseBatCap = runner?.Simulation?.Config?.Resources?.BatteryCapacity ?? 100.0;
+                    string prodStr = OutpostStrings.FormatSolarFacilityContribution(state, shownFac, solarRate);
+                    string capStr = OutpostStrings.FormatBatteryCapacityContribution(state, shownFac, baseBatCap);
+                    string extStr = OutpostStrings.FormatExtractorSiteSummary(state, shownFac, cell);
+                    string extraStr = !string.IsNullOrEmpty(prodStr) ? prodStr : (!string.IsNullOrEmpty(capStr) ? capStr : extStr);
+                    string prodSuffix = string.IsNullOrEmpty(extraStr) ? "" : $"\n{extraStr}";
+                    string dismantlePreview = !shownFac.IsProtectedStarter && runner != null
+                        ? OutpostStrings.FormatDismantlePreview(state, shownFac, runner.Simulation?.Config?.Resources, runner.CanDismantleFacility(shownFac.FacilityId))
+                        : "";
+                    string dismantleSuffix = string.IsNullOrEmpty(dismantlePreview) ? "" : $"\n{dismantlePreview}";
+                    facLine = OutpostStrings.TrEn(
+                        $"\nYapı: {facName} [{statusStr}]\nAğ: {connStr}{prodSuffix}{dismantleSuffix}",
+                        $"\nStruct: {facName} [{statusStr}]\nNet: {connStr}{prodSuffix}{dismantleSuffix}");
+                }
+            }
+
+            parcelDetailsText.text = OutpostStrings.TrEn(
+                $"Zemin: {terrainStr} | Geçiş: {walkStr} | {exploredStr}\nTahsis: {claimStr} | Hat: {lineStr}\n{solarLine}\n{resourceLine}{facLine}",
+                $"Terrain: {terrainStr} | Walk: {walkStr} | {exploredStr}\nClaim: {claimStr} | Line: {lineStr}\n{solarLine}\n{resourceLine}{facLine}");
+
+            PanelUnitState faultedPanelOnFac = null;
+            if (bpFac == null && shownFac != null && shownFac.LifecycleStatus == FacilityLifecycleStatus.Commissioned && state.Resources?.Panels != null)
+            {
+                for (int i = 0; i < state.Resources.Panels.Count; i++)
+                {
+                    var p = state.Resources.Panels[i];
+                    if (!p.IsFaulted) continue;
+                    bool owns = p.FacilityId == shownFac.FacilityId ||
+                        (shownFac.LinkedPanelIds != null && shownFac.LinkedPanelIds.Contains(p.Id));
+                    if (owns)
+                    {
+                        faultedPanelOnFac = p;
+                        break;
+                    }
+                }
+            }
+
+            if (cell.IsClaimed || cell.Protection != StarterProtectionKind.None)
+            {
+                if (bpFac != null)
+                {
+                    string assignedWorker = null;
+                    SurfaceJobPhase assignedPhase = SurfaceJobPhase.Travel;
+                    if (state.SurfaceJobs != null)
+                    {
+                        for (int j = 0; j < state.SurfaceJobs.Count; j++)
+                        {
+                            var sj = state.SurfaceJobs[j];
+                            if (sj.Kind == SurfaceJobKind.Construct && sj.TargetId == bpFac.FacilityId &&
+                                sj.Phase != SurfaceJobPhase.Completed && !string.IsNullOrEmpty(sj.AssignedCrewId))
+                            {
+                                assignedWorker = sj.AssignedCrewId;
+                                assignedPhase = sj.Phase;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(assignedWorker))
+                    {
+                        string phaseTr = assignedPhase == SurfaceJobPhase.Travel ? "Yolda" : "İnşa Ediyor";
+                        string phaseEn = assignedPhase == SurfaceJobPhase.Travel ? "Traveling" : "Building";
+                        parcelReasonText.text = OutpostStrings.TrEn($"Durum: {assignedWorker} ({phaseTr})", $"Status: {assignedWorker} ({phaseEn})");
+                        parcelReasonText.color = AccentBlue;
+                    }
+                    else
+                    {
+                        parcelReasonText.text = OutpostStrings.TrEn("Taslak inşaata hazır (Ekip ata).", "Blueprint ready for crew construction.");
+                        parcelReasonText.color = AccentAmber;
+                    }
+                }
+                else if (faultedPanelOnFac != null)
+                {
+                    parcelReasonText.text = OutpostStrings.TrEn(
+                        $"Arızalı Panel ({faultedPanelOnFac.Id}): {faultedPanelOnFac.RepairProgressSeconds:0.#}/{PanelUnitState.DefaultRepairSeconds:0}sn tamir gerekli.",
+                        $"Faulted Panel ({faultedPanelOnFac.Id}): {faultedPanelOnFac.RepairProgressSeconds:0.#}/{PanelUnitState.DefaultRepairSeconds:0}s repair needed.");
+                    parcelReasonText.color = AccentAmber;
+                }
+                else if (shownFac != null && shownFac.LifecycleStatus == FacilityLifecycleStatus.Commissioned && !shownFac.IsConnectedToCore)
+                {
+                    parcelReasonText.text = OutpostStrings.TrEn(
+                        "Bağlantı Yok: Merkeze 4-yönlü hat gerekli (Üretim: 0).",
+                        "Not Connected: Needs 4-way line to core (Output: 0).");
+                    parcelReasonText.color = AccentAmber;
+                }
+                else
+                {
+                    parcelReasonText.text = OutpostStrings.TrEn("Tahsis tamamlandı (Malzeme stok: " + state.Materials + ").", "Claimed (Materials: " + state.Materials + ").");
+                    parcelReasonText.color = AccentGreen;
+                }
+                btnClaimParcelText.text = OutpostStrings.TrEn("Tahsis Edildi", "Already Claimed");
+                btnClaimParcel.interactable = false;
+                if (btnClaimParcelBg != null) btnClaimParcelBg.color = ButtonBg;
+            }
+            else
+            {
+                string failReason = OutpostStrings.FormatClaimFailureReason(state.Map, state, coord);
+                btnClaimParcelText.text = OutpostStrings.TrEn(
+                    $"Tahsis Et ({MissionSimulation.ClaimParcelCost} Malzeme)",
+                    $"Claim Parcel ({MissionSimulation.ClaimParcelCost} Mat)");
+                btnClaimParcel.interactable = state.Outcome == MissionOutcome.InProgress;
+                if (string.IsNullOrEmpty(failReason))
+                {
+                    parcelReasonText.text = OutpostStrings.TrEn(
+                        $"Hazır ({MissionSimulation.ClaimParcelCost} malzeme, Stok: {state.Materials}).",
+                        $"Ready ({MissionSimulation.ClaimParcelCost} mat, Stock: {state.Materials}).");
+                    parcelReasonText.color = AccentGreen;
+                    if (btnClaimParcelBg != null) btnClaimParcelBg.color = AccentGreen;
+                }
+                else
+                {
+                    parcelReasonText.text = OutpostStrings.TrEn($"Gerekçe: {failReason}", $"Reason: {failReason}");
+                    parcelReasonText.color = AccentAmber;
+                    if (btnClaimParcelBg != null) btnClaimParcelBg.color = new Color(0.42f, 0.24f, 0.14f, 1f);
+                }
+            }
+
+            if (btnSurfaceWalk != null && btnSurfaceWalkText != null)
+            {
+                bool canWalk = state.Outcome == MissionOutcome.InProgress && !string.IsNullOrEmpty(selectedCrewId) &&
+                    GridNav.TryFindBestWorkCell(state.Map, ParcelMap.AirlockCorridorCoord, coord, allowTargetCell: cell.IsPassable, out _, out _);
+                btnSurfaceWalk.interactable = canWalk;
+                btnSurfaceWalkText.text = OutpostStrings.TrEn("Ekibi Gönder", "Send Crew");
+                if (btnSurfaceWalkBg != null)
+                    btnSurfaceWalkBg.color = canWalk ? AccentBlue : ButtonBg;
+            }
+
+            if (btnBuildBlueprint != null && btnBuildBlueprintText != null)
+            {
+                if (bpFac != null)
+                {
+                    selectedBlueprintId = bpFac.FacilityId;
+                    btnBuildBlueprint.gameObject.SetActive(true);
+                    bool canBuild = state.Outcome == MissionOutcome.InProgress && !string.IsNullOrEmpty(selectedCrewId);
+                    btnBuildBlueprint.interactable = canBuild;
+                    btnBuildBlueprintText.text = bpFac.WorkProgressSeconds > 0
+                        ? OutpostStrings.TrEn("İnşayı Sürdür (Ekip)", "Resume Build (Crew)")
+                        : OutpostStrings.TrEn("İnşa Et (Ekip)", "Build Blueprint (Crew)");
+                    if (btnBuildBlueprintBg != null)
+                        btnBuildBlueprintBg.color = canBuild ? AccentAmber : ButtonBg;
+                }
+                else
+                {
+                    selectedBlueprintId = null;
+                    btnBuildBlueprint.gameObject.SetActive(false);
+                }
+            }
+
+            if (btnCancelBlueprint != null && btnCancelBlueprintText != null)
+            {
+                if (bpFac != null && runner != null)
+                {
+                    btnCancelBlueprint.gameObject.SetActive(true);
+                    var canCancel = runner.CanCancelBlueprint(bpFac.FacilityId);
+                    btnCancelBlueprint.interactable = state.Outcome == MissionOutcome.InProgress && canCancel.Success;
+                    btnCancelBlueprintText.text = OutpostStrings.TrEn("Taslağı İptal\n(0 İade)", "Cancel BP\n(0 Refund)");
+                    if (btnCancelBlueprintBg != null)
+                        btnCancelBlueprintBg.color = canCancel.Success ? new Color(0.62f, 0.22f, 0.18f, 1f) : ButtonBg;
+                }
+                else
+                {
+                    btnCancelBlueprint.gameObject.SetActive(false);
+                }
+            }
+
+            bool hasFaultRepairRow = bpFac == null && faultedPanelOnFac != null && shownFac != null;
+            if (btnRepairParcel != null && btnRepairParcelText != null)
+            {
+                if (hasFaultRepairRow)
+                {
+                    selectedFaultFacilityId = shownFac.FacilityId;
+                    btnRepairParcel.gameObject.SetActive(true);
+                    bool canRepair = state.Outcome == MissionOutcome.InProgress && !string.IsNullOrEmpty(selectedCrewId);
+                    btnRepairParcel.interactable = canRepair;
+                    btnRepairParcelText.text = faultedPanelOnFac.RepairProgressSeconds > 0
+                        ? OutpostStrings.TrEn("Tamiri Sürdür (Ekip)", "Resume Repair (Crew)")
+                        : OutpostStrings.TrEn("Paneli Tamir Et (Ekip)", "Repair Panel (Crew)");
+                    if (btnRepairParcelBg != null)
+                        btnRepairParcelBg.color = canRepair ? AccentAmber : ButtonBg;
+                }
+                else
+                {
+                    selectedFaultFacilityId = null;
+                    btnRepairParcel.gameObject.SetActive(false);
+                }
+            }
+
+            bool hasSiteToggleRow = bpFac == null && !hasFaultRepairRow && shownFac != null &&
+                shownFac.LifecycleStatus == FacilityLifecycleStatus.Commissioned && !shownFac.IsProtectedStarter &&
+                runner != null && FacilityCatalog.TryGetSpec(shownFac.Kind, out var siteToggleSpec) &&
+                siteToggleSpec.WaterProductionRate > 0;
+            if (btnToggleSiteExtractor != null && btnToggleSiteExtractorText != null)
+            {
+                if (hasSiteToggleRow)
+                {
+                    selectedExtractorFacilityId = shownFac.FacilityId;
+                    btnToggleSiteExtractor.gameObject.SetActive(true);
+                    btnToggleSiteExtractor.interactable = state.Outcome == MissionOutcome.InProgress;
+                    btnToggleSiteExtractorText.text = shownFac.IsEnabled
+                        ? OutpostStrings.TrEn("Saha: AÇIK (Kapat)", "Site: ON (Pause)")
+                        : OutpostStrings.TrEn("Saha: KAPALI (Aç)", "Site: OFF (Resume)");
+                    if (btnToggleSiteExtractorBg != null)
+                        btnToggleSiteExtractorBg.color = shownFac.IsEnabled ? AccentGreen : ButtonBg;
+                }
+                else
+                {
+                    selectedExtractorFacilityId = null;
+                    btnToggleSiteExtractor.gameObject.SetActive(false);
+                }
+            }
+
+            bool splitBottomRow = hasFaultRepairRow || hasSiteToggleRow;
+            if (btnDismantleFacility != null && btnDismantleFacilityText != null)
+            {
+                if (bpFac == null && shownFac != null && shownFac.LifecycleStatus == FacilityLifecycleStatus.Commissioned &&
+                    !shownFac.IsProtectedStarter && runner != null)
+                {
+                    selectedDismantleFacilityId = shownFac.FacilityId;
+                    btnDismantleFacility.gameObject.SetActive(true);
+                    var dismantleRt = btnDismantleFacility.GetComponent<RectTransform>();
+                    if (dismantleRt != null)
+                    {
+                        dismantleRt.anchoredPosition = new Vector2(splitBottomRow ? 162f : 10f, -226f);
+                        dismantleRt.sizeDelta = new Vector2(splitBottomRow ? 106f : 258f, 36f);
+                    }
+                    var canDismantle = runner.CanDismantleFacility(shownFac.FacilityId);
+                    FacilityPlacementValidator.PreviewDismantleRefund(
+                        shownFac, state.Materials, state.MaterialCapacity, out int appliedRef, out _, out _);
+                    btnDismantleFacility.interactable = state.Outcome == MissionOutcome.InProgress && canDismantle.Success;
+                    btnDismantleFacilityText.text = splitBottomRow
+                        ? OutpostStrings.TrEn($"Sök (+{appliedRef})", $"Dismantle (+{appliedRef})")
+                        : OutpostStrings.TrEn($"Tesisi Sök (+{appliedRef} Malz.)", $"Dismantle Facility (+{appliedRef} Mat)");
+                    if (btnDismantleFacilityBg != null)
+                        btnDismantleFacilityBg.color = canDismantle.Success ? new Color(0.62f, 0.24f, 0.18f, 1f) : ButtonBg;
+                }
+                else
+                {
+                    selectedDismantleFacilityId = null;
+                    btnDismantleFacility.gameObject.SetActive(false);
+                }
+            }
+        }
+
+        private void RefreshOperationsBuildUi(MissionState state)
+        {
+            if (operationsBuildPanel == null) return;
+            bool isOps = state != null && state.Mode == MissionMode.Operations && state.Map != null;
+            operationsBuildPanel.SetActive(isOps);
+            if (!isOps) return;
+
+            int bpCount = 0;
+            if (state.Facilities != null)
+            {
+                for (int i = 0; i < state.Facilities.Count; i++)
+                {
+                    if (state.Facilities[i].LifecycleStatus == FacilityLifecycleStatus.Blueprint)
+                        bpCount++;
+                }
+            }
+
+            buildCatalogTitleText.text = OutpostStrings.TrEn(
+                $"İNŞA KATALOĞU | Taslak: {bpCount}",
+                $"BUILD CATALOG | Bluepr.: {bpCount}");
+
+            FacilitySpec lineSpec = FacilityCatalog.GetSpec(FacilityKind.UtilityLine);
+            FacilitySpec solarSpec = FacilityCatalog.GetSpec(FacilityKind.SolarPanel);
+            FacilitySpec batterySpec = FacilityCatalog.GetSpec(FacilityKind.Battery);
+            FacilitySpec extractorSpec = FacilityCatalog.GetSpec(FacilityKind.WaterExtractor);
+            bool unlockedLine = lineSpec.IsPlayerBuildable && lineSpec.UnlockedInPlayerCatalog;
+            bool unlockedSolar = solarSpec.IsPlayerBuildable && solarSpec.UnlockedInPlayerCatalog;
+            bool unlockedBattery = batterySpec.IsPlayerBuildable && batterySpec.UnlockedInPlayerCatalog;
+            bool unlockedExtractor = extractorSpec.IsPlayerBuildable && extractorSpec.UnlockedInPlayerCatalog;
+            btnBuildLine.gameObject.SetActive(unlockedLine);
+            btnBuildSolar.gameObject.SetActive(unlockedSolar);
+            if (btnBuildBattery != null) btnBuildBattery.gameObject.SetActive(unlockedBattery);
+            if (btnBuildExtractor != null) btnBuildExtractor.gameObject.SetActive(unlockedExtractor);
+
+            btnBuildLineText.text = OutpostStrings.TrEn(
+                $"Hat\n({lineSpec.MaterialCost} M)",
+                $"Line\n({lineSpec.MaterialCost} M)");
+            btnBuildSolarText.text = OutpostStrings.TrEn(
+                $"Solar\n({solarSpec.MaterialCost} M)",
+                $"Solar\n({solarSpec.MaterialCost} M)");
+            if (btnBuildBatteryText != null)
+            {
+                btnBuildBatteryText.text = OutpostStrings.TrEn(
+                    $"Bat.\n({batterySpec.MaterialCost} M)",
+                    $"Batt\n({batterySpec.MaterialCost} M)");
+            }
+            if (btnBuildExtractorText != null)
+            {
+                btnBuildExtractorText.text = OutpostStrings.TrEn(
+                    $"Buz Su\n({extractorSpec.MaterialCost} M)",
+                    $"Ice H2O\n({extractorSpec.MaterialCost} M)");
+            }
+
+            FacilityKind? activeBuild = worldView != null ? worldView.ActiveBuildKind : null;
+            bool inProgress = state.Outcome == MissionOutcome.InProgress;
+            btnBuildLine.interactable = inProgress;
+            btnBuildSolar.interactable = inProgress;
+            if (btnBuildBattery != null) btnBuildBattery.interactable = inProgress;
+            if (btnBuildExtractor != null) btnBuildExtractor.interactable = inProgress;
+
+            if (btnBuildLineBg != null)
+                btnBuildLineBg.color = activeBuild == FacilityKind.UtilityLine ? AccentCyan : (state.Materials >= lineSpec.MaterialCost ? ButtonBg : new Color(0.28f, 0.16f, 0.16f, 0.95f));
+            if (btnBuildSolarBg != null)
+                btnBuildSolarBg.color = activeBuild == FacilityKind.SolarPanel ? AccentCyan : (state.Materials >= solarSpec.MaterialCost ? ButtonBg : new Color(0.28f, 0.16f, 0.16f, 0.95f));
+            if (btnBuildBatteryBg != null)
+                btnBuildBatteryBg.color = activeBuild == FacilityKind.Battery ? AccentCyan : (state.Materials >= batterySpec.MaterialCost ? ButtonBg : new Color(0.28f, 0.16f, 0.16f, 0.95f));
+            if (btnBuildExtractorBg != null)
+                btnBuildExtractorBg.color = activeBuild == FacilityKind.WaterExtractor ? AccentCyan : (state.Materials >= extractorSpec.MaterialCost ? ButtonBg : new Color(0.28f, 0.16f, 0.16f, 0.95f));
+
+            btnRotateGhostText.text = OutpostStrings.TrEn("Döndür (R)", "Rotate (R)");
+            btnCancelGhostText.text = OutpostStrings.TrEn("İptal (Esc)", "Cancel (Esc)");
+            btnRotateGhost.interactable = activeBuild.HasValue;
+            btnCancelGhost.interactable = activeBuild.HasValue;
+
+            if (activeBuild.HasValue && worldView != null)
+            {
+                string kindName = OutpostStrings.FormatFacilityName(activeBuild.Value);
+                string coordStr = worldView.HoveredBuildCell.HasValue ? worldView.HoveredBuildCell.Value.ToString() : "--";
+                int rotDeg = (int)worldView.BuildRotation * 90;
+                buildGhostInfoText.text = OutpostStrings.TrEn(
+                    $"{kindName} | Parsel: {coordStr} | Açı: {rotDeg}°\nMaliyet: {worldView.LastGhostCost} Malzeme | {worldView.LastGhostReason}",
+                    $"{kindName} | Cell: {coordStr} | Rot: {rotDeg}°\nCost: {worldView.LastGhostCost} Mat | {worldView.LastGhostReason}");
+                buildGhostInfoText.color = worldView.LastGhostValid ? AccentGreen : AccentAmber;
+            }
+            else
+            {
+                buildGhostInfoText.text = OutpostStrings.TrEn(
+                    $"Bir taslak seç ve haritada tahsisli parsele tıkla.\nMalzeme Stoku: {state.Materials}/{state.MaterialCapacity}",
+                    $"Select a blueprint and click a claimed parcel.\nMaterials: {state.Materials}/{state.MaterialCapacity}");
+                buildGhostInfoText.color = new Color(0.86f, 0.92f, 0.98f);
+            }
+
+            buildNoticeText.text = OutpostStrings.TrEn(
+                "Not: Yerleşim sonrası iptal iadesizdir. R: Döndür | Sağ tık/Esc: İptal",
+                "Note: Canceling placed blueprints is non-refundable. R: Rotate | Esc: Cancel");
         }
 
         private void ToggleSourcesModal(bool open)
         {
             if (sourcesModal == null) return;
             sourcesModal.SetActive(open);
+            MarsOutpostCameraController.IsMenuBlockingCameraInput = open;
             if (open && runner != null && runner.Stepper != null && !runner.Stepper.UserPaused)
                 runner.SetPaused(true);
             UpdatePauseOverlay(runner != null ? runner.State : null);
@@ -1465,8 +2739,10 @@ namespace MarsOutpost.Presentation
             bool showAlert = !showOutcome && state != null && state.CriticalAlertPauseRequested;
             bool showReport = !showOutcome && !showAlert && state != null && state.SolReportPauseRequested && state.PendingSolReport != null;
             bool showSources = sourcesModal != null && sourcesModal.activeSelf;
+            bool showOrders = earthOrdersModal != null && earthOrdersModal.activeSelf;
 
-            bool shouldShow = isPaused && !showOutcome && !showAlert && !showReport && !showSources && !isScreenshotMode;
+            bool showSettings = settingsMenu != null && settingsMenu.IsOpen;
+            bool shouldShow = isPaused && !showOutcome && !showAlert && !showReport && !showSources && !showOrders && !showSettings && !isScreenshotMode;
             if (pauseOverlayPanel.activeSelf != shouldShow)
             {
                 pauseOverlayPanel.SetActive(shouldShow);
