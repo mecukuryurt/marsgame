@@ -2,6 +2,16 @@
 
 A 2.5D educational Mars habitat & mission management game built in **Unity 6000.3.28f1** with URP and Input System. The default **Outpost Operations** mode runs continuously with independent random hazards, repairable equipment, water extraction, spendable science, and seven kinds of Earth orders. **Training** retains the fixed two-sol mission; **Demo** compresses training into 90 seconds.
 
+## Latest toolbar cleanup
+
+The header now contains only Pause, Build, Systems, Tools and Settings.
+Language, mission mode, camera reset and cutaway controls are in Settings under
+Game and Camera; Grid is in Build. Legacy audio buttons are removed in favor
+of the Settings sliders. Current Linux launcher: `Build/Hackathon-topbar/MarsOutpost.x86_64`
+(or the refreshed `Build/Linux/MarsOutpost.x86_64`). Current archive:
+`Build/Release/MarsOutpost-Hackathon-Topbar-Linux.tar.gz`.
+Verified source commit: `d248b5f`; build identity: `docs/hackathon/TOPBAR_BUILD.json`.
+
 ## Hackathon polish — 15 November 2026
 
 This release improves the existing OP15 game. Later OP16–OP32 expansion is deferred.

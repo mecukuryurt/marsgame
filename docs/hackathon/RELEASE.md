@@ -1,5 +1,17 @@
 # Hackathon sürümü — 15 Kasım 2026
 
+## Son sürüm — üst bar sadeleştirmesi
+
+Güncel kaynak d248b5f. Üstte beş ana eylem; kamera/çatı/mod/dil Settings altında,
+grid İnşa içinde, ses eski satırı kaldırıldı. Güncel çalıştırıcı
+`Build/Hackathon-topbar/MarsOutpost.x86_64`; `Build/Linux` aynı dosyalarla yenilendi.
+Paket `Build/Release/MarsOutpost-Hackathon-Topbar-Linux.tar.gz`.
+Arşiv içindeki Presentation.dll hash'i gerçek çalıştırılan/capture alınan build ile
+karşılaştırıldı; TOPBAR_BUILD.json içinde kayıtlı. 36/36 PlayMode sonrası mod-pause
+fix'i ayrıca 7/7 ayar testiyle doğrulandı; son Linux build exit 0 ve gerçek 1440×900
+normal/Settings görüntüsü incelendi. Aşağıdaki b91ff4a paket bilgileri tarihsel sürümdür.
+
+
 ## Paket teslim düzeltmesi
 
 Kullanıcı eski menü/ses gördüğünü bildirince paket denetlendi. Önceki yeni build

@@ -5,3 +5,7 @@ The header now shows pause, Build and Systems in Operations, Tools, and Settings
 PlayMode: 36/36 passed (`docs/validation/hackathon-topbar-playmode.xml`) before the subsequent mode-switch pause fix and capture-only hook; focused Settings tests after that fix passed 7/7 (`docs/validation/hackathon-topbar-settings-tests.xml`). A prior 33/36 run exposed panel-transition and settings-lifecycle assumptions and was corrected. Fresh Linux player build and captures are the remaining verification step.
 
 Final Unity Linux build exited 0 at `Build/Hackathon-topbar/MarsOutpost.x86_64`. Actual 1440×900 player captures `docs/validation/topbar-normal-1440.png` and `docs/validation/topbar-utility-1440.png` were inspected. The built `MarsOutpost.Presentation.dll` SHA-256 is `709b6afb549d5c7ef82184c9cdff78f19f3aeceff2c139f67f908f69a10d24c0`.
+
+Parent review: normal and scrolled Settings captures accepted at 1440×900.
+Final package source commit d248b5f; package DLL hash matches TOPBAR_BUILD.json.
+Build/Linux updated from same fresh build; versioned Topbar archive created.
