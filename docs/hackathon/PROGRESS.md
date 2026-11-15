@@ -22,3 +22,10 @@ Push sonucu son teslim mesajında bildirilecek; GitHub release yayını yapılm�
 
 Son ayar yerleşiminden sonra ayrıca SettingsMenuTests 6/6 geçti;
 kanıt: docs/validation/hackathon-settings-tests.xml. Kaynak master dalına push edildi.
+
+## Paket düzeltmesi
+
+İlk yerel arşiv eski Build/Linux'tan hazırlanmıştı; kullanıcı bildirimiyle
+yakalandı. b91ff4a kaynaklı sürüm ayrı klasöre derlendi, iki gerçek açılış
+ve arşiv içi DLL hash eşitliğiyle kontrol edildi. Eski yol ve paket de yenilendi.
+Güncel dosya yolları/hash RELEASE.md ve BUILD_VERSION.json içindedir.

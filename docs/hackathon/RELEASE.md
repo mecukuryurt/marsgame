@@ -1,5 +1,18 @@
 # Hackathon sürümü — 15 Kasım 2026
 
+## Paket teslim düzeltmesi
+
+Kullanıcı eski menü/ses gördüğünü bildirince paket denetlendi. Önceki yeni build
+/tmp/mars-hackathon-build klasöründeydi; ilk yayınlanan yerel arşiv yanlışlıkla
+eski Build/Linux'tan hazırlanmıştı. Önceki 41.191.880 baytlık paket ve hash GEÇERSİZDİR.
+Bu teslim hatası ana ajan tarafından düzeltildi: b91ff4a kaynağı doğrudan
+Build/Hackathon-b91ff4a altına yeniden derlendi (exit 0), normal ve settings
+oyuncu açılışı exit 0 ile görüntülendi. Build/Linux da bu yeni dosyalarla yenilendi.
+Arşiv içindeki Presentation.dll SHA256'sı çalıştırılan binary'nin DLL'iyle eşleşiyor;
+BUILD_VERSION.json sürüm damgası eklendi. Yeni görüntüler:
+../validation/hackathon-delivery-fixed-normal.png ve
+../validation/hackathon-delivery-fixed-settings.png.
+
 Mevcut OP15 oyunu iyileştirildi. OP16–32 ertelendi; yarım keşif değişikliği
 etkin oyundan ayrıldı ve deferred-op16.patch olarak korundu.
 
@@ -30,11 +43,14 @@ etkin oyundan ayrıldı ve deferred-op16.patch olarak korundu.
 
 ## Açılacak oyun ve paket
 
-`Build/Linux/MarsOutpost.x86_64` doğrudan açılır. Taşınabilir yerel paket:
-`Build/Release/MarsOutpost-Hackathon-Linux.tar.gz` (41.191.880 bayt).
-SHA256: `8fc23bc42c252e31269837f9d061ac7c267d378d06cf4dd404e92a178324e504`.
-Arşivde executable ve UnityPlayer.so bulunduğu kontrol edildi. Build/ gitignore
-kapsamındadır; kaynak push'u oyun paketini GitHub release olarak yayımlamaz.
+`Build/Hackathon-b91ff4a/MarsOutpost.x86_64` sürüm isimli güncel çalıştırıcıdır.
+`Build/Linux/MarsOutpost.x86_64` aynı yeni dosyalarla güncellenmiştir.
+Yeni paket: `Build/Release/MarsOutpost-Hackathon-b91ff4a-Linux.tar.gz`
+(40.715.418 bayt); SHA256:
+`c31e94255d24b041a8b3f716e1cc4c99198a03e692ac1174a620837cbfa361f8`.
+Eski isimli `MarsOutpost-Hackathon-Linux.tar.gz` de düzeltildi (40.728.456 bayt).
+Paket içi DLL doğrulaması: BUILD_VERSION.json.
+Build/ gitignore kapsamındadır; kaynak push'u oyun paketini GitHub release olarak yayımlamaz.
 
 ## Dürüst sınırlar
 
