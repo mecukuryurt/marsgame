@@ -71,8 +71,8 @@ namespace MarsOutpost.Tests.PlayMode
             Assert.That(GameObject.Find("FeedbackBanner"), Is.Not.Null);
             GameObject.Find("BtnTools").GetComponent<Button>().onClick.Invoke();
             var save = GameObject.Find("BtnSaveOps").GetComponent<RectTransform>();
-            var notes = GameObject.Find("ReserveNote").GetComponent<RectTransform>();
-            Assert.That(save.anchoredPosition.x, Is.GreaterThan(notes.anchoredPosition.x + notes.rect.width));
+            Assert.That(save.gameObject.activeInHierarchy, Is.True);
+            GameObject.Find("BtnSystems").GetComponent<Button>().onClick.Invoke();
             GameObject.Find("BtnToggleExtractor").GetComponent<Button>().onClick.Invoke();
             Assert.That(runner.State.Resources.WaterExtractorEnabled, Is.False);
             runner.InitializeDefaultMission();
@@ -144,17 +144,11 @@ namespace MarsOutpost.Tests.PlayMode
             float savedVolume = audio.Volume;
             audio.SetMuted(false);
 
-            // Audio controls
-            var btnMute = GameObject.Find("BtnMuteAudio")?.GetComponent<Button>();
-            var btnVolDown = GameObject.Find("BtnVolDown")?.GetComponent<Button>();
-            Assert.That(btnMute, Is.Not.Null);
-            Assert.That(btnVolDown, Is.Not.Null);
-            btnMute.onClick.Invoke();
-            Assert.That(audio.IsMuted, Is.True);
-            btnVolDown.onClick.Invoke();
-            Assert.That(audio.Volume, Is.EqualTo(Mathf.Clamp01(savedVolume - .2f)).Within(.001f));
-            btnMute.onClick.Invoke();
-            Assert.That(audio.IsMuted, Is.False);
+            Assert.That(GameObject.Find("BtnMuteAudio"), Is.Null);
+            Assert.That(GameObject.Find("BtnVolDown"), Is.Null);
+            Assert.That(GameObject.Find("BtnCamReset"), Is.Null);
+            GameObject.Find("BtnTools").GetComponent<Button>().onClick.Invoke();
+            Assert.That(GameObject.Find("BtnCamReset"), Is.Null);
             audio.SetMuted(savedMute);
             audio.SetVolume(savedVolume);
 
@@ -167,9 +161,13 @@ namespace MarsOutpost.Tests.PlayMode
             runner.SetPaused(false);
 
             // Switch to 90-second Demo Mode via HUD button and step full 2-sol demo through completion
+            GameObject.Find("BtnTools").GetComponent<Button>().onClick.Invoke();
+            var settings = Object.FindFirstObjectByType<MarsOutpostSettingsMenu>();
+            settings.Open();
             var btnMode = GameObject.Find("BtnModeToggle")?.GetComponent<Button>();
             Assert.That(btnMode, Is.Not.Null);
             btnMode.onClick.Invoke();
+            settings.Close();
             Assert.That(runner.IsDemoMode, Is.True);
             Assert.That(runner.State.ElapsedSeconds, Is.EqualTo(0));
 
@@ -215,6 +213,8 @@ namespace MarsOutpost.Tests.PlayMode
             yield return null;
             yield return null;
 
+            var settings = Object.FindFirstObjectByType<MarsOutpostSettingsMenu>();
+            settings.Open();
             var btnLang = GameObject.Find("BtnLang")?.GetComponent<Button>();
             Assert.That(btnLang, Is.Not.Null);
             var langText = btnLang.GetComponentInChildren<Text>();
@@ -253,6 +253,7 @@ namespace MarsOutpost.Tests.PlayMode
             Assert.That(GameObject.Find("BtnRest")?.GetComponent<Button>(), Is.Not.Null);
             Assert.That(GameObject.Find("BtnCancel")?.GetComponent<Button>(), Is.Not.Null);
             Assert.That(GameObject.Find("BtnResearchToggle")?.GetComponent<Button>(), Is.Not.Null);
+            settings.Close();
         }
 
         [UnityTest]
@@ -334,6 +335,8 @@ namespace MarsOutpost.Tests.PlayMode
             Assert.That(world, Is.Not.Null, "MarsOutpostWorldView must be present in scene");
             Assert.That(cam, Is.Not.Null, "MarsOutpostCameraController must be present on Camera");
 
+            var settings = Object.FindFirstObjectByType<MarsOutpostSettingsMenu>();
+            settings.Open();
             // 1. Verify BtnCamReset and BtnDomeRoof exist and respond cleanly
             var btnCamReset = GameObject.Find("BtnCamReset")?.GetComponent<Button>();
             var btnDomeRoof = GameObject.Find("BtnDomeRoof")?.GetComponent<Button>();
@@ -369,6 +372,7 @@ namespace MarsOutpost.Tests.PlayMode
             cam.SetCameraPose(MarsOutpostCameraController.DefaultPivot, MarsOutpostCameraController.DefaultDistance, MarsOutpostCameraController.DefaultPitch, MarsOutpostCameraController.DefaultYaw, immediate: true);
             Assert.That(cam.CurrentDistance, Is.EqualTo(MarsOutpostCameraController.DefaultDistance), "BtnCamReset must restore DefaultDistance");
             Assert.That(cam.CurrentPivot, Is.EqualTo(MarsOutpostCameraController.DefaultPivot), "BtnCamReset must restore DefaultPivot");
+            settings.Close();
             Assert.That(cam.CurrentYaw, Is.EqualTo(MarsOutpostCameraController.DefaultYaw), "CurrentYaw must remain at DefaultYaw");
             Assert.That(cam.CurrentPitch, Is.EqualTo(MarsOutpostCameraController.DefaultPitch), "CurrentPitch must remain at DefaultPitch");
 

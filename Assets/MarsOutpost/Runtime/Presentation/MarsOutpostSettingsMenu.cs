@@ -31,6 +31,9 @@ namespace MarsOutpost.Presentation
         private int draftQuality, draftResolution;
         private readonly List<Resolution> resolutions = new List<Resolution>();
         private Button entryButton;
+        private Transform utilityContent;
+        private Text utilityHeader;
+        private readonly List<UnityEngine.UI.Button> utilityButtons = new List<UnityEngine.UI.Button>();
         private bool lastLanguageTurkish;
 
         public bool IsOpen => open;
@@ -40,6 +43,7 @@ namespace MarsOutpost.Presentation
             runner = FindFirstObjectByType<SimulationRunner>();
             audioController = FindFirstObjectByType<MarsOutpostAudio>();
             BuildOverlay();
+            AttachHudUtilities();
             LoadSavedSettings();
             overlay.SetActive(false);
             lastLanguageTurkish = OutpostStrings.IsTurkish;
@@ -79,7 +83,12 @@ namespace MarsOutpost.Presentation
 
         private void OnDestroy()
         {
+            if (open) Close();
             RestoreGraphics();
+            var hud = FindFirstObjectByType<MarsOutpostHud>();
+            var topBar = hud != null ? hud.transform.Find("MarsOutpostCanvas/TopBar") : null;
+            foreach (var button in utilityButtons)
+                if (button != null && topBar != null) { button.transform.SetParent(topBar, false); button.gameObject.SetActive(false); }
             if (overlay != null) Destroy(overlay);
             if (entryButton != null) Destroy(entryButton.gameObject);
         }
@@ -151,6 +160,8 @@ namespace MarsOutpost.Presentation
             sfxSlider = AddSlider(contentGo.transform, 52); sfxSlider.gameObject.name = "SfxSlider";
             graphicsHeader = Section(contentGo.transform, 38); qualityDropdown = AddDropdown(contentGo.transform, 44);
             displayHeader = Section(contentGo.transform, 38); fullscreenToggle = AddToggle(contentGo.transform, 42); resolutionDropdown = AddDropdown(contentGo.transform, 44);
+            utilityHeader = Section(contentGo.transform, 38);
+            utilityContent = contentGo.transform;
             statusText = Label("SettingsStatus", panel, new Vector2(24, 42), new Vector2(340, 24), 14, FontStyle.Italic, TextAnchor.MiddleLeft, new Color(0.65f, 0.85f, 1));
             statusText.text = "";
             var statusRect = statusText.rectTransform;
@@ -169,6 +180,34 @@ namespace MarsOutpost.Presentation
             qualityDropdown.onValueChanged.AddListener(v => draftQuality = v);
             resolutionDropdown.onValueChanged.AddListener(v => draftResolution = v);
             RefreshLabels();
+        }
+
+        private void AttachHudUtilities()
+        {
+            var hud = FindFirstObjectByType<MarsOutpostHud>();
+            if (hud == null) return;
+            foreach (var button in hud.GetComponentsInChildren<UnityEngine.UI.Button>(true))
+                if (button.name == "BtnCamReset" || button.name == "BtnDomeRoof" || button.name == "BtnModeToggle" || button.name == "BtnLang")
+                    AddUtilityButton(button);
+        }
+
+        public void AddUtilityButton(UnityEngine.UI.Button button)
+        {
+            if (button == null || utilityContent == null) return;
+            if (!utilityButtons.Contains(button)) utilityButtons.Add(button);
+            button.transform.SetParent(utilityContent, false);
+            var rect = button.GetComponent<RectTransform>();
+            rect.localScale = Vector3.one; rect.localRotation = Quaternion.identity;
+            var label = button.GetComponentInChildren<Text>(true);
+            if (label != null)
+            {
+                label.rectTransform.anchorMin = Vector2.zero; label.rectTransform.anchorMax = Vector2.one;
+                label.rectTransform.offsetMin = new Vector2(6, 1); label.rectTransform.offsetMax = new Vector2(-6, -1);
+            }
+            var element = button.gameObject.GetComponent<LayoutElement>();
+            if (element == null) element = button.gameObject.AddComponent<LayoutElement>();
+            element.preferredHeight = 40;
+            button.gameObject.SetActive(true);
         }
 
         private void ReadDraft()
@@ -355,6 +394,7 @@ namespace MarsOutpost.Presentation
             if (titleText == null) return;
             titleText.text = OutpostStrings.TrEn("AYARLAR", "SETTINGS");
             entryButton.GetComponentInChildren<Text>().text = OutpostStrings.TrEn("Ayarlar", "Settings");
+            utilityHeader.text = OutpostStrings.TrEn("OYUN VE KAMERA", "GAME & CAMERA");
             audioHeader.text = OutpostStrings.TrEn("SES", "AUDIO"); graphicsHeader.text = OutpostStrings.TrEn("GRAFİK", "GRAPHICS"); displayHeader.text = OutpostStrings.TrEn("EKRAN", "DISPLAY");
             SetToggleLabel(muteToggle, OutpostStrings.TrEn("Sesi kapat", "Mute sound")); SetSliderLabel(volumeSlider, OutpostStrings.TrEn("Ana ses", "Master"));
             SetSliderLabel(ambienceSlider, OutpostStrings.TrEn("Ambiyans", "Ambience"));

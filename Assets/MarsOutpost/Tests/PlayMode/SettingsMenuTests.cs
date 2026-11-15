@@ -80,6 +80,21 @@ namespace MarsOutpost.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator ChangingModeInsideSettingsKeepsNewMissionPausedUntilClose()
+        {
+            runner.SetPaused(false);
+            menu.Open();
+            var mode = GameObject.Find("BtnModeToggle").GetComponent<Button>();
+            mode.onClick.Invoke();
+            Assert.That(runner.Stepper.UserPaused, Is.True);
+            double elapsed = runner.State.ElapsedSeconds;
+            yield return new WaitForSecondsRealtime(.3f);
+            Assert.That(runner.State.ElapsedSeconds, Is.EqualTo(elapsed));
+            menu.Close();
+            Assert.That(runner.Stepper.UserPaused, Is.False);
+        }
+
+        [UnityTest]
         public IEnumerator OpenPausesCloseRestoresAndReopenDoesNotDuplicateEntry()
         {
             var entry = menu.transform.Find("BtnSettings");
@@ -132,6 +147,13 @@ namespace MarsOutpost.Tests.PlayMode
             menu.Open();
             Assert.That(Field<Dropdown>("qualityDropdown").value, Is.EqualTo(1));
             Assert.That(Field<Slider>("volumeSlider").value, Is.EqualTo(.35f).Within(.001f));
+            var utility = GameObject.Find("BtnCamReset");
+            Assert.That(utility, Is.Not.Null);
+            var scroll = menu.GetComponentInChildren<ScrollRect>();
+            Assert.That(utility.transform.IsChildOf(scroll.content), Is.True);
+            scroll.verticalNormalizedPosition = 0;
+            yield return null;
+            Assert.That(scroll.verticalNormalizedPosition, Is.LessThan(.01f));
         }
 
         [UnityTest]

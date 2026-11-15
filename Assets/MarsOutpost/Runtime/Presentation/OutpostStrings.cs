@@ -78,9 +78,9 @@ namespace MarsOutpost.Presentation
         public static string GetSkipTutorialButton() => TrEn("Rehberi Gizle", SkipTutorialButton);
         public static string GetSourcesButton() => TrEn("[NASA] Bilim Kaynakları", "NASA Sources");
         public static string GetLangButton() => TrEn("[TR / EN]", "[EN / TR]");
-        public static string GetCameraResetButton() => TrEn("[3D] Kamera", "[3D] Reset Cam");
+        public static string GetCameraResetButton() => TrEn("Kamera Sıfırla", "Reset Camera");
         public static string GetDomeRoofButton(bool isRoofVisible) =>
-            isRoofVisible ? TrEn("[3D] Kubbe: Açık", "[3D] Dome: Closed") : TrEn("[3D] Kubbe: Kesit", "[3D] Dome: Cutaway");
+            isRoofVisible ? TrEn("Kubbe: Kapalı", "Dome: Closed") : TrEn("Kubbe: Kesit", "Dome: Cutaway");
         public static string GetCameraNavigationHint() =>
             TrEn("Tekerlek: Yakınlaştır | Sürükle / WASD: Gez | R: Sıfırla",
                  "Wheel: Zoom | Drag / WASD: Pan | R: Reset");

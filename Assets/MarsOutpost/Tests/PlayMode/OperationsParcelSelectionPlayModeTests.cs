@@ -43,12 +43,16 @@ namespace MarsOutpost.Tests.PlayMode
             runner.SetPaused(true);
             yield return null;
 
+            Assert.That(GameObject.Find("BtnGridToggle"), Is.Null);
+            GameObject.Find("BtnBuildMode").GetComponent<Button>().onClick.Invoke();
             var btnGridGo = GameObject.Find("BtnGridToggle");
             var matsGo = GameObject.Find("MaterialsText");
             Assert.That(btnGridGo, Is.Not.Null);
             Assert.That(matsGo, Is.Not.Null);
             Assert.That(matsGo.GetComponent<Text>().text, Does.Contain("40/80"));
-            Assert.That(gridOverlay.gameObject.activeSelf, Is.False);
+            Assert.That(gridOverlay.gameObject.activeSelf, Is.True);
+            btnGridGo.GetComponent<Button>().onClick.Invoke();
+            Assert.That(worldView.IsGridVisible, Is.False);
 
             // Toggle Grid ON via HUD button
             btnGridGo.GetComponent<Button>().onClick.Invoke();

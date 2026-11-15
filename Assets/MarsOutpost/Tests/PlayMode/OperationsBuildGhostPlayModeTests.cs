@@ -148,6 +148,7 @@ namespace MarsOutpost.Tests.PlayMode
             Assert.That(scaffoldGo.activeInHierarchy, Is.True);
 
             // Clicking HUD button must not place another blueprint
+            GameObject.Find("BtnBuildMode").GetComponent<Button>().onClick.Invoke();
             var btnGridGo = GameObject.Find("BtnGridToggle");
             Assert.That(btnGridGo, Is.Not.Null);
             btnGridGo.GetComponent<Button>().onClick.Invoke();

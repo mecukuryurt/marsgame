@@ -272,7 +272,7 @@ namespace MarsOutpost.Presentation
         private bool buildDrawerOpen;
         private bool systemsDrawerOpen;
         private bool toolsOpen;
-        private GameObject buildEntry, systemsEntry;
+        private GameObject buildEntry, systemsEntry, toolsPanel;
         private Text buildCatalogTitleText;
         private Text buildGhostInfoText;
         private Text buildNoticeText;
@@ -376,6 +376,11 @@ namespace MarsOutpost.Presentation
                 settingsMenu = canvas.GetComponent<MarsOutpostSettingsMenu>();
                 if (settingsMenu == null)
                     settingsMenu = canvas.gameObject.AddComponent<MarsOutpostSettingsMenu>();
+                foreach (var name in new[] { "BtnCamReset", "BtnDomeRoof", "BtnModeToggle", "BtnLang" })
+                {
+                    var button = canvas.transform.Find("TopBar/" + name);
+                    if (button != null) settingsMenu.AddUtilityButton(button.GetComponent<Button>());
+                }
             }
             if (worldView != null)
                 worldView.SetLanguage(OutpostStrings.IsTurkish);
@@ -629,10 +634,17 @@ namespace MarsOutpost.Presentation
                 yield return null;
                 yield return new WaitForEndOfFrame();
             }
-            if (Array.IndexOf(Environment.GetCommandLineArgs(), "--capture-settings") >= 0 && settingsMenu != null)
+            bool captureSettingsUtility = Array.IndexOf(Environment.GetCommandLineArgs(), "--capture-settings-utility") >= 0;
+            if ((captureSettingsUtility || Array.IndexOf(Environment.GetCommandLineArgs(), "--capture-settings") >= 0) && settingsMenu != null)
             {
                 settingsMenu.Open();
                 yield return null;
+                if (captureSettingsUtility)
+                {
+                    var scroll = settingsMenu.GetComponentInChildren<ScrollRect>();
+                    if (scroll != null) scroll.verticalNormalizedPosition = 0f;
+                    yield return null;
+                }
                 yield return new WaitForEndOfFrame();
             }
 
@@ -1059,6 +1071,7 @@ namespace MarsOutpost.Presentation
                     : runner.CurrentMode == MissionMode.Demo
                         ? OutpostStrings.TrEn("90sn Demo", "90s Demo")
                         : OutpostStrings.TrEn("2-Sol Eğitim", "2-Sol Training");
+                btnModeText.text += OutpostStrings.TrEn("\n(değiştir: sıfırla)", "\n(change: reset)");
             }
 
             if (btnCamResetText != null)
@@ -1541,6 +1554,7 @@ namespace MarsOutpost.Presentation
             {
                 if (runner == null) return;
                 runner.CycleMode();
+                if (settingsMenu != null && settingsMenu.IsOpen) runner.SetPaused(true);
             });
 
             CreatePillButton(topBar, "BtnLang", new Vector2(1270, -6), new Vector2(74, 26), out btnLangText, () =>
@@ -1565,7 +1579,8 @@ namespace MarsOutpost.Presentation
             buildEntry = CreatePillButton(topBar, "BtnBuildMode", new Vector2(1536, -36), new Vector2(96, 24), out var buildEntryText, () =>
             {
                 buildDrawerOpen = !buildDrawerOpen;
-                systemsDrawerOpen = false;
+                systemsDrawerOpen = false; toolsOpen = false;
+                if (toolsPanel != null) toolsPanel.SetActive(false);
                 if (worldView != null)
                 {
                     if (buildDrawerOpen) { worldView.SetGridVisible(true); worldView.ClearParcelSelection(); }
@@ -1579,7 +1594,8 @@ namespace MarsOutpost.Presentation
             systemsEntry = CreatePillButton(topBar, "BtnSystems", new Vector2(1640, -36), new Vector2(96, 24), out var systemsEntryText, () =>
             {
                 systemsDrawerOpen = !systemsDrawerOpen;
-                buildDrawerOpen = false;
+                buildDrawerOpen = false; toolsOpen = false;
+                if (toolsPanel != null) toolsPanel.SetActive(false);
                 if (worldView != null) { worldView.CancelBuildMode(); worldView.ClearParcelSelection(); }
                 RefreshOperationsBuildUi(runner != null ? runner.State : null);
                 RefreshEquipmentUi(runner != null ? runner.State : null);
@@ -1588,6 +1604,14 @@ namespace MarsOutpost.Presentation
             CreatePillButton(topBar, "BtnTools", new Vector2(1744, -36), new Vector2(78, 24), out var toolsText, () =>
             {
                 toolsOpen = !toolsOpen;
+                if (toolsOpen)
+                {
+                    buildDrawerOpen = false; systemsDrawerOpen = false;
+                    if (worldView != null) { worldView.CancelBuildMode(); worldView.ClearParcelSelection(); }
+                    RefreshOperationsBuildUi(runner != null ? runner.State : null);
+                    RefreshEquipmentUi(runner != null ? runner.State : null);
+                }
+                if (toolsPanel != null) toolsPanel.SetActive(toolsOpen);
                 RefreshEarthOrdersUi(runner != null ? runner.State : null);
             });
             toolsText.text = OutpostStrings.TrEn("Araçlar", "Tools");
@@ -1648,6 +1672,39 @@ namespace MarsOutpost.Presentation
             cameraHintText.text = OutpostStrings.TrEn("WASD: Gez | Tekerlek: Yakınlaştır | R: Sıfırla", "WASD: Pan | Wheel: Zoom | R: Reset");
             cameraHintText.enabled = false;
             RefreshAudioControls();
+
+            // Auxiliary actions live in a single collapsible menu; audio is in Settings.
+            var aux = CreateSlicedPanel("ToolsPanel", root, new Vector2(1, 1), new Vector2(1, 1),
+                new Vector2(-300, -330), new Vector2(-12, -68), CardBg, panelFrameSprite);
+            toolsPanel = aux.gameObject;
+            string[] toolNames = { "BtnSources", "BtnSaveOps", "BtnLoadOps", "BtnEarthOrders" };
+            for (int i = 0; i < toolNames.Length; i++)
+            {
+                var child = topBar.Find(toolNames[i]);
+                if (child == null) continue;
+                var rect = child.GetComponent<RectTransform>();
+                rect.SetParent(aux, false);
+                rect.anchorMin = rect.anchorMax = new Vector2(0, 1);
+                rect.pivot = new Vector2(0, 1);
+                rect.anchoredPosition = new Vector2(10 + (i % 2) * 136, -10 - (i / 2) * 48);
+                rect.sizeDelta = new Vector2(128, 40);
+            }
+            foreach (var name in new[] { "BtnMuteAudio", "BtnVolDown", "BtnVolUp", "VolumeText" })
+            {
+                var legacy = topBar.Find(name);
+                if (legacy != null) legacy.gameObject.SetActive(false);
+            }
+            void PositionHeader(string name, float x, float width)
+            {
+                var rect = topBar.Find(name).GetComponent<RectTransform>();
+                rect.anchoredPosition = new Vector2(x, -12);
+                rect.sizeDelta = new Vector2(width, 38);
+            }
+            PositionHeader("BtnPause", 1000, 110);
+            PositionHeader("BtnBuildMode", 1120, 110);
+            PositionHeader("BtnSystems", 1240, 120);
+            PositionHeader("BtnTools", 1370, 110);
+            toolsPanel.SetActive(false);
 
             // -------------------------------------------------------------
             // 2. LEFT PANEL (Width = 256px, between y = -74 and y = +104 to clear BottomCommandDock)
@@ -2052,6 +2109,10 @@ namespace MarsOutpost.Presentation
             var buildRect = CreateSlicedPanel("OperationsBuildPanel", root, new Vector2(1, 0), new Vector2(1, 0),
                 new Vector2(-290, 102), new Vector2(-12, 348), CardBg, panelFrameSprite);
             operationsBuildPanel = buildRect.gameObject;
+            var gridRect = btnGridToggle.GetComponent<RectTransform>();
+            gridRect.SetParent(buildRect, false);
+            gridRect.anchoredPosition = new Vector2(10, -208);
+            gridRect.sizeDelta = new Vector2(124, 30);
             buildCatalogTitleText = CreateText("BuildCatalogTitle", buildRect, new Vector2(10, -6), new Vector2(258, 24),
                 14, FontStyle.Bold, TextAnchor.MiddleLeft, AccentCyan);
             btnBuildLine = CreatePillButton(buildRect, "BtnBuildLine", new Vector2(10, -34), new Vector2(61, 42),
@@ -2135,6 +2196,7 @@ namespace MarsOutpost.Presentation
             if (earthOrdersModal != null && earthOrdersModal.activeSelf) { ToggleEarthOrdersModal(false); return true; }
             if (!buildDrawerOpen && !systemsDrawerOpen && !toolsOpen) return false;
             buildDrawerOpen = false; systemsDrawerOpen = false; toolsOpen = false;
+            if (toolsPanel != null) toolsPanel.SetActive(false);
             RefreshOperationsBuildUi(runner != null ? runner.State : null);
             RefreshEquipmentUi(runner != null ? runner.State : null);
             RefreshParcelSelectionUi(runner != null ? runner.State : null);
