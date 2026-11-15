@@ -2,6 +2,19 @@
 
 A 2.5D educational Mars habitat & mission management game built in **Unity 6000.3.28f1** with URP and Input System. The default **Outpost Operations** mode runs continuously with independent random hazards, repairable equipment, water extraction, spendable science, and seven kinds of Earth orders. **Training** retains the fixed two-sol mission; **Demo** compresses training into 90 seconds.
 
+## Hackathon polish — 15 November 2026
+
+This release improves the existing OP15 game. Later OP16–OP32 expansion is deferred.
+Build and Systems details open on demand; Tools groups save/load/orders. In Build
+mode, **R rotates the preview** and **Escape cancels/closes the current context**.
+The starter solar array now fits its reserved parcel; grid clicks target terrain
+and ignore intervening models and camera drags. Original synthesized wind/hum and
+quiet music have separate persistent mixer controls in Settings.
+
+Verified current-code tests: **142 EditMode + 36 PlayMode** passed. See
+[`docs/hackathon/PROGRESS.md`](docs/hackathon/PROGRESS.md) for release checks and
+[`audio provenance`](docs/expansion-v3/ART_AUDIO_PROVENANCE.md) for sound generation.
+
 ## Project Setup & How to Run
 
 - **Unity Editor Version:** `6000.3.28f1` (URP `17.3.0`, Input System `1.20.0`, uGUI `2.0.0`, Test Framework `1.6.0`)
