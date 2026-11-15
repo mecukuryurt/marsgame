@@ -22,6 +22,7 @@ etkin oyundan ayrıldı ve deferred-op16.patch olarak korundu.
 - PlayMode: 36/36, failed=0, skipped=0; ../validation/hackathon-playmode.xml.
 - Son ayar yerleşimi, tam PlayMode koşusundan sonra yalnız görsel olarak değişti;
   son Linux derlemesinde derlendi ve ekran görüntüsünde incelendi.
+- Son yerleşimden sonra odaklı SettingsMenuTests: 6/6; ../validation/hackathon-settings-tests.xml.
 - Linux build: Unity 6000.3.28f1, exit 0. Mevcut kullanıcı sahnesi yeniden üretilmedi.
 - Gerçek 1440×900 ekranlar: ../validation/hackathon-normal-1440.png,
   hackathon-build-1440.png, hackathon-systems-1440.png, hackathon-settings-1440.png.

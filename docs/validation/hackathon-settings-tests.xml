@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="6" result="Passed" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-11-15 11:23:58Z" end-time="2026-11-15 11:24:02Z" duration="4.337703">
+  <test-suite type="TestSuite" id="1059" name="marsoutpostgame" fullname="marsoutpostgame" runstate="Runnable" testcasecount="36" result="Passed" start-time="2026-11-15 11:23:58Z" end-time="2026-11-15 11:24:02Z" duration="4.337703" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1052" name="MarsOutpost.Tests.PlayMode.dll" fullname="/run/media/senesatka/storage/projects/marsgame/Library/ScriptAssemblies/MarsOutpost.Tests.PlayMode.dll" runstate="Runnable" testcasecount="36" result="Passed" start-time="2026-11-15 11:23:58Z" end-time="2026-11-15 11:24:02Z" duration="4.328748" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="2032426" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1053" name="MarsOutpost" fullname="MarsOutpost" runstate="Runnable" testcasecount="36" result="Passed" start-time="2026-11-15 11:23:58Z" end-time="2026-11-15 11:24:02Z" duration="4.327093" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1054" name="Tests" fullname="MarsOutpost.Tests" runstate="Runnable" testcasecount="36" result="Passed" start-time="2026-11-15 11:23:58Z" end-time="2026-11-15 11:24:02Z" duration="4.325464" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1055" name="PlayMode" fullname="MarsOutpost.Tests.PlayMode" runstate="Runnable" testcasecount="33" result="Passed" start-time="2026-11-15 11:23:58Z" end-time="2026-11-15 11:24:02Z" duration="4.323834" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1045" name="SettingsMenuTests" fullname="MarsOutpost.Tests.PlayMode.SettingsMenuTests" classname="MarsOutpost.Tests.PlayMode.SettingsMenuTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-11-15 11:23:58Z" end-time="2026-11-15 11:24:02Z" duration="4.320879" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1051" name="AspectFramingMenuCameraGuardAndResolutionValidationWorkCleanly" fullname="MarsOutpost.Tests.PlayMode.SettingsMenuTests.AspectFramingMenuCameraGuardAndResolutionValidationWorkCleanly" methodname="AspectFramingMenuCameraGuardAndResolutionValidationWorkCleanly" classname="MarsOutpost.Tests.PlayMode.SettingsMenuTests" runstate="Runnable" seed="1648831586" result="Passed" start-time="2026-11-15 11:23:58Z" end-time="2026-11-15 11:23:59Z" duration="1.042756" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1050" name="CancelDoesNotSaveDraftChanges" fullname="MarsOutpost.Tests.PlayMode.SettingsMenuTests.CancelDoesNotSaveDraftChanges" methodname="CancelDoesNotSaveDraftChanges" classname="MarsOutpost.Tests.PlayMode.SettingsMenuTests" runstate="Runnable" seed="502086392" result="Passed" start-time="2026-11-15 11:23:59Z" end-time="2026-11-15 11:23:59Z" duration="0.570602" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1048" name="ClosingSettingsKeepsPriorPauseAndNewFocusPause" fullname="MarsOutpost.Tests.PlayMode.SettingsMenuTests.ClosingSettingsKeepsPriorPauseAndNewFocusPause" methodname="ClosingSettingsKeepsPriorPauseAndNewFocusPause" classname="MarsOutpost.Tests.PlayMode.SettingsMenuTests" runstate="Runnable" seed="1697523867" result="Passed" start-time="2026-11-15 11:23:59Z" end-time="2026-11-15 11:24:00Z" duration="0.588939" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1046" name="MixerSettingsPersistAndOwnedLoopsAreReleased" fullname="MarsOutpost.Tests.PlayMode.SettingsMenuTests.MixerSettingsPersistAndOwnedLoopsAreReleased" methodname="MixerSettingsPersistAndOwnedLoopsAreReleased" classname="MarsOutpost.Tests.PlayMode.SettingsMenuTests" runstate="Runnable" seed="330905212" result="Passed" start-time="2026-11-15 11:24:00Z" end-time="2026-11-15 11:24:01Z" duration="0.587080" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1047" name="OpenPausesCloseRestoresAndReopenDoesNotDuplicateEntry" fullname="MarsOutpost.Tests.PlayMode.SettingsMenuTests.OpenPausesCloseRestoresAndReopenDoesNotDuplicateEntry" methodname="OpenPausesCloseRestoresAndReopenDoesNotDuplicateEntry" classname="MarsOutpost.Tests.PlayMode.SettingsMenuTests" runstate="Runnable" seed="1699071598" result="Passed" start-time="2026-11-15 11:24:01Z" end-time="2026-11-15 11:24:02Z" duration="0.897735" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1049" name="QualityDropdownOpensAndApplySurvivesCloseAndRecreation" fullname="MarsOutpost.Tests.PlayMode.SettingsMenuTests.QualityDropdownOpensAndApplySurvivesCloseAndRecreation" methodname="QualityDropdownOpensAndApplySurvivesCloseAndRecreation" classname="MarsOutpost.Tests.PlayMode.SettingsMenuTests" runstate="Runnable" seed="1003572233" result="Passed" start-time="2026-11-15 11:24:02Z" end-time="2026-11-15 11:24:02Z" duration="0.617710" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: /home/senesatka/.config/unity3d/DefaultCompany/marsoutpostgame/TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
